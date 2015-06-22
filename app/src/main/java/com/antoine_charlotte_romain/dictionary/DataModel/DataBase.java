@@ -10,13 +10,13 @@ import android.provider.BaseColumns;
  */
 public class DataBase {
 
-    private static final String SQL_CREATE_DICTIONARIES =
+    private static final String SQL_CREATE_DICTIONARY =
             "CREATE TABLE " + Dictionary.TABLE_NAME + " (" +
                     Dictionary._ID + " INTEGER PRIMARY KEY," +
                     Dictionary.COLUMN_NAME_TITLE + " TEXT"
                 + ");";
 
-    private static final String SQL_CREATE_WORDS =
+    private static final String SQL_CREATE_WORD =
             "CREATE TABLE " + Word.TABLE_NAME + " (" +
                     Word._ID + " INTEGER PRIMARY KEY," +
                     Word.COLUMN_NAME_DICTIONARY_ID + " INTEGER," +
@@ -26,8 +26,8 @@ public class DataBase {
                     "FOREIGN KEY(" + Word.COLUMN_NAME_DICTIONARY_ID + ") REFERENCES " + Dictionary.TABLE_NAME + "(" + Dictionary._ID + ")"
                     + ");";
 
-    private static final String SQL_DELETE_DICTIONARIES = "DROP TABLE IF EXISTS " + Dictionary.TABLE_NAME;
-    private static final String SQL_DELETE_WORDS = "DROP TABLE IF EXISTS " + Word.TABLE_NAME;
+    private static final String SQL_DELETE_DICTIONARY = "DROP TABLE IF EXISTS " + Dictionary.TABLE_NAME;
+    private static final String SQL_DELETE_WORD = "DROP TABLE IF EXISTS " + Word.TABLE_NAME;
 
     public DataBase(){}
 
@@ -53,14 +53,14 @@ public class DataBase {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(SQL_CREATE_DICTIONARIES);
-            db.execSQL(SQL_CREATE_WORDS);
+            db.execSQL(SQL_CREATE_DICTIONARY);
+            db.execSQL(SQL_CREATE_WORD);
         }
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // This database is only a cache for online data, so its upgrade policy is
             // to simply to discard the data and start over
-            db.execSQL(SQL_DELETE_DICTIONARIES);
-            db.execSQL(SQL_DELETE_WORDS);
+            db.execSQL(SQL_DELETE_DICTIONARY);
+            db.execSQL(SQL_DELETE_WORD);
             onCreate(db);
         }
         public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {

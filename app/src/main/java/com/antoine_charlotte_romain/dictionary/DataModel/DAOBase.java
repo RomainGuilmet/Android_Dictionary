@@ -10,6 +10,8 @@ public abstract class DAOBase {
     protected SQLiteDatabase myDb = null;
     protected DataBase.DataBaseHelper myDbHelper =  null;
 
+    public DAOBase(){}
+
     public DAOBase(Context context) {
         this.myDbHelper = new DataBase.DataBaseHelper(context);
     }
