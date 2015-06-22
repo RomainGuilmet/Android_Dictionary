@@ -11,6 +11,10 @@ public class Word {
     private String translation;
     private String note;
 
+    public static int ALL_DICTIONARIES = -1;
+
+    public Word(){}
+
     public Word(long id, long dictionaryID, String headword, String translation, String note){
         this.id = id;
         this.dictionaryID = dictionaryID;

@@ -1,6 +1,7 @@
 package com.antoine_charlotte_romain.dictionary.Controllers;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,12 +9,16 @@ import android.view.MenuItem;
 import com.antoine_charlotte_romain.dictionary.R;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
+
+
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = getApplicationContext();
     }
 
     @Override
@@ -36,5 +41,9 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static Context getAppContext() {
+        return context;
     }
 }

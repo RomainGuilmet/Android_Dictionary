@@ -15,7 +15,7 @@ public class DictionaryDataModel extends DAOBase{
 
     public static final String SQL_CREATE_DICTIONARY =
             "CREATE TABLE " + DictionaryEntry.TABLE_NAME + " (" +
-                    DictionaryEntry._ID + " INTEGER PRIMARY KEY," +
+                    DictionaryEntry._ID + " INTEGER PRIMARY KEY, " +
                     DictionaryEntry.COLUMN_NAME_TITLE + " TEXT NOT NULL"
                     + ");";
 
