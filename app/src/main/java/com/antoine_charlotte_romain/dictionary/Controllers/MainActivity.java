@@ -1,9 +1,11 @@
-package com.antoine_charlotte_romain.dictionary;
+package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.antoine_charlotte_romain.dictionary.R;
 
 
 public class MainActivity extends ActionBarActivity {
