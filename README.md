@@ -1,2 +1,0 @@
-# Dictionary
-Internship project
