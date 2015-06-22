@@ -11,4 +11,51 @@ public class Word {
     private String translation;
     private String note;
 
+    public Word(long id, long dictionaryID, String headword, String translation, String note){
+        this.id = id;
+        this.dictionaryID = dictionaryID;
+        this.headword = headword;
+        this.translation = translation;
+        this.note = note;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getDictionaryID() {
+        return dictionaryID;
+    }
+
+    public void setDictionaryID(long dictionaryID) {
+        this.dictionaryID = dictionaryID;
+    }
+
+    public String getHeadword() {
+        return headword;
+    }
+
+    public void setHeadword(String headword) {
+        this.headword = headword;
+    }
+
+    public String getTranslation() {
+        return translation;
+    }
+
+    public void setTranslation(String translation) {
+        this.translation = translation;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }
