@@ -1,4 +1,4 @@
-package com.antoine_charlotte_romain.dictionary.ModelData;
+package com.antoine_charlotte_romain.dictionary.DataModel;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,14 +13,18 @@ public class DataBase {
     private static final String SQL_CREATE_DICTIONARIES =
             "CREATE TABLE " + Dictionary.TABLE_NAME + " (" +
                     Dictionary._ID + " INTEGER PRIMARY KEY," +
-                    Dictionary.COLUMN_NAME_TITLE + " TEXT)";
+                    Dictionary.COLUMN_NAME_TITLE + " TEXT"
+                + ");";
 
     private static final String SQL_CREATE_WORDS =
             "CREATE TABLE " + Word.TABLE_NAME + " (" +
                     Word._ID + " INTEGER PRIMARY KEY," +
+                    Word.COLUMN_NAME_DICTIONARY_ID + " INTEGER," +
                     Word.COLUMN_NAME_HEADWORD + " TEXT," +
                     Word.COLUMN_NAME_TRANSLATION + " TEXT," +
-                    Word.COLUMN_NAME_NOTE + " TEXT)";
+                    Word.COLUMN_NAME_NOTE + " TEXT," +
+                    "FOREIGN KEY(" + Word.COLUMN_NAME_DICTIONARY_ID + ") REFERENCES " + Dictionary.TABLE_NAME + "(" + Dictionary._ID + ")"
+                    + ");";
 
     private static final String SQL_DELETE_DICTIONARIES = "DROP TABLE IF EXISTS " + Dictionary.TABLE_NAME;
     private static final String SQL_DELETE_WORDS = "DROP TABLE IF EXISTS " + Word.TABLE_NAME;
@@ -34,15 +38,16 @@ public class DataBase {
 
     public static abstract class Word implements BaseColumns {
         public static final String TABLE_NAME = "word";
+        public static final String COLUMN_NAME_DICTIONARY_ID = "dictionaryID";
         public static final String COLUMN_NAME_HEADWORD = "headword";
         public static final String COLUMN_NAME_TRANSLATION = "translation";
         public static final String COLUMN_NAME_NOTE = "note";
     }
 
-    public class DataBaseHelper extends SQLiteOpenHelper {
+    public static class DataBaseHelper extends SQLiteOpenHelper {
         // If you change the database schema, you must increment the database version.
         public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_NAME = "Dictionary.db";
+        public static final String DATABASE_NAME = "dictionary_database.db";
 
         public DataBaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
