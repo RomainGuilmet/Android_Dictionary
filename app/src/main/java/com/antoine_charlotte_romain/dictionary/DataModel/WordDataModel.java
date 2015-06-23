@@ -62,23 +62,32 @@ public class WordDataModel extends DAOBase{
      * Insert a word in the database
      *
      * @param w The word to insert.
+     *
+     * @return 1 if the word already exists or 2 if we try to insert without a selected dictionary
      */
-    public void insert(Word w){
-        // Gets the data repository in write mode
-        SQLiteDatabase db = open();
+    public int insert(Word w){
 
-        // Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-        values.put(WordEntry.COLUMN_NAME_DICTIONARY_ID, w.getDictionaryID());
-        values.put(WordEntry.COLUMN_NAME_HEADWORD, w.getHeadword());
-        values.put(WordEntry.COLUMN_NAME_TRANSLATION, w.getTranslation());
-        values.put(WordEntry.COLUMN_NAME_NOTE, w.getNote());
+        if(w.getDictionaryID() != Word.ALL_DICTIONARIES) {
+            // Gets the data repository in write mode
+            SQLiteDatabase db = open();
 
-        // Insert the new row, returning the primary key value of the new row
-        long newWordID = db.insert(WordEntry.TABLE_NAME, WordEntry.COLUMN_NAME_NOTE, values);
+            ArrayList<Word> aw = selectFromHeadWord(w.getHeadword(), w.getDictionaryID());
+            if(aw.size() == 0){
+                // Create a new map of values, where column names are the keys
+                ContentValues values = new ContentValues();
+                values.put(WordEntry.COLUMN_NAME_DICTIONARY_ID, w.getDictionaryID());
+                values.put(WordEntry.COLUMN_NAME_HEADWORD, w.getHeadword());
+                values.put(WordEntry.COLUMN_NAME_TRANSLATION, w.getTranslation());
+                values.put(WordEntry.COLUMN_NAME_NOTE, w.getNote());
 
-        w.setId(newWordID);
-        close();
+                // Insert the new row, returning the primary key value of the new row
+                long newWordID = db.insert(WordEntry.TABLE_NAME, WordEntry.COLUMN_NAME_NOTE, values);
+
+                w.setId(newWordID);
+        }
+            return -1;
+        }
+        return -2;
     }
 
     /**
@@ -106,7 +115,6 @@ public class WordDataModel extends DAOBase{
         }
 
         c.close();
-        close();
         return w;
     }
 
@@ -133,7 +141,6 @@ public class WordDataModel extends DAOBase{
             listWord.add(w);
         }
         c.close();
-        close();
         return listWord;
     }
 
@@ -160,7 +167,20 @@ public class WordDataModel extends DAOBase{
             listWord.add(w);
         }
         c.close();
-        close();
+        return listWord;
+    }
+
+    public ArrayList<Word> selectAllFromDictionary(long dictionaryID){
+        SQLiteDatabase db = open();
+
+        Cursor c = db.rawQuery(SQL_SELECT_WORD_FROM_WHOLE_WORD, new String[]{String.valueOf(word), String.valueOf(word), String.valueOf(word)});
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        while (c.moveToNext()) {
+            Word w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
         return listWord;
     }
 
@@ -179,8 +199,6 @@ public class WordDataModel extends DAOBase{
         values.put(WordEntry.COLUMN_NAME_NOTE, w.getNote());
 
         db.update(WordEntry.TABLE_NAME, values, WordEntry._ID + " = ?", new String[]{String.valueOf(w.getId())});
-
-        close();
     }
 
     /**
@@ -199,8 +217,6 @@ public class WordDataModel extends DAOBase{
 
         // Issue SQL statement.
         db.delete(WordEntry.TABLE_NAME, selection, selectionArgs);
-
-        close();
     }
 
 }

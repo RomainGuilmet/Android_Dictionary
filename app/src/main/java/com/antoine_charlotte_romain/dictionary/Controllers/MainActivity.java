@@ -6,19 +6,36 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.antoine_charlotte_romain.dictionary.Business.Word;
+import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends Activity {
-
-
-    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = getApplicationContext();
+
+
+        // TESTS
+        WordDataModel wd = new WordDataModel(getApplicationContext());
+
+        Word w = new Word();
+        w.setDictionaryID(Word.ALL_DICTIONARIES);
+        w.setHeadword("Test");
+        w.setTranslation("Hello");
+        w.setNote("test");
+        wd.insert(w);
+
+        ArrayList<Word> aw = wd.selectFromWholeWord("Test", Word.ALL_DICTIONARIES);
+        for(int i=0; i<aw.size(); i++)
+        {
+            System.out.println(aw.get(i).getId());
+        }
     }
 
     @Override
@@ -41,9 +58,5 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public static Context getAppContext() {
-        return context;
     }
 }

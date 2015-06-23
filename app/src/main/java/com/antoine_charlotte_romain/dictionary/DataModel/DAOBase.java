@@ -9,11 +9,13 @@ public abstract class DAOBase {
 
     protected SQLiteDatabase myDb = null;
     protected DataBaseHelper myDbHelper =  null;
+    protected Context context = null;
 
     public DAOBase(){}
 
     public DAOBase(Context context) {
         this.myDbHelper = new DataBaseHelper(context);
+        this.context = context;
     }
 
     public SQLiteDatabase open() {
