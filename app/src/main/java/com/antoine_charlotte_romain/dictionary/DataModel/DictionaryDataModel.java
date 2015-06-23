@@ -1,6 +1,7 @@
 package com.antoine_charlotte_romain.dictionary.DataModel;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
@@ -15,15 +16,19 @@ public class DictionaryDataModel extends DAOBase{
 
     public static final String SQL_CREATE_DICTIONARY =
             "CREATE TABLE " + DictionaryEntry.TABLE_NAME + " (" +
-                    DictionaryEntry._ID + " INTEGER PRIMARY KEY, " +
+                    DictionaryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     DictionaryEntry.COLUMN_NAME_TITLE + " TEXT NOT NULL"
                     + ");";
 
-    public static final String SQL_DELETE_DICTIONARY = "DROP TABLE IF EXISTS " + DictionaryEntry.TABLE_NAME;
+    public static final String SQL_DELETE_DICTIONARY = "DROP TABLE IF EXISTS " + DictionaryEntry.TABLE_NAME + ";";
 
     public static abstract class DictionaryEntry implements BaseColumns {
         public static final String TABLE_NAME = "dictionary";
         public static final String COLUMN_NAME_TITLE = "title";
+    }
+
+    public DictionaryDataModel(Context context){
+        super(context);
     }
 
     /**
@@ -31,13 +36,14 @@ public class DictionaryDataModel extends DAOBase{
      *
      * @param d
      *          The dictionary to insert
-     * @return The id of the added dictionary or -1 if the dictionary already exists
+     * @return 1 if the dictionary was inserted
+     *         0 if the dictionary already exists
      */
-    public long insert(Dictionary d){
+    public int insert(Dictionary d){
         // Look if this dictionary (with this name) already exists
         if(select(d.getTitle()) == null){
             // Gets the data repository in write mode
-            SQLiteDatabase db = open();
+            this.open();
 
             // Create a new map of values, where column names are the keys
             ContentValues values = new ContentValues();
@@ -45,14 +51,12 @@ public class DictionaryDataModel extends DAOBase{
 
             // Insert the new row, returning the primary key value of the new row
             long newdictionaryID;
-            newdictionaryID = db.insert(DictionaryEntry.TABLE_NAME, null, values);
+            newdictionaryID = myDb.insert(DictionaryEntry.TABLE_NAME, null, values);
+            d.setId(newdictionaryID);
 
-            // Close DB
-            db.close();
-
-            return newdictionaryID;
+            return 1;
         }
-        return -1;
+        return 0;
 
     }
 
@@ -65,23 +69,24 @@ public class DictionaryDataModel extends DAOBase{
      */
     public Dictionary select(long id){
         // Gets the data repository in write mode
-        SQLiteDatabase db = open();
+        this.open();
 
         // Query
-        Cursor c = db.rawQuery("select * from " + DictionaryEntry.TABLE_NAME + "where " + DictionaryEntry._ID + " = ?", new String[]{String.valueOf(id)});
-
-        // Close DB
-        db.close();
+        Cursor c = myDb.rawQuery("select * from " + DictionaryEntry.TABLE_NAME + " where " + DictionaryEntry._ID + " = ?", new String[]{String.valueOf(id)});
 
         // Creating object found
+        Dictionary d;
         if (c.getCount() == 1) {
            c.moveToNext();
             // Obtained row is made of :
             // / id / title /
-            return new Dictionary(c.getLong(0), c.getString(1));
+            d = new Dictionary(c.getLong(0), c.getString(1));
+        } else {
+            d = null;
         }
+        c.close();
         // if Cursor object has not only one element, something wrong happened
-        return null;
+        return d;
     }
 
     /**
@@ -93,20 +98,21 @@ public class DictionaryDataModel extends DAOBase{
      */
     public Dictionary select(String title){
         // Gets the data repository in write mode
-        SQLiteDatabase db = open();
+        this.open();
 
-        Cursor c = db.rawQuery("select * from " + DictionaryEntry.TABLE_NAME + "where " + DictionaryEntry.COLUMN_NAME_TITLE + " = ?", new String[]{title});
+        Cursor c = myDb.rawQuery("select * from " + DictionaryEntry.TABLE_NAME + " where " + DictionaryEntry.COLUMN_NAME_TITLE + " = ?", new String[]{title});
 
-        // Close DB
-        db.close();
-
+        Dictionary d;
         if (c.getCount() == 1) {
             c.moveToNext();
             // Obtained row is made of :
             // / id / title /
-            return new Dictionary(c.getLong(0), c.getString(1));
+            d = new Dictionary(c.getLong(0), c.getString(1));
+        } else {
+            d = null;
         }
-        return null;
+        c.close();
+        return d;
     }
 
     /**
@@ -117,15 +123,12 @@ public class DictionaryDataModel extends DAOBase{
      */
     public void update(Dictionary d){
         // Gets the data repository in write mode
-        SQLiteDatabase db = open();
+        this.open();
 
         ContentValues value = new ContentValues();
-        value.put(DictionaryEntry.COLUMN_NAME_TITLE,d.getTitle());
+        value.put(DictionaryEntry.COLUMN_NAME_TITLE, d.getTitle());
 
-        db.update(DictionaryEntry.TABLE_NAME, value, DictionaryEntry._ID + " = ?", new String[]{String.valueOf(d.getId())});
-
-        // Close DB
-        db.close();
+        myDb.update(DictionaryEntry.TABLE_NAME, value, DictionaryEntry._ID + " = ?", new String[]{String.valueOf(d.getId())});
     }
 
     /**
@@ -136,13 +139,13 @@ public class DictionaryDataModel extends DAOBase{
      */
     public void delete(long id){
         // Gets the data repository in write mode
-        SQLiteDatabase db = open();
+        this.open();
+
+        WordDataModel wdm = new WordDataModel(context);
+        wdm.selectAllFromDictionary(id);
 
         // delete words with dictionqryID in word table ? Or automatic with foreign key
-        db.delete(DictionaryEntry.TABLE_NAME, DictionaryEntry._ID + " = ?", new String[]{String.valueOf(id)});
-
-        // Close DB
-        db.close();
+        myDb.delete(DictionaryEntry.TABLE_NAME, DictionaryEntry._ID + " = ?", new String[]{String.valueOf(id)});
     }
 
     /**
@@ -153,12 +156,10 @@ public class DictionaryDataModel extends DAOBase{
      */
     public void delete(String dictionaryName){
         // Gets the data repository in write mode
-        SQLiteDatabase db = open();
+        this.open();
 
         // delete words with dictionqryID in word table ? Or automatic with foreign key
-        db.delete(DictionaryEntry.TABLE_NAME, DictionaryEntry.COLUMN_NAME_TITLE + " = ?", new String[]{dictionaryName});
+        myDb.delete(DictionaryEntry.TABLE_NAME, DictionaryEntry.COLUMN_NAME_TITLE + " = ?", new String[]{dictionaryName});
 
-        // Close DB
-        db.close();
     }
 }
