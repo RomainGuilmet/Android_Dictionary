@@ -141,6 +141,7 @@ public class DictionaryDataModel extends DAOBase{
         // Gets the data repository in write mode
         this.open();
 
+        // suppress its words
         WordDataModel wdm = new WordDataModel(context);
         wdm.selectAllFromDictionary(id);
 
@@ -158,8 +159,14 @@ public class DictionaryDataModel extends DAOBase{
         // Gets the data repository in write mode
         this.open();
 
-        // delete words with dictionqryID in word table ? Or automatic with foreign key
-        myDb.delete(DictionaryEntry.TABLE_NAME, DictionaryEntry.COLUMN_NAME_TITLE + " = ?", new String[]{dictionaryName});
+        // Find the dictionary associated to this name
+        Dictionary result = select(dictionaryName);
+        if (result != null){
+            // if there is a dictionary with this name, suppress its words and then supress the dictionary
+            WordDataModel wdm = new WordDataModel(context);
+            wdm.selectAllFromDictionary(result.getId());
+            delete(result.getId());
+        }
 
     }
 }
