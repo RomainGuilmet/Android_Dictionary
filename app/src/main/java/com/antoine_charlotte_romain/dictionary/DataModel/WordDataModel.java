@@ -62,10 +62,8 @@ public class WordDataModel extends DAOBase{
 
     /**
      * Insert a word in the database
-     *
      * @param w The word to insert.
-     *
-     * @return 1 if the word already exists or 2 if we try to insert without a selected dictionary
+     * @return 0 if it's a success, 1 if the word already exists or 2 if we try to insert without a selected dictionary
      */
     public int insert(Word w){
 
@@ -86,10 +84,11 @@ public class WordDataModel extends DAOBase{
                 long newWordID = db.insert(WordEntry.TABLE_NAME, WordEntry.COLUMN_NAME_NOTE, values);
 
                 w.setId(newWordID);
+                return 0;
+            }
+            return 1;
         }
-            return -1;
-        }
-        return -2;
+        return 2;
     }
 
     /**
@@ -172,6 +171,11 @@ public class WordDataModel extends DAOBase{
         return listWord;
     }
 
+    /**
+     * Find all the words in the database present in a dictionary
+     * @param dictionaryID the ID of the dictionary in which we want to find all the words
+     * @return A list of all the words present in the selected dictionary
+     */
     public ArrayList<Word> selectAllFromDictionary(long dictionaryID){
         SQLiteDatabase db = open();
 
@@ -191,12 +195,10 @@ public class WordDataModel extends DAOBase{
      * @param w The word to update
      */
     public void update(Word w){
-        // Gets the data repository in write mode
         SQLiteDatabase db = open();
 
         ContentValues values = new ContentValues();
-        values.put(WordEntry.COLUMN_NAME_DICTIONARY_ID, w.getDictionaryID());
-        values.put(WordEntry.COLUMN_NAME_HEADWORD, w.getHeadword());
+
         values.put(WordEntry.COLUMN_NAME_TRANSLATION, w.getTranslation());
         values.put(WordEntry.COLUMN_NAME_NOTE, w.getNote());
 
@@ -221,8 +223,11 @@ public class WordDataModel extends DAOBase{
         db.delete(WordEntry.TABLE_NAME, selection, selectionArgs);
     }
 
+    /**
+     * Delete all the word in the database of this dictionary
+     * @param dictionaryId the ID of the dictionary in which we want to delete all the words
+     */
     public void deleteAll(long dictionaryId){
-
         if(dictionaryId != Word.ALL_DICTIONARIES) {
             // Gets the data repository in write mode
             SQLiteDatabase db = open();
