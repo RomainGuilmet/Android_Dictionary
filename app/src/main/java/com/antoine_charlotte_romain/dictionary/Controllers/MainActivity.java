@@ -19,23 +19,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        // TESTS
-        WordDataModel wd = new WordDataModel(getApplicationContext());
-
-        Word w = new Word();
-        w.setDictionaryID(Word.ALL_DICTIONARIES);
-        w.setHeadword("Test");
-        w.setTranslation("Hello");
-        w.setNote("test");
-        wd.insert(w);
-
-        ArrayList<Word> aw = wd.selectFromWholeWord("Test", Word.ALL_DICTIONARIES);
-        for(int i=0; i<aw.size(); i++)
-        {
-            System.out.println(aw.get(i).getId());
-        }
     }
 
     @Override

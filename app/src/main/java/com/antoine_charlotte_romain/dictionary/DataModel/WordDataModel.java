@@ -46,6 +46,8 @@ public class WordDataModel extends DAOBase{
                     " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
                     " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
+    private static final String SQL_SELECT_ALL_FROM_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
+
     public static abstract class WordEntry implements BaseColumns {
         public static final String TABLE_NAME = "word";
         public static final String COLUMN_NAME_DICTIONARY_ID = "dictionaryID";
@@ -173,7 +175,7 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectAllFromDictionary(long dictionaryID){
         SQLiteDatabase db = open();
 
-        Cursor c = db.rawQuery(SQL_SELECT_WORD_FROM_WHOLE_WORD, new String[]{String.valueOf(word), String.valueOf(word), String.valueOf(word)});
+        Cursor c = db.rawQuery(SQL_SELECT_ALL_FROM_DICTIONARY, new String[]{String.valueOf(dictionaryID)});
 
         ArrayList<Word> listWord = new ArrayList<Word>();
         while (c.moveToNext()) {
@@ -214,6 +216,20 @@ public class WordDataModel extends DAOBase{
 
         // Specify arguments in placeholder order.
         String[] selectionArgs = { String.valueOf(id) };
+
+        // Issue SQL statement.
+        db.delete(WordEntry.TABLE_NAME, selection, selectionArgs);
+    }
+
+    public void deleteAll(long dictionaryId){
+        // Gets the data repository in write mode
+        SQLiteDatabase db = open();
+
+        // Define 'where' part of query.
+        String selection = DictionaryDataModel.DictionaryEntry._ID + " LIKE ?";
+
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { String.valueOf(dictionaryId) };
 
         // Issue SQL statement.
         db.delete(WordEntry.TABLE_NAME, selection, selectionArgs);
