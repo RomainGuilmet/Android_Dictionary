@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class WordDataModel extends DAOBase{
 
     public static final String SQL_CREATE_WORD =
             "CREATE TABLE " + WordEntry.TABLE_NAME + " (" +
-                    WordEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    WordEntry._ID + " INTEGER PRIMARY KEY, " +
                     WordEntry.COLUMN_NAME_DICTIONARY_ID + " INTEGER NOT NULL, " +
                     WordEntry.COLUMN_NAME_HEADWORD + " TEXT NOT NULL, " +
                     WordEntry.COLUMN_NAME_TRANSLATION + " TEXT NOT NULL, " +
@@ -48,6 +49,8 @@ public class WordDataModel extends DAOBase{
 
     private static final String SQL_SELECT_ALL_FROM_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
+    private static final String SQL_SELECT_ALL = "SELECT * FROM " + WordEntry.TABLE_NAME + ";";
+
     public static abstract class WordEntry implements BaseColumns {
         public static final String TABLE_NAME = "word";
         public static final String COLUMN_NAME_DICTIONARY_ID = "dictionaryID";
@@ -63,7 +66,7 @@ public class WordDataModel extends DAOBase{
     /**
      * Insert a word in the database
      * @param w The word to insert.
-     * @return 0 if it's a success, 1 if the word already exists or 2 if we try to insert without a selected dictionary
+     * @return 0 if it's a success, 1 if the word already exists, 2 if the dictionary doesn't already exists or 3 if we try to insert without a selected dictionary
      */
     public int insert(Word w){
 
@@ -71,24 +74,29 @@ public class WordDataModel extends DAOBase{
             // Gets the data repository in write mode
             SQLiteDatabase db = open();
 
-            ArrayList<Word> aw = selectFromHeadWord(w.getHeadword(), w.getDictionaryID());
-            if(aw.size() == 0){
-                // Create a new map of values, where column names are the keys
-                ContentValues values = new ContentValues();
-                values.put(WordEntry.COLUMN_NAME_DICTIONARY_ID, w.getDictionaryID());
-                values.put(WordEntry.COLUMN_NAME_HEADWORD, w.getHeadword());
-                values.put(WordEntry.COLUMN_NAME_TRANSLATION, w.getTranslation());
-                values.put(WordEntry.COLUMN_NAME_NOTE, w.getNote());
+            DictionaryDataModel dd = new DictionaryDataModel(context);
+            Dictionary d = dd.select(w.getDictionaryID());
+            if(d != null) {
+                ArrayList<Word> aw = selectFromHeadWord(w.getHeadword(), w.getDictionaryID());
+                if (aw.size() == 0) {
+                    // Create a new map of values, where column names are the keys
+                    ContentValues values = new ContentValues();
+                    values.put(WordEntry.COLUMN_NAME_DICTIONARY_ID, w.getDictionaryID());
+                    values.put(WordEntry.COLUMN_NAME_HEADWORD, w.getHeadword());
+                    values.put(WordEntry.COLUMN_NAME_TRANSLATION, w.getTranslation());
+                    values.put(WordEntry.COLUMN_NAME_NOTE, w.getNote());
 
-                // Insert the new row, returning the primary key value of the new row
-                long newWordID = db.insert(WordEntry.TABLE_NAME, WordEntry.COLUMN_NAME_NOTE, values);
+                    // Insert the new row, returning the primary key value of the new row
+                    long newWordID = db.insert(WordEntry.TABLE_NAME, WordEntry.COLUMN_NAME_NOTE, values);
 
-                w.setId(newWordID);
-                return 0;
+                    w.setId(newWordID);
+                    return 0;
+                }
+                return 1;
             }
-            return 1;
+            return 2;
         }
-        return 2;
+        return 3;
     }
 
     /**
@@ -179,7 +187,14 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectAllFromDictionary(long dictionaryID){
         SQLiteDatabase db = open();
 
-        Cursor c = db.rawQuery(SQL_SELECT_ALL_FROM_DICTIONARY, new String[]{String.valueOf(dictionaryID)});
+        Cursor c;
+
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_ALL, null);
+        }
+        else {
+            c = db.rawQuery(SQL_SELECT_ALL_FROM_DICTIONARY, new String[]{String.valueOf(dictionaryID)});
+        }
 
         ArrayList<Word> listWord = new ArrayList<Word>();
         while (c.moveToNext()) {
