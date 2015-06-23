@@ -15,6 +15,19 @@ public class Word {
 
     public Word(){}
 
+    public Word(long dictionaryID, String headword, String translation){
+        this.dictionaryID = dictionaryID;
+        this.headword = headword;
+        this.translation = translation;
+    }
+
+    public Word(long dictionaryID, String headword, String translation, String note){
+        this.dictionaryID = dictionaryID;
+        this.headword = headword;
+        this.translation = translation;
+        this.note = note;
+    }
+
     public Word(long id, long dictionaryID, String headword, String translation, String note){
         this.id = id;
         this.dictionaryID = dictionaryID;
