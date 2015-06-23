@@ -222,17 +222,20 @@ public class WordDataModel extends DAOBase{
     }
 
     public void deleteAll(long dictionaryId){
-        // Gets the data repository in write mode
-        SQLiteDatabase db = open();
 
-        // Define 'where' part of query.
-        String selection = DictionaryDataModel.DictionaryEntry._ID + " LIKE ?";
+        if(dictionaryId != Word.ALL_DICTIONARIES) {
+            // Gets the data repository in write mode
+            SQLiteDatabase db = open();
 
-        // Specify arguments in placeholder order.
-        String[] selectionArgs = { String.valueOf(dictionaryId) };
+            // Define 'where' part of query.
+            String selection = WordEntry.COLUMN_NAME_DICTIONARY_ID + " LIKE ?";
 
-        // Issue SQL statement.
-        db.delete(WordEntry.TABLE_NAME, selection, selectionArgs);
+            // Specify arguments in placeholder order.
+            String[] selectionArgs = {String.valueOf(dictionaryId)};
+
+            // Issue SQL statement.
+            db.delete(WordEntry.TABLE_NAME, selection, selectionArgs);
+        }
     }
 
 }
