@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
 
-    <com.antoine_charlotte_romain.dictionary.SlidingTabLayout
+    <com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

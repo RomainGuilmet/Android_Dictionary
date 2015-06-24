@@ -3,7 +3,6 @@ package com.antoine_charlotte_romain.dictionary.DataModel;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;

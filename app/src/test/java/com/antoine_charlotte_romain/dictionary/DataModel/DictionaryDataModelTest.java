@@ -1,16 +1,9 @@
 package com.antoine_charlotte_romain.dictionary.DataModel;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
-import android.test.InstrumentationTestCase;
 import android.test.RenamingDelegatingContext;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
-import com.antoine_charlotte_romain.dictionary.Controllers.MainActivity;
-
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by summer3 on 23/06/2015.

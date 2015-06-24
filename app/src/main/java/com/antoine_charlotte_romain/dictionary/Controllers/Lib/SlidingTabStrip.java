@@ -1,4 +1,4 @@
-package com.antoine_charlotte_romain.dictionary;
+package com.antoine_charlotte_romain.dictionary.Controllers.Lib;
 
 import android.R;
 import android.content.Context;

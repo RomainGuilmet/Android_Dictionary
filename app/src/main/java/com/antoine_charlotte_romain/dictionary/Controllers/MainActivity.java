@@ -1,20 +1,14 @@
 package com.antoine_charlotte_romain.dictionary.Controllers;
 
-import android.app.Activity;
-import android.content.Context;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
-import com.antoine_charlotte_romain.dictionary.Business.Word;
-import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
-import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
+
+import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
 import com.antoine_charlotte_romain.dictionary.R;
-import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {

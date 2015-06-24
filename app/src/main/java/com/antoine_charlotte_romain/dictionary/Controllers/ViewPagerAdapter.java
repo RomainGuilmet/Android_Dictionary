@@ -1,8 +1,9 @@
-package com.antoine_charlotte_romain.dictionary;
+package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import com.antoine_charlotte_romain.dictionary.R;
 
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -30,18 +31,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0)
         {
-            HomeFragment homeTab = new HomeFragment();
-            return homeTab;
+            return new HomeFragment();
         }
         else if (position == 1)
         {
-            HistoryFragment historyTab = new HistoryFragment();
-            return historyTab;
+            return  new HistoryFragment();
         }
         else
         {
-            SearchFragment searchTab = new SearchFragment();
-            return searchTab;
+            return new SearchFragment();
         }
     }
 
