@@ -8,7 +8,7 @@ import com.antoine_charlotte_romain.dictionary.R;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
+    int numbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
 
     //Store the icons ids
     int[] drawablesIds = {
@@ -21,7 +21,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public ViewPagerAdapter(FragmentManager fm, int mNumbOfTabsumb) {
         super(fm);
 
-        this.NumbOfTabs = mNumbOfTabsumb;
+        this.numbOfTabs = mNumbOfTabsumb;
 
     }
 
@@ -46,7 +46,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     // This method return the Number of tabs for the tabs Strip
     @Override
     public int getCount() {
-        return NumbOfTabs;
+        return numbOfTabs;
     }
 
     // This method return the specific tab icon
