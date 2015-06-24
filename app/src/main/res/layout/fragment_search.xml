@@ -4,13 +4,108 @@
     android:layout_height="match_parent">
 
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Adv Search"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        android:id="@+id/searchStrings">
+
+        <EditText
+            android:id="@+id/beginString"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:hint="@string/begin_with"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            android:layout_marginBottom="15dip" />
+
+        <EditText
+            android:id="@+id/middleString"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:hint="@string/contains"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            android:layout_marginBottom="15dip"
+            android:layout_below="@id/beginString"/>
+
+        <EditText
+            android:id="@+id/endString"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:hint="@string/end_with"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            android:layout_marginBottom="15dip"
+            android:layout_below="@id/middleString"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        android:layout_below="@id/searchStrings"
+        android:id="@+id/radio"
+        android:layout_marginBottom="15dip">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:checkedButton="@+id/headword">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/headword_only"
+                android:textSize="25sp"
+                android:id="@+id/headword"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/whole_word"
+                android:textSize="25sp"
+                android:id="@+id/whole"/>
+
+        </RadioGroup>
+
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        android:layout_below="@id/radio"
+        android:id="@+id/dico">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/actual_dico"
+            android:id="@+id/textCurrentDico"
+            android:textSize="25sp"
+            android:textColor="#000000"/>
+
+        <Button
+            android:id="@+id/dicoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/choose"
+            android:layout_alignParentRight="true"
+            android:layout_alignBaseline="@id/textCurrentDico"
+            android:onClick="SearchFragment.displayDictionaries"/>
+    </RelativeLayout>
 
 </RelativeLayout>
