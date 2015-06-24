@@ -47,6 +47,14 @@ public class WordDataModel extends DAOBase{
                     " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
                     " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%?%?;";
+
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%?%?" +
+            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
+
+
     private static final String SQL_SELECT_ALL_FROM_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
     private static final String SQL_SELECT_ALL = "SELECT * FROM " + WordEntry.TABLE_NAME + ";";
@@ -178,6 +186,33 @@ public class WordDataModel extends DAOBase{
         c.close();
         return listWord;
     }
+
+    /**
+     * Find a word in a dictionary with the wholeword (i.e its headword, its translation and its note)
+     * @param word the headword, the translation or the note of the word we are wanted to find
+     * @param dictionaryID the ID of the dictionary in we wish we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
+     * @return A list of word which have this headword, this translation or this note in the selected dictionary
+     */
+    public ArrayList<Word> selectHeadwordWithBeginMiddleEnd(String begin, String middle, String end, long dictionaryID){
+        SQLiteDatabase db = open();
+
+        Cursor c;
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD, new String[]{String.valueOf(begin), String.valueOf(middle), String.valueOf(end), String.valueOf(dictionaryID)});
+        }
+        else{
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY, new String[]{String.valueOf(begin), String.valueOf(middle), String.valueOf(end), String.valueOf(dictionaryID)});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        while (c.moveToNext()) {
+            Word w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
 
     /**
      * Find all the words in the database present in a dictionary
