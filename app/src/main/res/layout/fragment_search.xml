@@ -12,38 +12,80 @@
         tools:context=".MainActivity"
         android:id="@+id/searchStrings">
 
-        <EditText
-            android:id="@+id/beginString"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:hint="@string/begin_with"
-            android:textColor="#000000"
-            android:textSize="25sp"
-            android:layout_marginBottom="15dip" />
+            android:id="@+id/b">
 
-        <EditText
-            android:id="@+id/middleString"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search_white_36dp"
+                android:contentDescription="zoom"
+                android:layout_alignBaseline="@+id/beginString"
+                android:layout_gravity="center"/>
+
+            <EditText
+                android:id="@+id/beginString"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:hint="@string/begin_with"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                android:layout_marginBottom="15dip" />
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:hint="@string/contains"
-            android:textColor="#000000"
-            android:textSize="25sp"
-            android:layout_marginBottom="15dip"
-            android:layout_below="@id/beginString"/>
+            android:id="@+id/m"
+            android:layout_below="@id/b">
 
-        <EditText
-            android:id="@+id/endString"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search_white_36dp"
+                android:contentDescription="zoom"
+                android:layout_alignBaseline="@+id/middleString" />
+
+            <EditText
+                android:id="@+id/middleString"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:hint="@string/contains"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                android:layout_marginBottom="15dip" />
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:hint="@string/end_with"
-            android:textColor="#000000"
-            android:textSize="25sp"
-            android:layout_marginBottom="15dip"
-            android:layout_below="@id/middleString"/>
+            android:id="@+id/e"
+            android:layout_below="@id/m">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search_white_36dp"
+                android:contentDescription="zoom"
+                android:layout_alignBaseline="@+id/endString" />
+
+            <EditText
+                android:id="@+id/endString"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:hint="@string/end_with"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                android:layout_marginBottom="15dip" />
+        </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -105,7 +147,7 @@
             android:layout_gravity="center"
             android:text="@string/allDico"
             android:layout_alignParentRight="true"
-            android:layout_alignBaseline="@id/textCurrentDico"
+            android:layout_alignBaseline="@+id/textCurrentDico"
             android:onClick="displayDictionaries"/>
     </RelativeLayout>
 

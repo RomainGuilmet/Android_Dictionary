@@ -20,5 +20,5 @@
     <string name="search">Search !</string>
 
     <string name="returnString">Return</string>
-    <string name="title_activity_advanced_search_result">AdvancedSearchResultActivity</string>
+    <string name="title_activity_advanced_search_result">Advanced Search Result</string>
 </resources>

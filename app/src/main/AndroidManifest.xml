@@ -16,7 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".Controllers.AdvancedSearchResultActivity"
+            android:label="@string/title_activity_advanced_search_result" >
+        </activity>
     </application>
 
 </manifest>

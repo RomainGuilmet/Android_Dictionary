@@ -53,37 +53,17 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
             String headWhole = intent.getStringExtra(EXTRA_HEAD_OR_WHOLE);
             String dico = intent.getStringExtra(EXTRA_TARGET_DICO);
 
-            System.out.println("b = "+begin+".");
-            System.out.println("m = "+middle+".");
-            System.out.println("e = "+end+".");
-            System.out.println(headWhole);
-
             // find id of the dictionary
             long id;
             DictionaryDataModel ddm = new DictionaryDataModel(this);
-/*            ddm.insert(new Dictionary("Dico1"));
-            ddm.insert(new Dictionary("Dico2"));
-            ddm.insert(new Dictionary("Dico3"));
-            ddm.insert(new Dictionary("Dico4"));*/
-
-            System.out.println(dico);
-
             if(!dico.equals(ALL_DICO)) {
                 id = ddm.select(dico).getId();
             } else {
                 id = Word.ALL_DICTIONARIES;
             }
 
-            System.out.println(id);
-
             // search
             WordDataModel wdm = new WordDataModel(this);
-
-/*            wdm.insert(new Word(1, "try", "essayer", "This is my note"));
-            wdm.insert(new Word(2, "try2", "essayer", "This is my note"));
-            wdm.insert(new Word(1, "play", "jouer", "This is my note yeah yeah"));
-            wdm.insert(new Word(1, "break", "briser, pause", "Great or note"));*/
-
             if(headWhole.equals("head")){
                 results = wdm.selectHeadwordWithBeginMiddleEnd(begin, middle, end, id);
             } else {
@@ -91,13 +71,17 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
             }
         }
 
-        System.out.println(results.size());
-
         // Display results
         vue = (ListView) findViewById(R.id.resultsList);
-
         List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
         HashMap<String, String> element;
+
+        // if there is no result to display
+        if(results.size()==0){
+            element = new HashMap<String, String>();
+            element.put("headword","Empty list");
+            liste.add(element);
+        }
 
         for(int i = 0 ; i < results.size() ; i++) {
             // we add each word of the results list in this new list
@@ -118,7 +102,7 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
                 new String[] {"headword", "translation"},
                 new int[] {android.R.id.text1, android.R.id.text2 });
 
-        //Pour finir, on donne a la ListView le SimpleAdapter
+        // Give ListView to the SimpleAdapter
         vue.setAdapter(adapter);
 
     }
