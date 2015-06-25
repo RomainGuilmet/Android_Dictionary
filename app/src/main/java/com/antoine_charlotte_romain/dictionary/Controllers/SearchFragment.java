@@ -32,48 +32,21 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View vue = inflater.inflate(R.layout.fragment_search,container,false);
+        thisView = inflater.inflate(R.layout.fragment_search,container,false);
 
-        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity())
-                .setTitle("try")
-                .setMessage("My message !")
-                .setNegativeButton("Retour", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert);
-        AlertDialog alert = ad.create();
-        alert.show();
+        ((MainActivity)getActivity()).setSearchFragment(this);
 
-        // Listener on the ChooseButton
-        final Button chooseButton = (Button) vue.findViewById(R.id.dicoButton);
-        System.out.println(chooseButton.getText());
-        chooseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("NOOOOOOOOOOOOO");
-                //displayDictionaries(v);
-            }
-        });
-
-        System.out.println("end");
-
-        return inflater.inflate(R.layout.fragment_search,container,false);
+        return thisView;
     }
 
     public void displayDictionaries(View v){
-        System.out.print("YEAH");
-        DictionaryDataModel ddm = new DictionaryDataModel(getActivity());
-        if (ddm != null)
-            System.out.println("YEAH");
-        else
-            System.out.println("NOOOOOOOOO");
+        DictionaryDataModel ddm = new DictionaryDataModel(this.getActivity());
         ArrayList<Dictionary> dico = ddm.select();
-        ArrayList<String> nameDico = new ArrayList<String>();
-        for (Dictionary d : dico){
-            nameDico.add(d.getTitle());
+        String[] nameDico = new String[dico.size()];
+        for (int i=0; i<dico.size(); i++){
+            nameDico[i] = dico.get(i).getTitle();
         }
-        final String[] names = (String[])nameDico.toArray();
+        final String[] names = nameDico.clone();
 
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity())
                 .setTitle("@string/choose_dico")

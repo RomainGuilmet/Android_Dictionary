@@ -102,10 +102,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/choose"
+            android:text="@string/all"
             android:layout_alignParentRight="true"
             android:layout_alignBaseline="@id/textCurrentDico"
-            android:onClick="SearchFragment.displayDictionaries"/>
+            android:onClick="displayDictionaries"/>
     </RelativeLayout>
 
 </RelativeLayout>

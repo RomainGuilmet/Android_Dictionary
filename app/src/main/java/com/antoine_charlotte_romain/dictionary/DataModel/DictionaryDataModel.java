@@ -76,7 +76,6 @@ public class DictionaryDataModel extends DAOBase{
         // Creating object found
         ArrayList<Dictionary> d = new ArrayList<Dictionary>();
         while (c.moveToNext()) {
-            c.moveToNext();
             // Obtained row is made of :
             // / id / title /
             d.add(new Dictionary(c.getLong(0), c.getString(1)));

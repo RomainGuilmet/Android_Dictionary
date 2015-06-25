@@ -7,4 +7,14 @@
     <string name="last">Last</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="begin_with">Begin with</string>
+    <string name="contains">Contains</string>
+    <string name="end_with">End with</string>
+    <string name="headword_only">Headword only</string>
+    <string name="whole_word">Whole word</string>
+    <string name="choose">Choose</string>
+    <string name="all">All</string>
+    <string name="actual_dico">Target dictionary :</string>
+    <string name="choose_dico">Choose a dictionary</string>
 </resources>

@@ -1,11 +1,13 @@
 package com.antoine_charlotte_romain.dictionary.Controllers;
 
+import android.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
 import com.antoine_charlotte_romain.dictionary.R;
@@ -18,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     int numbOfTabs =3;
+
+    private SearchFragment searchFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,5 +77,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setSearchFragment(SearchFragment f){
+        this.searchFragment = f;
+    }
+
+    public void displayDictionaries(View v){
+        this.searchFragment.displayDictionaries(v);
     }
 }
