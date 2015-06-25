@@ -7,6 +7,9 @@ import android.provider.BaseColumns;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Created by summer1 on 22/06/2015.
  * Updated by summer3 on 22/06/2015.
@@ -112,6 +115,26 @@ public class DictionaryDataModel extends DAOBase{
         }
         c.close();
         return d;
+    }
+
+    /**
+     * Find all dictionaries in the DataBase
+     *
+     * @return The list of dictionaries
+     */
+    public ArrayList<Dictionary> selectAll() {
+        // Gets the data repository in write mode
+        this.open();
+
+        Cursor c = myDb.rawQuery("select * from " + DictionaryEntry.TABLE_NAME, null);
+        ArrayList<Dictionary> listDictionary = new ArrayList<Dictionary>();
+
+        while (c.moveToNext()) {
+            Dictionary w = new Dictionary(c.getLong(0), c.getString(1));
+            listDictionary.add(w);
+        }
+        c.close();
+        return listDictionary;
     }
 
     /**

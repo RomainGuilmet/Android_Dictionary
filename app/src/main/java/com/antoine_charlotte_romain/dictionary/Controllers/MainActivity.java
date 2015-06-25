@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
 import com.antoine_charlotte_romain.dictionary.R;
 
@@ -17,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    int Numboftabs =3;
+    int Numboftabs = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

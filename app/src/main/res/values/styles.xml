@@ -5,6 +5,7 @@
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="popupTheme">@style/PopupMenuStyle</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="PopupMenuStyle" parent="ThemeOverlay.AppCompat">
