@@ -30,10 +30,10 @@ public class WordDataModel extends DAOBase{
 
     private static final String SQL_SELECT_WORD_FROM_ID = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry._ID + " = ?;";
 
-    private static final String SQL_SELECT_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%;";
+    private static final String SQL_SELECT_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
 
     private static final String SQL_SELECT_WORD_FROM_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%" +
+                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
                     " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
     private static final String SQL_SELECT_WORD_FROM_WHOLE_WORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
@@ -48,21 +48,21 @@ public class WordDataModel extends DAOBase{
                     " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%?%?;";
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%?%?" +
-            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
+            " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " AND " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%?%?" +
-            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?%?%?" +
-            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?%?%?;";
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%?%?" +
-            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?%?%?" +
-            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?%?%?" +
+            " WHERE (" + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ? )" +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
     private static final String SQL_SELECT_ALL_FROM_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
@@ -208,17 +208,19 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectHeadwordWithBeginMiddleEnd(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
+        String search = begin+"%"+middle+"%"+end;
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
-            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD, new String[]{String.valueOf(begin), String.valueOf(middle), String.valueOf(end), String.valueOf(dictionaryID)});
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD, new String[]{search});
         }
         else{
-            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY, new String[]{String.valueOf(begin), String.valueOf(middle), String.valueOf(end), String.valueOf(dictionaryID)});
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY, new String[]{String.valueOf(dictionaryID), search});
         }
 
         ArrayList<Word> listWord = new ArrayList<Word>();
+        Word w;
         while (c.moveToNext()) {
-            Word w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
             listWord.add(w);
         }
         c.close();
@@ -236,12 +238,13 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectWholeWordWithBeginMiddleEnd(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
+        String search = begin+"%"+middle+"%"+end;
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
-            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD, new String[]{String.valueOf(begin), String.valueOf(middle), String.valueOf(end), String.valueOf(dictionaryID)});
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD, new String[]{search, search, search});
         }
         else{
-            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD_AND_DICTIONARY, new String[]{String.valueOf(begin), String.valueOf(middle), String.valueOf(end), String.valueOf(dictionaryID)});
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD_AND_DICTIONARY, new String[]{search, search, search, String.valueOf(dictionaryID)});
         }
 
         ArrayList<Word> listWord = new ArrayList<Word>();

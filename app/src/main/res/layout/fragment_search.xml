@@ -60,7 +60,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:checkedButton="@+id/headword">
+            android:checkedButton="@+id/headword"
+            android:id="@+id/boutonsradio">
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -102,10 +103,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/all"
+            android:text="@string/allDico"
             android:layout_alignParentRight="true"
             android:layout_alignBaseline="@id/textCurrentDico"
             android:onClick="displayDictionaries"/>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        android:layout_below="@id/dico"
+        android:id="@+id/validate">
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/search"
+            android:layout_centerHorizontal="true"
+            android:onClick="advancedSearch"/>
     </RelativeLayout>
 
 </RelativeLayout>

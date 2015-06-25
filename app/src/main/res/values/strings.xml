@@ -14,7 +14,11 @@
     <string name="headword_only">Headword only</string>
     <string name="whole_word">Whole word</string>
     <string name="choose">Choose</string>
-    <string name="all">All</string>
+    <string name="allDico">All</string>
     <string name="actual_dico">Target dictionary :</string>
     <string name="choose_dico">Choose a dictionary</string>
+    <string name="search">Search !</string>
+
+    <string name="returnString">Return</string>
+    <string name="title_activity_advanced_search_result">AdvancedSearchResultActivity</string>
 </resources>

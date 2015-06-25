@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
@@ -24,6 +26,7 @@ import java.util.List;
  */
 public class SearchFragment extends Fragment {
     private View thisView;
+    final String ALL_DICO = "All";
 
     public SearchFragment() {
         // Required empty public constructor
@@ -36,27 +39,30 @@ public class SearchFragment extends Fragment {
 
         ((MainActivity)getActivity()).setSearchFragment(this);
 
+        ((Button)thisView.findViewById(R.id.dicoButton)).setText(ALL_DICO);
+
         return thisView;
     }
 
     public void displayDictionaries(View v){
         DictionaryDataModel ddm = new DictionaryDataModel(this.getActivity());
         ArrayList<Dictionary> dico = ddm.select();
-        String[] nameDico = new String[dico.size()];
+        String[] nameDico = new String[dico.size()+1];
+        nameDico[0] = ALL_DICO;
         for (int i=0; i<dico.size(); i++){
-            nameDico[i] = dico.get(i).getTitle();
+            nameDico[i+1] = dico.get(i).getTitle();
         }
         final String[] names = nameDico.clone();
 
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity())
-                .setTitle("@string/choose_dico")
+                .setTitle(R.string.choose_dico)
                 .setItems(names, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         ((Button)thisView.findViewById(R.id.dicoButton)).setText(names[which]);
                     }
                 })
-                .setNegativeButton("Retour", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
@@ -64,5 +70,50 @@ public class SearchFragment extends Fragment {
                 .setIcon(android.R.drawable.ic_dialog_alert);
         AlertDialog alert = ad.create();
         alert.show();
+    }
+
+    public void advancedSearch(View v){
+        Intent intent = new Intent(getActivity(), AdvancedSearchResultActivity.class);
+
+        // Let's take the string indicated by the user
+        final String EXTRA_BEGIN_STRING = "begin";
+        final String EXTRA_MIDDLE_STRING = "middle";
+        final String EXTRA_END_STRING = "end";
+
+        EditText beginS = (EditText) thisView.findViewById(R.id.beginString);
+        EditText middleS = (EditText) thisView.findViewById(R.id.middleString);
+        EditText endS = (EditText) thisView.findViewById(R.id.endString);
+
+        String bString = "";
+        String mString = "";
+        String eString = "";
+        if (beginS.getText() != null)
+            bString = beginS.getText().toString();
+        if (middleS.getText() != null)
+            mString = middleS.getText().toString();
+        if (beginS.getText() != null)
+            eString = endS.getText().toString();
+
+        intent.putExtra(EXTRA_BEGIN_STRING, bString);
+        intent.putExtra(EXTRA_MIDDLE_STRING, mString);
+        intent.putExtra(EXTRA_END_STRING, eString);
+
+        // Let's see if the search has to be done on headword or whole word
+        final String EXTRA_HEAD_OR_WHOLE = "headOrWhole";
+        switch (((RadioGroup)thisView.findViewById(R.id.boutonsradio)).getCheckedRadioButtonId()) {
+            case R.id.headword:
+                intent.putExtra(EXTRA_HEAD_OR_WHOLE, "head");
+                break;
+            case R.id.whole:
+                intent.putExtra(EXTRA_HEAD_OR_WHOLE, "whole");
+                break;
+        }
+
+        // Let's get the targeted dictionary
+        final String EXTRA_TARGET_DICO = "target";
+        String dico = ((Button)thisView.findViewById(R.id.dicoButton)).getText().toString();
+        intent.putExtra(EXTRA_TARGET_DICO, dico);
+
+        startActivity(intent);
     }
 }
