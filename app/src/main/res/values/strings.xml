@@ -8,17 +8,31 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="begin_with">Begin with</string>
-    <string name="contains">Contains</string>
-    <string name="end_with">End with</string>
-    <string name="headword_only">Headword only</string>
-    <string name="whole_word">Whole word</string>
-    <string name="choose">Choose</string>
-    <string name="allDico">All</string>
-    <string name="actual_dico">Target dictionary :</string>
-    <string name="choose_dico">Choose a dictionary</string>
-    <string name="search">Search !</string>
-
-    <string name="returnString">Return</string>
+    <string name="advsearch_begin_with">Begin with</string>
+    <string name="advsearch_contains">Contains</string>
+    <string name="advsearch_end_with">End with</string>
+    <string name="advsearch_headword_only">Headword only</string>
+    <string name="advsearch_whole_word">Whole word</string>
+    <string name="advsearch_choose">Choose</string>
+    <string name="advsearch_allDico">All</string>
+    <string name="advsearch_actual_dico">Target dictionary :</string>
+    <string name="advsearch_choose_dico">Choose a dictionary</string>
+    <string name="advsearch_search">Search !</string>
+    <string name="advsearch_returnString">Return</string>
     <string name="title_activity_advanced_search_result">Advanced Search Result</string>
+
+    <string name="search">Search</string>
+    <string name="advanced_search">Advanced Search</string>
+    <string name="list_words_activity">List</string>
+    <string name="word_activity">Details</string>
+    <string name="headword">HeadWord :</string>
+    <string name="translation">Translation :</string>
+    <string name="note">Note :</string>
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="action_import_csv">Import a csv</string>
+    <string name="action_add_word">Add a word</string>
+    <string name="action_rename">Rename</string>
+    <string name="dictionary">Dictionary :</string>
 </resources>

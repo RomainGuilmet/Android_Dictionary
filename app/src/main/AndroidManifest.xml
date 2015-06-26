@@ -17,6 +17,23 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Controllers.ListWordsActivity"
+            android:label="@string/list_words_activity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".Controllers.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Controllers.WordActivity"
+            android:label="@string/word_activity"
+            android:parentActivityName=".Controllers.ListWordsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.ListWordsActivity" />
+        </activity>
+        <activity
             android:name=".Controllers.AdvancedSearchResultActivity"
             android:label="@string/title_activity_advanced_search_result" >
         </activity>

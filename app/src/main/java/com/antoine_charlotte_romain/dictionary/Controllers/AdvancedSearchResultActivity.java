@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -105,6 +107,25 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
         // Give ListView to the SimpleAdapter
         vue.setAdapter(adapter);
 
+        vue.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                HashMap<String, String> item = (HashMap<String, String>) parent.getItemAtPosition(position);
+                Long idword = Long.parseLong(item.get("id"));
+                Long dicoid = Long.parseLong(item.get("dicoid"));
+                String headword = item.get("headword");
+                String translation = item.get("translation");
+                String note = item.get("note");
+
+                Intent intent = new Intent(AdvancedSearchResultActivity.this, WordActivity.class);
+                intent.putExtra("selectedWord", new Word(idword,dicoid,headword,translation,note));
+
+                DictionaryDataModel ddm = new DictionaryDataModel(getApplicationContext());
+                intent.putExtra("selectedDictionary", ddm.select(dicoid));
+
+                startActivity(intent);
+            }
+        });
     }
 
 

@@ -5,6 +5,9 @@
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="popupTheme">@style/PopupMenuStyle</item>
+        <item name="alertDialogTheme">@style/alertDialogStyle</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="borderlessButtonStyle">@color/colorTextFlatButton</item>
     </style>
 
     <style name="PopupMenuStyle" parent="ThemeOverlay.AppCompat">
@@ -12,4 +15,13 @@
         <item name="android:textColor">@color/windowBackground</item>
     </style>
 
+    <style name="alertDialogStyle" parent="ThemeOverlay.AppCompat">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/windowBackground</item>
+    </style>
+
+    <style name="borderlessButtonStyle" parent="ThemeOverlay.AppCompat">
+        <item name="android:background">@color/windowBackground</item>
+        <item name="android:textColor">@color/colorTextFlatButton</item>
+    </style>
 </resources>

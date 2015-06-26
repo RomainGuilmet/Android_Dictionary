@@ -21,7 +21,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_white_36dp"
+                android:src="@drawable/ic_search_grey_36dp"
                 android:contentDescription="zoom"
                 android:layout_alignBaseline="@+id/beginString"
                 android:layout_gravity="center"/>
@@ -31,7 +31,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:hint="@string/begin_with"
+                android:hint="@string/advsearch_begin_with"
                 android:textColor="#000000"
                 android:textSize="25sp"
                 android:layout_marginBottom="15dip" />
@@ -47,7 +47,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_white_36dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_search_grey_36dp"
                 android:contentDescription="zoom"
                 android:layout_alignBaseline="@+id/middleString" />
 
@@ -56,7 +57,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:hint="@string/contains"
+                android:hint="@string/advsearch_contains"
                 android:textColor="#000000"
                 android:textSize="25sp"
                 android:layout_marginBottom="15dip" />
@@ -72,7 +73,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_white_36dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_search_grey_36dp"
                 android:contentDescription="zoom"
                 android:layout_alignBaseline="@+id/endString" />
 
@@ -81,7 +83,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:hint="@string/end_with"
+                android:hint="@string/advsearch_end_with"
                 android:textColor="#000000"
                 android:textSize="25sp"
                 android:layout_marginBottom="15dip" />
@@ -108,14 +110,14 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/headword_only"
+                android:text="@string/advsearch_headword_only"
                 android:textSize="25sp"
                 android:id="@+id/headword"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/whole_word"
+                android:text="@string/advsearch_whole_word"
                 android:textSize="25sp"
                 android:id="@+id/whole"/>
 
@@ -135,7 +137,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/actual_dico"
+            android:text="@string/advsearch_actual_dico"
             android:id="@+id/textCurrentDico"
             android:textSize="25sp"
             android:textColor="#000000"/>
@@ -145,7 +147,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/allDico"
+            android:text="@string/advsearch_allDico"
             android:layout_alignParentRight="true"
             android:layout_alignBaseline="@+id/textCurrentDico"
             android:onClick="displayDictionaries"/>
@@ -165,7 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/search"
+            android:text="@string/advsearch_search"
             android:layout_centerHorizontal="true"
             android:onClick="advancedSearch"/>
     </RelativeLayout>
