@@ -35,4 +35,5 @@
     <string name="action_add_word">Add a word</string>
     <string name="action_rename">Rename</string>
     <string name="dictionary">Dictionary :</string>
+    <string name="title_activity_csvimport">CSVImportActivity</string>
 </resources>
