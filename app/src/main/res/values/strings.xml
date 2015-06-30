@@ -21,6 +21,14 @@
     <string name="advsearch_returnString">Return</string>
     <string name="title_activity_advanced_search_result">Advanced Search Result</string>
 
+    <string name="csvimport_returnString">Return</string>
+    <string name="csvimport_nocsv">No CSV found</string>
+    <string name="csvimport_popupmessage">What do you want to do know ?</string>
+    <string name="csvimport_popuptitle">CSV imported</string>
+    <string name="csvimport_popupnegative">Import other CSV</string>
+    <string name="csvimport_popuppositive">See updated dictionary</string>
+    <string name="title_activity_csvimport">Import a CSV</string>
+
     <string name="search">Search</string>
     <string name="advanced_search">Advanced Search</string>
     <string name="list_words_activity">List</string>
@@ -35,5 +43,6 @@
     <string name="action_add_word">Add a word</string>
     <string name="action_rename">Rename</string>
     <string name="dictionary">Dictionary :</string>
-    <string name="title_activity_csvimport">CSVImportActivity</string>
+    <string name="title_activity_csvexport">CSVExportActivity</string>
+
 </resources>

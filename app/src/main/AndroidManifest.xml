@@ -43,6 +43,10 @@
             android:name=".Controllers.CSVImportActivity"
             android:label="@string/title_activity_csvimport" >
         </activity>
+        <activity
+            android:name=".Controllers.CSVExportActivity"
+            android:label="@string/title_activity_csvexport" >
+        </activity>
     </application>
 
 </manifest>
