@@ -142,15 +142,24 @@ public class DictionaryDataModel extends DAOBase{
      *
      * @param d
      *          The dictionary to update
+     *
+     * @return 1 if the dictionary was updated
+     *         0 if the new dictionary already exists
      */
-    public void update(Dictionary d){
-        // Gets the data repository in write mode
-        this.open();
+    public int update(Dictionary d){
+        // Look if this dictionary (with this name) already exists
+        if(select(d.getTitle()) == null)
+        {
+            // Gets the data repository in write mode
+            this.open();
 
-        ContentValues value = new ContentValues();
-        value.put(DictionaryEntry.COLUMN_NAME_TITLE, d.getTitle());
+            ContentValues value = new ContentValues();
+            value.put(DictionaryEntry.COLUMN_NAME_TITLE, d.getTitle());
 
-        myDb.update(DictionaryEntry.TABLE_NAME, value, DictionaryEntry._ID + " = ?", new String[]{String.valueOf(d.getId())});
+            myDb.update(DictionaryEntry.TABLE_NAME, value, DictionaryEntry._ID + " = ?", new String[]{String.valueOf(d.getId())});
+            return 1;
+        }
+        return 0;
     }
 
     /**

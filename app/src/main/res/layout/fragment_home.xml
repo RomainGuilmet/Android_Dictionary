@@ -26,15 +26,23 @@
                         android:hint="@string/jump_to"
                         android:layout_marginLeft="12dp"
                         android:layout_marginRight="12dp"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:drawableLeft="@drawable/ic_search_black_18dp"
                         android:drawablePadding="5dp"
                         android:id="@+id/search_field"/>
 
-                <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/dictionary_list" />
+                    <GridView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dictionary_list"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="88dp"
+                        android:clipToPadding="false"
+                        android:numColumns="@integer/nb_columns_dico_grid"
+                        android:verticalSpacing="@dimen/vertical_spacing"
+                        android:paddingLeft="@dimen/grid_space"
+                        />
+
 
             </LinearLayout>
 
