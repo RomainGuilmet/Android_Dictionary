@@ -29,6 +29,19 @@
     <string name="csvimport_popuppositive">See updated dictionary</string>
     <string name="title_activity_csvimport">Import a CSV</string>
 
+    <string name="csvexport_insertCSVname">Name of the CSV file :</string>
+    <string name="csvexport_CSVname">CSV name</string>
+    <string name="csvexport_export">Export !</string>
+    <string name="csvexport_popupmessage">The dictionary was exported</string>
+    <string name="csvexport_popuptitle">Success</string>
+    <string name="csvexport_popupnegative">EEEE</string>
+    <string name="csvexport_popuppositive">Return to dictionaries</string>
+    <string name="csvexport_popupmessage1">The specified name already exists</string>
+    <string name="csvexport_popuptitle1">Oups...</string>
+    <string name="csvexport_popupnegative1">EEEE</string>
+    <string name="csvexport_popuppositive1">Change file name</string>
+    <string name="title_activity_csvexport">CSVExportActivity</string>
+
     <string name="search">Search</string>
     <string name="advanced_search">Advanced Search</string>
     <string name="list_words_activity">List</string>
@@ -43,6 +56,5 @@
     <string name="action_add_word">Add a word</string>
     <string name="action_rename">Rename</string>
     <string name="dictionary">Dictionary :</string>
-    <string name="title_activity_csvexport">CSVExportActivity</string>
 
 </resources>

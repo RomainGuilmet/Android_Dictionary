@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".AdvancedSearchResultActivity">
+
+<include android:id="@+id/tool_bar"
+    layout="@layout/tool_bar"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"/>
+
+<android.support.v4.view.ViewPager
+    android:id="@+id/pager"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_weight="1" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/csvexport_insertCSVname"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/nom">
+
+            <EditText
+                android:id="@+id/nameCSVfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:layout_alignParentLeft="true"
+                android:hint="@string/csvexport_CSVname"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                android:layout_marginBottom="25dip"
+                android:layout_toLeftOf="@+id/dotCSV"/>
+
+            <TextView
+                android:id="@+id/dotCSV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:text=".csv"
+                android:textColor="#000000"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/nom"
+            android:id="@+id/validate">
+
+            <Button
+                android:id="@+id/okButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/csvexport_export"
+                android:layout_centerHorizontal="true"
+                android:onClick="export"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
