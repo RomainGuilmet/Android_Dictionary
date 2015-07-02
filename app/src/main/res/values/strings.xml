@@ -28,4 +28,5 @@
     <string name="rename_button">rename</string>
     <string name="dictionary_renamed">Dictionary renamed.</string>
     <string name="dictionary_not_renamed">Can\'t rename this dictionary. Name already taken.</string>
+    <string name="open">Open</string>
 </resources>

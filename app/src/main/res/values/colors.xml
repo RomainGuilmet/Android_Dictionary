@@ -25,7 +25,7 @@
     <color name="colorPrimaryDark">@color/cyan_600</color>
     <color name="tabsScrollColor">@color/lime_A100</color>
     <color name="colorAccent">@color/cyan_500</color>
-    <color name="textColor">@color/grey_900</color>
+    <color name="textColor">@color/grey_700</color>
 
     <!-- Red -->
     <color name="red_50">#FFEBEE</color>
