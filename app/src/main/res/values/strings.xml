@@ -23,9 +23,10 @@
 
     <string name="csvimport_returnString">Return</string>
     <string name="csvimport_nocsv">No CSV found</string>
-    <string name="csvimport_popupmessage">What do you want to do know ?</string>
+    <string name="csvimport_popupmessage1">Number of added words :</string>
+    <string name="csvimport_popupmessage2">Number of updated words :</string>
     <string name="csvimport_popuptitle">CSV imported</string>
-    <string name="csvimport_popupnegative">Import other CSV</string>
+    <string name="csvimport_popupnegative">See updated words</string>
     <string name="csvimport_popuppositive">See updated dictionary</string>
     <string name="title_activity_csvimport">Import a CSV</string>
 

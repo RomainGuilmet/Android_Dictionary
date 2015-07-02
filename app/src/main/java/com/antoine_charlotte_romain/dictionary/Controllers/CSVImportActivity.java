@@ -42,6 +42,8 @@ public class CSVImportActivity extends AppCompatActivity {
     final String EXTRA_NEW_DICO_NAME = "name dico";
 
     String dictionaryName;
+    List<Word> updatedWords;
+    int addedWords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,10 @@ public class CSVImportActivity extends AppCompatActivity {
         // Creating The Toolbar and setting it as the Toolbar for the activity
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+
+        // Initialize attributes
+        updatedWords = new ArrayList<Word>();
+        addedWords = 0;
 
         // Get data associated to the advanced search
         Intent intent = getIntent();
@@ -96,19 +102,24 @@ public class CSVImportActivity extends AppCompatActivity {
             // When an item of the list is clicked
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Import the chosen CSV file in the previously specified dictionary
-                importCSV(csvDispo.get(position));
+                importCSV(csvDispo.get(position),updatedWords,addedWords);
                 // Display a pop up window
+                final String message = R.string.csvimport_popupmessage1 + addedWords + "\n"
+                        + R.string.csvimport_popupmessage2 + updatedWords.size();
                 new AlertDialog.Builder(CSVImportActivity.this)
                         .setTitle(R.string.csvimport_popuptitle)
-                        .setMessage(R.string.csvimport_popupmessage)
+                        .setMessage(message)
                         .setPositiveButton(R.string.csvimport_popuppositive, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // pop up closes and the list of the words in this dictionary is displayed
+                                // TODO Redirect to list of words (made by Romain) with the dictionary id OR the list of words ?
                             }
                         })
                         .setNegativeButton(R.string.csvimport_popupnegative, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // pop up closes and it is possible to import another CSV file
+                                // pop up closes and the list of the updated words is displayed
+                                // TODO display updated words (with list of words by Romain or new activity/update this one
+
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -171,12 +182,13 @@ public class CSVImportActivity extends AppCompatActivity {
      *
      * @param fileToRead
      *          The CSV file providing the words to add in the dictionary
+     * @return A list of updated words after the import
      */
-    private void importCSV(File fileToRead){
+    private void importCSV(File fileToRead, List<Word> updatedWords, int addedWords){
         // Get the dictionary in which the words have to be added
         DictionaryDataModel ddm = new DictionaryDataModel(this);
-        Dictionary d = ddm.select(dictionaryName); // if the dico exists !!!
-        // if it's a new one, when do we create it ? NOW
+        Dictionary d = ddm.select(dictionaryName);
+        // if a dictionary with this name dos not exist, we create it
         if (d == null)
             d = new Dictionary(dictionaryName);
         Long dicoID = d.getId();
@@ -194,9 +206,13 @@ public class CSVImportActivity extends AppCompatActivity {
             String[] wordInfo;
             String note;
             String translation;
+            Word w = null;
+            List<Word> databaseWord = null;
+            String meanings = "";
             while ((line = br.readLine()) != null) {
                 // Split the line with comma as a separator
                 wordInfo = line.split(cvsSplitBy);
+                // TODO warning : elements must not have comma in their string
                 note = "";
                 translation = "";
                 // if a translation exists
@@ -206,7 +222,29 @@ public class CSVImportActivity extends AppCompatActivity {
                 if (wordInfo.length >= 3)
                     note = extractWord(wordInfo[2]);
                 // Add the word in the database
-                wdm.insert(new Word(dicoID,extractWord(wordInfo[0]),translation,note));
+                w = new Word(dicoID,extractWord(wordInfo[0]),translation,note);
+                int result = wdm.insert(w);
+
+                // if the headword of the word we try to insert already exists in this dictionary
+                if (result == 1){
+                    // Get the already existing word
+                    databaseWord = wdm.selectFromHeadWord(w.getHeadword(),dicoID);
+                    if (databaseWord.size() == 1){
+                        // Get its translation
+                        meanings = databaseWord.get(0).getTranslation();
+                        // if the CSV word translation does not appear in the already existing word translation
+                        if (!meanings.contains(translation)){
+                            // TODO CHOOSE HOW TO REPRESENT ANOTHER MEANING
+                            meanings = meanings + " - " + translation;
+                            w.setTranslation(meanings);
+                            wdm.update(w);
+                            updatedWords.add(w);
+                        }
+                    }
+                } else if (result == 0){
+                    // if the word was successfully added in the database
+                    addedWords = addedWords + 1;
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -231,6 +269,7 @@ public class CSVImportActivity extends AppCompatActivity {
      *          The word without the simple quotes
      */
     private String extractWord(String s){
+        // TODO or just concatenate all strings after split() function ?
         String word = s;
         String splitBy = "'"; // Use the simple quote as a separator
         String[] strings = s.split(splitBy);
