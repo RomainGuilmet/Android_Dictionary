@@ -27,6 +27,7 @@
     <color name="colorAccent">@color/cyan_500</color>
     <color name="textColor">@color/grey_800</color>
     <color name="colorTextFlatButton">@color/blue_600</color>
+    <color name="buttonColor">@color/white</color>
 
     <!-- Red -->
     <color name="red_50">#FFEBEE</color>

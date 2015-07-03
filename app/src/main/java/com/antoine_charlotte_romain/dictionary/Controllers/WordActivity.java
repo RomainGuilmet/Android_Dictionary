@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -61,7 +62,7 @@ public class WordActivity extends AppCompatActivity {
         noteText = (EditText) findViewById(R.id.editTextNote);
         dictionaryText.setEnabled(false);
         dictionaryText.setText(selectedDictionary.getTitle());
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         setupUI(findViewById(R.id.word_layout));
     }
 
