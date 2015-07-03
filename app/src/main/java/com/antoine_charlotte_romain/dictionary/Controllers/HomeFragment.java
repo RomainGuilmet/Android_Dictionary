@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -28,7 +26,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -49,7 +46,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     *                        CONSTANTS
     *---------------------------------------------------------*/
 
-    public final static String EXTRA_DICTIONARY = "SelectedDictionary";
     private final int CONTEXT_MENU_READ = 0;
     private final int CONTEXT_MENU_UPDATE = 1;
     private final int CONTEXT_MENU_DELETE = 2;
@@ -124,14 +120,18 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         v = inflater.inflate(R.layout.fragment_home,container,false);
         rootLayout = (CoordinatorLayout) v.findViewById(R.id.rootLayout);
 
+        return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         initData();
         initGridView();
         initEditText();
         initFloatingActionButton();
-
-        return v;
     }
-
 
     /**
      * Initialising the data model and selecting all the dictionaries
@@ -140,10 +140,8 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     {
         ddm = new DictionaryDataModel(getActivity());
         ddm.open();
-        //for (int i = 0; i < 10; i++) {ddm.insert(new Dictionary("Dictionary " + i));}
         dictionaries = ddm.selectAll();
-        dictionariesDisplay = new ArrayList<Dictionary>(dictionaries);
-
+        dictionariesDisplay = new ArrayList<>(dictionaries);
     }
 
     /**
@@ -203,7 +201,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                         dictionariesDisplay.add(dictionaries.get(i));
                 }
                 adapter.notifyDataSetChanged();
-            };
+            }
         });
     }
 
@@ -354,7 +352,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
 
         Dictionary d = dictionariesDisplay.get(position);
         Intent intent = new Intent(HomeFragment.this.getActivity(),ListWordsActivity.class);
-        intent.putExtra(EXTRA_DICTIONARY, d);
+        intent.putExtra(MainActivity.EXTRA_DICTIONARY, d);
         startActivity(intent);
     }
 

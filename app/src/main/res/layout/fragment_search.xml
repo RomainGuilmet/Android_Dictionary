@@ -1,175 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".MainActivity"
-        android:id="@+id/searchStrings">
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/b">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_search_grey_36dp"
-                android:contentDescription="zoom"
-                android:layout_alignBaseline="@+id/beginString"
-                android:layout_gravity="center"/>
-
-            <EditText
-                android:id="@+id/beginString"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:hint="@string/advsearch_begin_with"
-                android:textColor="#000000"
-                android:textSize="25sp"
-                android:layout_marginBottom="15dip" />
-        </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/m"
-            android:layout_below="@id/b">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_search_grey_36dp"
-                android:contentDescription="zoom"
-                android:layout_alignBaseline="@+id/middleString" />
-
-            <EditText
-                android:id="@+id/middleString"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:hint="@string/advsearch_contains"
-                android:textColor="#000000"
-                android:textSize="25sp"
-                android:layout_marginBottom="15dip" />
-        </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/e"
-            android:layout_below="@id/m">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_search_grey_36dp"
-                android:contentDescription="zoom"
-                android:layout_alignBaseline="@+id/endString" />
-
-            <EditText
-                android:id="@+id/endString"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:hint="@string/advsearch_end_with"
-                android:textColor="#000000"
-                android:textSize="25sp"
-                android:layout_marginBottom="15dip" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <EditText
+        android:id="@+id/beginString"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".MainActivity"
-        android:layout_below="@id/searchStrings"
-        android:id="@+id/radio"
-        android:layout_marginBottom="15dip">
+        android:gravity="left"
+        android:drawableLeft="@drawable/ic_search_black_18dp"
+        android:drawableStart="@drawable/ic_search_black_18dp"
+        android:editable="false"
+        android:hint="@string/advsearch_begin_with"
+        android:inputType="text"
+        android:layout_marginEnd="@dimen/edit_text_margin"
+        android:layout_marginRight="@dimen/edit_text_margin"
+        android:layout_marginLeft="@dimen/edit_text_margin"
+        android:layout_marginStart="@dimen/edit_text_margin"/>
 
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:checkedButton="@+id/headword"
-            android:id="@+id/boutonsradio">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/advsearch_headword_only"
-                android:textSize="25sp"
-                android:id="@+id/headword"/>
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/advsearch_whole_word"
-                android:textSize="25sp"
-                android:id="@+id/whole"/>
-
-        </RadioGroup>
-
-    </RelativeLayout>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <EditText
+        android:id="@+id/middleString"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".MainActivity"
-        android:layout_below="@id/radio"
-        android:id="@+id/dico">
+        android:gravity="left"
+        android:drawableLeft="@drawable/ic_search_black_18dp"
+        android:drawableStart="@drawable/ic_search_black_18dp"
+        android:editable="false"
+        android:hint="@string/advsearch_contains"
+        android:inputType="text"
+        android:layout_below="@+id/beginString"
+        android:layout_alignLeft="@+id/beginString"
+        android:layout_alignStart="@+id/beginString"
+        android:layout_alignRight="@+id/beginString"
+        android:layout_alignEnd="@+id/beginString" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/advsearch_actual_dico"
-            android:id="@+id/textCurrentDico"
-            android:textSize="25sp"
-            android:textColor="#000000"/>
-
-        <Button
-            android:id="@+id/dicoButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/advsearch_allDico"
-            android:layout_alignParentRight="true"
-            android:layout_alignBaseline="@+id/textCurrentDico"
-            android:onClick="displayDictionaries"/>
-    </RelativeLayout>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <EditText
+        android:id="@+id/endString"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".MainActivity"
-        android:layout_below="@id/dico"
-        android:id="@+id/validate">
+        android:gravity="left"
+        android:drawableLeft="@drawable/ic_search_black_18dp"
+        android:drawableStart="@drawable/ic_search_black_18dp"
+        android:editable="false"
+        android:hint="@string/advsearch_end_with"
+        android:layout_below="@+id/middleString"
+        android:inputType="text"
+        android:layout_alignLeft="@+id/middleString"
+        android:layout_alignStart="@+id/middleString"
+        android:layout_alignRight="@+id/middleString"
+        android:layout_alignEnd="@+id/middleString" />
 
-        <Button
-            android:id="@+id/okButton"
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:checkedButton="@+id/headword"
+        android:id="@+id/boutonsradio"
+        android:layout_below="@+id/endString"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="@dimen/edit_text_margin"
+        android:layout_marginRight="@dimen/edit_text_margin"
+        android:layout_marginLeft="@dimen/edit_text_margin"
+        android:layout_marginStart="@dimen/edit_text_margin">
+
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/advsearch_search"
-            android:layout_centerHorizontal="true"
-            android:onClick="advancedSearch"/>
-    </RelativeLayout>
+            android:text="@string/advsearch_headword_only"
+            android:id="@+id/headword"
+            android:checked="false"
+            android:layout_below="@+id/endString"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="16dp" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/advsearch_whole_word"
+            android:id="@+id/whole"
+            android:layout_below="@+id/headword"
+            android:layout_toRightOf="@+id/boutonsradio"
+            android:layout_toEndOf="@+id/boutonsradio"
+            android:textSize="16dp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/advsearch_actual_dico"
+        android:id="@+id/textCurrentDico"
+        android:layout_below="@+id/boutonsradio"
+        android:layout_alignLeft="@+id/boutonsradio"
+        android:layout_alignStart="@+id/boutonsradio"
+        android:textSize="16dp" />
+
+    <Button
+        android:id="@+id/dicoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/advsearch_allDico"
+        android:onClick="displayDictionaries"
+        android:layout_below="@+id/boutonsradio"
+        android:layout_alignRight="@+id/endString"
+        android:layout_alignEnd="@+id/endString"
+        android:layout_marginTop="-10dp" />
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/advsearch_search"
+        android:onClick="advancedSearch"
+        android:layout_below="@+id/dicoButton"
+        android:layout_alignLeft="@+id/dicoButton"
+        android:layout_alignStart="@+id/dicoButton" />
 
 </RelativeLayout>
