@@ -177,11 +177,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
             ImageView tabIconView = null;
 
 
-            if (tabView == null) {
-                tabView = createDefaultImageView(getContext());
-            }
+            tabView = createDefaultImageView(getContext());
 
-            if (tabIconView == null && ImageView.class.isInstance(tabView)) {
+            if (ImageView.class.isInstance(tabView)) {
                 tabIconView = (ImageView) tabView;
             }
 
@@ -305,7 +303,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         TypedValue outValue = new TypedValue();
         getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
                 outValue, true);
-        imageView.setBackgroundResource(outValue.resourceId);
+        imageView.setImageResource(outValue.resourceId);
 
         return imageView;
     }

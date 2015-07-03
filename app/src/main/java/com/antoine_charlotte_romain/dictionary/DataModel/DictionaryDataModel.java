@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
+import java.util.ArrayList;
 
 import java.util.ArrayList;
 
@@ -145,15 +146,24 @@ public class DictionaryDataModel extends DAOBase{
      *
      * @param d
      *          The dictionary to update
+     *
+     * @return 1 if the dictionary was updated
+     *         0 if the new dictionary already exists
      */
-    public void update(Dictionary d){
-        // Gets the data repository in write mode
-        this.open();
+    public int update(Dictionary d){
+        // Look if this dictionary (with this name) already exists
+        if(select(d.getTitle()) == null)
+        {
+            // Gets the data repository in write mode
+            this.open();
 
-        ContentValues value = new ContentValues();
-        value.put(DictionaryEntry.COLUMN_NAME_TITLE, d.getTitle());
+            ContentValues value = new ContentValues();
+            value.put(DictionaryEntry.COLUMN_NAME_TITLE, d.getTitle());
 
-        myDb.update(DictionaryEntry.TABLE_NAME, value, DictionaryEntry._ID + " = ?", new String[]{String.valueOf(d.getId())});
+            myDb.update(DictionaryEntry.TABLE_NAME, value, DictionaryEntry._ID + " = ?", new String[]{String.valueOf(d.getId())});
+            return 1;
+        }
+        return 0;
     }
 
     /**
@@ -170,7 +180,7 @@ public class DictionaryDataModel extends DAOBase{
         WordDataModel wdm = new WordDataModel(context);
         wdm.selectAllFromDictionary(id);
 
-        // delete words with dictionqryID in word table ? Or automatic with foreign key
+        // delete words with dictionaryID in word table ? Or automatic with foreign key
         myDb.delete(DictionaryEntry.TABLE_NAME, DictionaryEntry._ID + " = ?", new String[]{String.valueOf(id)});
     }
 
@@ -187,11 +197,29 @@ public class DictionaryDataModel extends DAOBase{
         // Find the dictionary associated to this name
         Dictionary result = select(dictionaryName);
         if (result != null){
-            // if there is a dictionary with this name, suppress its words and then supress the dictionary
+            // if there is a dictionary with this name, suppress its words and then suppress the dictionary
             WordDataModel wdm = new WordDataModel(context);
             wdm.selectAllFromDictionary(result.getId());
             delete(result.getId());
         }
 
+    }
+
+    public ArrayList<Dictionary> selectAll(){
+        // Gets the data repository in write mode
+        this.open();
+
+        // Query
+        Cursor c = myDb.rawQuery("select * from " + DictionaryEntry.TABLE_NAME, null);
+
+        // Creating object found
+        ArrayList<Dictionary> listDictionaries = new ArrayList<Dictionary>();
+        while (c.moveToNext()) {
+            Dictionary d = select(c.getLong(c.getColumnIndexOrThrow(DictionaryEntry._ID)));
+            listDictionaries.add(d);
+        }
+        c.close();
+        // if Cursor object has not only one element, something wrong happened
+        return listDictionaries;
     }
 }

@@ -49,7 +49,7 @@ public class CSVExportActivity extends AppCompatActivity {
             dictionaryName = intent.getStringExtra(EXTRA_NEW_DICO_NAME);
         }
 
-        // Au clic sur le bouton, on recup le dictionnaire associé au nom transmis
+        // Au clic sur le bouton, on recup le dictionnaire associ au nom transmis
         // on recup tous les mots de ce dictionnaire et on les ajoute dans un nouveau fichier
         // Changer AndroidManifest.xml ???
 

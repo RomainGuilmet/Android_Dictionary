@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:id="@+id/main_layout"
+    tools:context=".Controllers.MainActivity">
+
 
     <include android:id="@+id/tool_bar"
         layout="@layout/tool_bar"
@@ -17,10 +19,11 @@
         android:elevation="4dp"
         android:background="@color/colorPrimary"/>
 
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_weight="1" />
 
-</LinearLayout> 
+</LinearLayout>

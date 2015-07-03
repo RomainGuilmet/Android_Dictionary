@@ -1,5 +1,7 @@
 package com.antoine_charlotte_romain.dictionary.Controllers;
 
+import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
+import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -19,8 +25,9 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
     int numbOfTabs =3;
-
     private SearchFragment searchFragment;
+    private DictionaryDataModel dd;
+    private ArrayList<Dictionary> listDictionaries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         tabs.setViewPager(pager);
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

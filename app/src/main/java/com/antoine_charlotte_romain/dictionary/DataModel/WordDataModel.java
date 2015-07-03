@@ -30,21 +30,23 @@ public class WordDataModel extends DAOBase{
 
     private static final String SQL_SELECT_WORD_FROM_ID = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry._ID + " = ?;";
 
-    private static final String SQL_SELECT_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
+    private static final String SQL_SELECT_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?"
+            + " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_FROM_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
-                    " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
+                    " WHERE UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?" +
+                    " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+                     " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_FROM_WHOLE_WORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
-                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%" +
-                    " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?%" +
-                    " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?%;";
+                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
+                    " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+                    " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?;";
 
     private static final String SQL_SELECT_WORD_FROM_WHOLE_WORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?%" +
-                    " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?%" +
-                    " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?%" +
+                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
+                    " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+                    " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
                     " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
@@ -65,9 +67,17 @@ public class WordDataModel extends DAOBase{
             " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ? )" +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
-    private static final String SQL_SELECT_ALL_FROM_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
+    private static final String SQL_SELECT_ALL_FROM_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME
+            + " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ? "
+            + " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
-    private static final String SQL_SELECT_ALL = "SELECT * FROM " + WordEntry.TABLE_NAME + ";";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM " + WordEntry.TABLE_NAME + " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_ALL_FROM_DICTIONARY_LIMIT = "SELECT * FROM " + WordEntry.TABLE_NAME
+            + " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ? "
+            + " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC LIMIT ? OFFSET ?;";
+
+    private static final String SQL_SELECT_ALL_LIMIT = "SELECT * FROM " + WordEntry.TABLE_NAME + " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC LIMIT ? OFFSET ?;";
 
     public static abstract class WordEntry implements BaseColumns {
         public static final String TABLE_NAME = "word";
@@ -156,10 +166,10 @@ public class WordDataModel extends DAOBase{
 
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
-            c = db.rawQuery(SQL_SELECT_WORD_FROM_HEADWORD, new String[]{String.valueOf(headWord)});
+            c = db.rawQuery(SQL_SELECT_WORD_FROM_HEADWORD, new String[]{String.valueOf(headWord)+"%"});
         }
         else{
-            c = db.rawQuery(SQL_SELECT_WORD_FROM_HEADWORD_AND_DICTIONARY, new String[]{String.valueOf(headWord), String.valueOf(dictionaryID)});
+            c = db.rawQuery(SQL_SELECT_WORD_FROM_HEADWORD_AND_DICTIONARY, new String[]{String.valueOf(headWord)+"%", String.valueOf(dictionaryID)});
         }
 
         ArrayList<Word> listWord = new ArrayList<Word>();
@@ -256,7 +266,6 @@ public class WordDataModel extends DAOBase{
         return listWord;
     }
 
-
     /**
      * Find all the words in the database present in a dictionary
      * @param dictionaryID the ID of the dictionary in which we want to find all the words
@@ -272,6 +281,34 @@ public class WordDataModel extends DAOBase{
         }
         else {
             c = db.rawQuery(SQL_SELECT_ALL_FROM_DICTIONARY, new String[]{String.valueOf(dictionaryID)});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        while (c.moveToNext()) {
+            Word w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
+    /**
+     * Find all the words in the database present in a dictionary
+     * @param dictionaryID the ID of the dictionary in which we want to find all the words
+     * @param limit the limit of rows to return if set to it will return all the rows
+     * @param offset the number of first rows to not return
+     * @return A list of all the words present in the selected dictionary
+     */
+    public ArrayList<Word> selectAllFromDictionary(long dictionaryID, int limit, int offset){
+        SQLiteDatabase db = open();
+
+        Cursor c;
+
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_ALL_LIMIT, new String[]{String.valueOf(limit), String.valueOf(offset)});
+        }
+        else {
+            c = db.rawQuery(SQL_SELECT_ALL_FROM_DICTIONARY_LIMIT, new String[]{String.valueOf(dictionaryID), String.valueOf(limit), String.valueOf(offset)});
         }
 
         ArrayList<Word> listWord = new ArrayList<Word>();
