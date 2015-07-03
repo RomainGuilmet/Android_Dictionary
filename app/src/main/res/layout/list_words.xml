@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Controllers.ListWordsActivity"
+    android:id="@+id/list_words_layout">
+
+    <include android:id="@+id/tool_bar"
+        layout="@layout/tool_bar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/advanced_search"
+        android:id="@+id/advancedSearch"
+        style="@style/borderlessButtonStyle"
+        android:layout_below="@+id/filterWords"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewWords"
+        android:layout_below="@+id/advancedSearch"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/filterWords"
+        android:layout_alignStart="@+id/filterWords"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:clipToPadding="false"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/filterWords"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:drawableStart="@drawable/ic_search_black_24dp"
+        android:editable="false"
+        android:inputType="textFilter"
+        android:hint="@string/search"
+        android:layout_below="@+id/tool_bar"
+        android:layout_alignRight="@+id/advancedSearch"
+        android:layout_alignEnd="@+id/advancedSearch"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingMenuButton"
+        android:src="@drawable/ic_add_white_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        android:onClick="showFloatingMenu"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:layout_marginEnd="@dimen/fab_margin_right"
+        android:layout_marginStart="@dimen/fab_margin_left"
+        android:layout_marginLeft="@dimen/fab_margin_left"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addWordButton"
+        android:src="@drawable/ic_create_white_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        android:onClick="newWord"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:layout_alignTop="@+id/floatingMenuButton"
+        android:layout_alignLeft="@+id/importCsvButton"
+        android:layout_alignStart="@+id/importCsvButton" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/importCsvButton"
+        android:src="@drawable/ic_file_upload_white_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        android:onClick="importCsv"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:layout_alignTop="@+id/floatingMenuButton"
+        android:layout_alignRight="@+id/floatingMenuButton"
+        android:layout_alignEnd="@+id/floatingMenuButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/add_word"
+        android:id="@+id/textAddAWord"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:layout_alignBottom="@+id/addWordButton"
+        android:layout_toLeftOf="@+id/addWordButton"
+        android:layout_toStartOf="@+id/addWordButton"
+        android:layout_marginBottom="@dimen/fab_menuText_margin_bottom"
+        android:layout_marginLeft="@dimen/fab_menuText_margin_right"
+        android:layout_marginEnd="@dimen/fab_menuText_margin_right" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/import_csv"
+        android:id="@+id/textImportACsv"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:layout_alignBottom="@+id/importCsvButton"
+        android:layout_toLeftOf="@+id/addWordButton"
+        android:layout_marginBottom="@dimen/fab_menuText_margin_bottom"
+        android:layout_toStartOf="@+id/addWordButton" />
+</RelativeLayout>

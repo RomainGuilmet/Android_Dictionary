@@ -24,8 +24,14 @@
     <color name="windowBackground">@color/grey_200</color>
     <color name="colorPrimaryDark">@color/cyan_600</color>
     <color name="tabsScrollColor">@color/lime_A100</color>
+<<<<<<< HEAD
     <color name="colorAccent">@color/cyan_500</color>
     <color name="textColor">@color/grey_700</color>
+=======
+    <color name="colorAccent">@color/teal_600</color>
+    <color name="colorTextFlatButton">@color/blue_600</color>
+
+>>>>>>> origin/Word
 
     <!-- Red -->
     <color name="red_50">#FFEBEE</color>

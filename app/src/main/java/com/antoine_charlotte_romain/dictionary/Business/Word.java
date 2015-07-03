@@ -1,9 +1,11 @@
 package com.antoine_charlotte_romain.dictionary.Business;
 
+import java.io.Serializable;
+
 /**
  * Created by summer1 on 22/06/2015.
  */
-public class Word {
+public class Word implements Serializable {
 
     private long id;
     private long dictionaryID;

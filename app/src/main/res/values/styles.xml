@@ -4,14 +4,31 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+<<<<<<< HEAD
         <item name="popupTheme">@style/PopupMenuStyle</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionMenuTextAppearance">@color/colorPrimary</item>
+=======
+        <item name="popupTheme">@style/popupMenuStyle</item>
+        <item name="alertDialogTheme">@style/alertDialogStyle</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="borderlessButtonStyle">@color/colorTextFlatButton</item>
+>>>>>>> origin/Word
     </style>
 
-    <style name="PopupMenuStyle" parent="ThemeOverlay.AppCompat">
+    <style name="popupMenuStyle" parent="ThemeOverlay.AppCompat">
         <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="alertDialogStyle" parent="ThemeOverlay.AppCompat">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/windowBackground</item>
+    </style>
+
+    <style name="borderlessButtonStyle" parent="ThemeOverlay.AppCompat">
+        <item name="android:background">@color/windowBackground</item>
+        <item name="android:textColor">@color/colorTextFlatButton</item>
     </style>
 
 </resources>
