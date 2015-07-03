@@ -23,9 +23,7 @@ import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 
-/**
- * Created by summer1 on 24/06/2015.
- */
+
 public class WordActivity extends AppCompatActivity {
 
     private EditText dictionaryText;
@@ -53,8 +51,8 @@ public class WordActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        selectedWord = (Word)intent.getSerializableExtra("selectedWord");
-        selectedDictionary = (Dictionary)intent.getSerializableExtra("selectedDictionary");
+        selectedWord = (Word)intent.getSerializableExtra(MainActivity.EXTRA_WORD);
+        selectedDictionary = (Dictionary)intent.getSerializableExtra(MainActivity.EXTRA_DICTIONARY);
 
         dictionaryText = (EditText) findViewById(R.id.editTextDictionary);
         headwordText = (EditText) findViewById(R.id.editTextHeadword);

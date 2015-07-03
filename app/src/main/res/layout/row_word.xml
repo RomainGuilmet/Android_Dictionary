@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants" >
+    android:descendantFocusability="blocksDescendants"
+    android:background="@color/white">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,7 +12,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/textHeader"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:layout_marginLeft="@dimen/edit_text_margin"
+        android:layout_marginStart="@dimen/edit_text_margin" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +25,9 @@
         android:textColor="@android:color/darker_gray"
         android:layout_below="@+id/textHeader"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/edit_text_margin"
+        android:layout_marginStart="@dimen/edit_text_margin"/>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -33,6 +38,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignBottom="@+id/textSub"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="@dimen/edit_text_margin"
+        android:layout_marginRight="@dimen/edit_text_margin"/>
 
 </RelativeLayout>

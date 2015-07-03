@@ -11,10 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
-import com.antoine_charlotte_romain.dictionary.Business.Word;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
-import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 
 import java.util.ArrayList;
@@ -22,11 +20,24 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    SlidingTabLayout tabs;
-    int numbOfTabs =3;
+    public final static int ADVANCED_HOME_FRAGMENT = 0;
+    public final static int ADVANCED_HISTORY_FRAGMENT = 1;
+    public final static int ADVANCED_SEARCH_FRAGMENT = 2;
+    public final static String EXTRA_DICTIONARY = "SelectedDictionary";
+    public final static String EXTRA_FRAGMENT = "fragment";
+    public final static String EXTRA_WORD = "selectedWord";
+    public static final String EXTRA_BEGIN_STRING = "begin";
+    public static final String EXTRA_MIDDLE_STRING = "middle";
+    public static final String EXTRA_END_STRING = "end";
+    public static final String EXTRA_HEAD_OR_WHOLE = "headOrWhole";
+
+    private Toolbar toolbar;
+    private ViewPager pager;
+    private ViewPagerAdapter adapter;
+    private SlidingTabLayout tabs;
+    private int numbOfTabs =3;
+
+
     private SearchFragment searchFragment;
     private DictionaryDataModel dd;
     private ArrayList<Dictionary> listDictionaries;
@@ -39,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
         // Creating The Toolbar and setting it as the Toolbar for the activity
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+
+        Intent intent = getIntent();
+        String fragment = intent.getStringExtra("fragment");
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter =  new ViewPagerAdapter(getSupportFragmentManager(),numbOfTabs);
@@ -62,11 +76,9 @@ public class MainActivity extends AppCompatActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        WordDataModel ddm = new WordDataModel(this);
-        ddm.open();
-        //for (int i = 0; i < 10; i++) {ddm.insert(new Dictionary("Dictionary " + i));}
-        System.out.println("MOTS  : " + ddm.selectAllFromDictionary(Word.ALL_DICTIONARIES));
-
+        if(fragment != null && fragment.equalsIgnoreCase("advancedSearch")){
+            pager.setCurrentItem(ADVANCED_SEARCH_FRAGMENT);
+        }
     }
 
     @Override
