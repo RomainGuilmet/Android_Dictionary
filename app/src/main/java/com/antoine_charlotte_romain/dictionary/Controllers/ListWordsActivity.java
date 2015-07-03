@@ -28,8 +28,7 @@ import com.antoine_charlotte_romain.dictionary.Business.Word;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
-import com.antoine_charlotte_romain.dictionary.Utilities.KeyBoardUtility;
-import com.antoine_charlotte_romain.dictionary.Utilities.WordAdapter;
+import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 
 import java.util.ArrayList;
 
@@ -85,7 +84,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        selectedDictionary = (Dictionary)intent.getSerializableExtra("selectedDictionary");
+        selectedDictionary = (Dictionary)intent.getSerializableExtra(HomeFragment.EXTRA_DICTIONARY);
 
         filterWords = (EditText) findViewById(R.id.filterWords);
         listViewWords = (ListView) findViewById(R.id.listViewWords);
@@ -588,7 +587,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             view.setOnTouchListener(new View.OnTouchListener() {
 
                 public boolean onTouch(View v, MotionEvent event) {
-                    KeyBoardUtility.hideSoftKeyboard(ListWordsActivity.this);
+                    KeyboardUtility.hideSoftKeyboard(ListWordsActivity.this);
                     return false;
                 }
 

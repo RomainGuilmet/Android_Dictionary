@@ -20,7 +20,7 @@ import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
-import com.antoine_charlotte_romain.dictionary.Utilities.KeyBoardUtility;
+import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 
 /**
  * Created by summer1 on 24/06/2015.
@@ -241,7 +241,7 @@ public class WordActivity extends AppCompatActivity {
             view.setOnTouchListener(new View.OnTouchListener() {
 
                 public boolean onTouch(View v, MotionEvent event) {
-                    KeyBoardUtility.hideSoftKeyboard(WordActivity.this);
+                    KeyboardUtility.hideSoftKeyboard(WordActivity.this);
                     return false;
                 }
 

@@ -16,8 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-=======
         <activity
             android:name=".Controllers.ListWordsActivity"
             android:label="@string/list_words_activity"
@@ -35,7 +33,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.ListWordsActivity" />
         </activity>
->>>>>>> origin/Word
     </application>
 
 </manifest>

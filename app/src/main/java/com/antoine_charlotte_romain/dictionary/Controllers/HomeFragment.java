@@ -353,10 +353,9 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     {
 
         Dictionary d = dictionariesDisplay.get(position);
-        System.out.println("read " + d.getTitle()) ;
-        /*Intent intent = new Intent(HomeFragment.this.getActivity(),DictionaryActivity.class);
+        Intent intent = new Intent(HomeFragment.this.getActivity(),ListWordsActivity.class);
         intent.putExtra(EXTRA_DICTIONARY, d);
-        startActivity(intent);*/
+        startActivity(intent);
     }
 
     /**

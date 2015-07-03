@@ -6,11 +6,6 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
-
-<<<<<<< HEAD
-import java.lang.reflect.Array;
-=======
->>>>>>> origin/Word
 import java.util.ArrayList;
 
 /**
@@ -118,26 +113,6 @@ public class DictionaryDataModel extends DAOBase{
         }
         c.close();
         return d;
-    }
-
-    /**
-     * Find all dictionaries in the DataBase
-     *
-     * @return The list of dictionaries
-     */
-    public ArrayList<Dictionary> selectAll() {
-        // Gets the data repository in write mode
-        this.open();
-
-        Cursor c = myDb.rawQuery("select * from " + DictionaryEntry.TABLE_NAME, null);
-        ArrayList<Dictionary> listDictionary = new ArrayList<Dictionary>();
-
-        while (c.moveToNext()) {
-            Dictionary w = new Dictionary(c.getLong(0), c.getString(1));
-            listDictionary.add(w);
-        }
-        c.close();
-        return listDictionary;
     }
 
     /**

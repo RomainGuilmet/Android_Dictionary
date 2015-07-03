@@ -6,7 +6,7 @@ import android.view.inputmethod.InputMethodManager;
 /**
  * Created by summer1 on 25/06/2015.
  */
-public class KeyBoardUtility {
+public class KeyboardUtility {
 
     public static void hideSoftKeyboard(AppCompatActivity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);

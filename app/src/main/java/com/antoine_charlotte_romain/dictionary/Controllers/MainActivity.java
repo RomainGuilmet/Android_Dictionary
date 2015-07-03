@@ -59,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        //TESTS
-        dd = new DictionaryDataModel(getApplicationContext());
-        listDictionaries = dd.selectAll();
     }
 
     @Override
@@ -85,22 +82,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-<<<<<<< HEAD
-
-=======
-    public void testAll(View view){
-        Intent i = new Intent(this, ListWordsActivity.class);
-
-        startActivity(i);
-    }
-
-    public void test(View view){
-        Intent i = new Intent(this, ListWordsActivity.class);
-
-        i.putExtra("selectedDictionary",listDictionaries.get(0));
-
-        startActivity(i);
-    }
->>>>>>> origin/Word
 }

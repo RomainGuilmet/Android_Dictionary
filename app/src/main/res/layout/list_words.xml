@@ -42,8 +42,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/filterWords"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
-        android:drawableStart="@drawable/ic_search_black_24dp"
+        android:drawableLeft="@drawable/ic_search_black_18dp"
+        android:drawableStart="@drawable/ic_search_black_18dp"
         android:editable="false"
         android:inputType="textFilter"
         android:hint="@string/search"
@@ -120,7 +120,7 @@
         android:layout_toLeftOf="@+id/addWordButton"
         android:layout_toStartOf="@+id/addWordButton"
         android:layout_marginBottom="@dimen/fab_menuText_margin_bottom"
-        android:layout_marginLeft="@dimen/fab_menuText_margin_right"
+        android:layout_marginRight="@dimen/fab_menuText_margin_right"
         android:layout_marginEnd="@dimen/fab_menuText_margin_right" />
 
     <TextView
