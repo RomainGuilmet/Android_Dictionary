@@ -7,4 +7,26 @@
     <string name="last">Last</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_test">TestActivity</string>
+
+    <string name="jump_to">Jump to&#8230;</string>
+    <string name="title_activity_dictionary">DictionaryActivity</string>
+
+    <string name="dictionary_name">Dictionary Name</string>
+    <string name="add_dictionary">Add a dictionary</string>
+    <string name="add_button">Add</string>
+    <string name="dictionary_added">Dictionary added !</string>
+    <string name="dictionary_not_added">Can\'t add this dictionary. Name already taken.</string>
+    <string name="close_button">Close</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="csv_button">Import a csv</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="undo_button">undo</string>
+    <string name="deleted">" has been deleted."</string>
+    <string name="rename_dictionary">Rename a dictionary</string>
+    <string name="rename_button">rename</string>
+    <string name="dictionary_renamed">Dictionary renamed.</string>
+    <string name="dictionary_not_renamed">Can\'t rename this dictionary. Name already taken.</string>
+    <string name="open">Open</string>
 </resources>
