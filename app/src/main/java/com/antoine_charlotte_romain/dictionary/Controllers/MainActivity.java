@@ -41,12 +41,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private SearchFragment searchFragment;
-    private DictionaryDataModel dd;
-    private ArrayList<Dictionary> listDictionaries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         setContentView(R.layout.activity_main);
 
         // Creating The Toolbar and setting it as the Toolbar for the activity

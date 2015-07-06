@@ -35,7 +35,7 @@
                         android:inputType="text"
                         android:imeOptions="actionGo|flagNoExtractUi" />
 
-                    <GridView
+                    <com.antoine_charlotte_romain.dictionary.Controllers.Lib.HeaderGridView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/dictionary_list"

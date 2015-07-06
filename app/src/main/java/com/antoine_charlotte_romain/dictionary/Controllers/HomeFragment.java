@@ -26,12 +26,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
+import com.antoine_charlotte_romain.dictionary.Controllers.Lib.HeaderGridView;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 import java.util.ArrayList;
@@ -74,7 +76,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     /**
      * Allow to display a list of Objects.
      */
-    private GridView gridView;
+    private HeaderGridView gridView;
 
     /**
      * Custom ArrayAdapter to manage the different rows of the grid
@@ -120,17 +122,12 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         v = inflater.inflate(R.layout.fragment_home,container,false);
         rootLayout = (CoordinatorLayout) v.findViewById(R.id.rootLayout);
 
-        return v;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
         initData();
         initGridView();
         initEditText();
         initFloatingActionButton();
+
+        return v;
     }
 
     /**
@@ -149,8 +146,21 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     private void initGridView()
     {
-        //Creating the GridView and populating it
-        gridView = (GridView) v.findViewById(R.id.dictionary_list);
+        //Creating the GridView
+        gridView = (HeaderGridView) v.findViewById(R.id.dictionary_list);
+
+        //Adding the GridView header
+        View header = getActivity().getLayoutInflater().inflate(R.layout.grid_view_header, null);
+        gridView.addHeaderView(header);
+        Button b = (Button) header.findViewById(R.id.button_all);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                read(-1);
+            }
+        });
+
+        //Populating the GridView
         adapter = new DictionaryAdapter(getActivity(), android.R.layout.simple_list_item_1 , dictionariesDisplay);
         adapter.setCallback(this);
         gridView.setAdapter(adapter);
@@ -161,7 +171,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        read(position);
+                        read(position - 1);
                     }
                 }
         );
@@ -169,7 +179,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         //Adding the context menu on each rows
         registerForContextMenu(gridView);
 
-        Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fly_in_from_center);
+        Animation anim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left);
         gridView.setAnimation(anim);
         anim.start();
 
@@ -287,17 +297,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                     public void onClick(DialogInterface dialog, int which) {
                         Dictionary d = new Dictionary(nameBox.getText().toString());
                         if (ddm.insert(d) == 1) {
-                            dictionaries.add(d);
-                            dictionariesDisplay.add(d);
-                            adapter.notifyDataSetChanged();
-                            searchBox.setText("");
-
-                            Snackbar.make(rootLayout, R.string.dictionary_added, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            }).show();
+                            read(dictionariesDisplay.indexOf(d));
                         } else {
                             Snackbar.make(rootLayout, R.string.dictionary_not_added, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                 @Override
@@ -356,16 +356,15 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     }
 
     /**
-     * Method which allows user to open a dictionary. It is Redirecting to the ... Activity.
+     * Method which allows user to open a dictionary. It is Redirecting to the ListWordsActivity.
      *
      * @param position position of the dictionary to read in the dictionariesDisplay list.
      */
     public void read(int position)
     {
-
-        Dictionary d = dictionariesDisplay.get(position);
         Intent intent = new Intent(HomeFragment.this.getActivity(),ListWordsActivity.class);
-        intent.putExtra(MainActivity.EXTRA_DICTIONARY, d);
+        if(position != -1)
+            intent.putExtra(MainActivity.EXTRA_DICTIONARY, dictionariesDisplay.get(position));
         startActivity(intent);
     }
 
@@ -456,7 +455,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     public void delete(final int position)
     {
             final Dictionary d = dictionariesDisplay.get(position);
-            System.out.println(gridView.getChildCount());
             dictionariesDisplay.remove(d);
             adapter.notifyDataSetChanged();
             undo = false;

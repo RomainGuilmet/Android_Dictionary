@@ -79,5 +79,6 @@
     <string name="add_word">Add a word</string>
     <string name="modify">Modify</string>
     <string name="undo">Undo</string>
+    <string name="all_dictionaries">All Dictionaries</string>
 
 </resources>
