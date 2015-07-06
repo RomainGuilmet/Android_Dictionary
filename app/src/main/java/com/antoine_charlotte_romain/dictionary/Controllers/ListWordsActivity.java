@@ -339,6 +339,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         if(open){
             showFloatingMenu(view);
         }
+        Intent importCSVintent = new Intent(this, CSVImportActivity.class);
+        importCSVintent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, selectedDictionary.getTitle());
+
+        startActivity(importCSVintent);
     }
 
     /**
