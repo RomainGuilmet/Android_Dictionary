@@ -2,6 +2,8 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,19 +11,25 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
@@ -54,6 +62,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private FloatingActionButton importCsvButton;
     private TextView importText;
     private View loading;
+    private EditText nameBox;
 
     private WordDataModel wdm;
     private DictionaryDataModel ddm;
@@ -84,7 +93,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        selectedDictionary = (Dictionary)intent.getSerializableExtra(HomeFragment.EXTRA_DICTIONARY);
+        selectedDictionary = (Dictionary)intent.getSerializableExtra(MainActivity.EXTRA_DICTIONARY);
 
         filterWords = (EditText) findViewById(R.id.filterWords);
         listViewWords = (ListView) findViewById(R.id.listViewWords);
@@ -199,11 +208,11 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                 return true;
 
             case R.id.action_rename_dictionary:
-
+                renameDictionary(findViewById(R.id.list_words_layout));
                 return true;
 
             case R.id.action_delete_dictionary:
-
+                deleteDictionary(findViewById(R.id.list_words_layout));
                 return true;
 
             default:
@@ -317,7 +326,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         }
         Intent newWordIntent = new Intent(this, WordActivity.class);
 
-        newWordIntent.putExtra("selectedDictionary", selectedDictionary);
+        newWordIntent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
 
         startActivity(newWordIntent);
     }
@@ -330,6 +339,19 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         if(open){
             showFloatingMenu(view);
         }
+    }
+
+    /**
+     * This function launch the activity advancedSearch
+     * @param view
+     */
+    public void advancedSearch(View view){
+        Intent advancedSearchIntent = new Intent(this, MainActivity.class);
+
+        advancedSearchIntent.putExtra(MainActivity.EXTRA_FRAGMENT, "advancedSearch");
+        advancedSearchIntent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
+
+        startActivity(advancedSearchIntent);
     }
 
     /**
@@ -449,16 +471,114 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private void modify(int position){
         Intent wordDetailIntent = new Intent(this, WordActivity.class);
 
-        wordDetailIntent.putExtra("selectedWord", myWordsList.get(position));
+        wordDetailIntent.putExtra(MainActivity.EXTRA_WORD, myWordsList.get(position));
         if(selectedDictionary != null) {
-            wordDetailIntent.putExtra("selectedDictionary", selectedDictionary);
+            wordDetailIntent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
         }
         else{
             ddm = new DictionaryDataModel(getApplicationContext());
-            wordDetailIntent.putExtra("selectedDictionary", ddm.select(myWordsList.get(position).getDictionaryID()));
+            wordDetailIntent.putExtra(MainActivity.EXTRA_DICTIONARY, ddm.select(myWordsList.get(position).getDictionaryID()));
         }
 
         startActivity(wordDetailIntent);
+    }
+
+    /**
+     * This function allow to rename the current dictionary
+     * @param view
+     */
+    public void renameDictionary(View view){
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(60, 30, 60, 0);
+
+        nameBox = new EditText(this);
+        nameBox.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        nameBox.setText(selectedDictionary.getTitle());
+        nameBox.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        nameBox.selectAll();
+        layout.addView(nameBox);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.rename_dictionary);
+        builder.setView(layout);
+
+
+        builder.setPositiveButton(R.string.rename_button,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        final String title = selectedDictionary.getTitle();
+                        selectedDictionary.setTitle(nameBox.getText().toString());
+                        ddm = new DictionaryDataModel(getApplicationContext());
+                        if (ddm.update(selectedDictionary) == 1) {
+                            Snackbar.make(findViewById(R.id.list_words_layout), R.string.dictionary_renamed, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                }
+                            }).show();
+
+                            getSupportActionBar().setTitle(selectedDictionary.getTitle());
+                        } else {
+                            selectedDictionary.setTitle(title);
+                            Snackbar.make(findViewById(R.id.list_words_layout), R.string.dictionary_not_renamed, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                }
+                            }).show();
+                        }
+                        dialog.cancel();
+                    }
+                });
+
+        builder.setNegativeButton(R.string.cancel_button,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        //Creating the dialog and opening the keyboard
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+        //Listening the keyboard to handle a "Done" action
+        nameBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                //Simulating a positive button click. The positive action is executed.
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+                return true;
+            }
+        });
+
+        alertDialog.show();
+    }
+
+    /**
+     * This function delete the current dictionary after a confirmation
+     * @param view
+     */
+    public void deleteDictionary(View view){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("Delete this dictionary ?");
+        alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(getApplicationContext(), selectedDictionary.getTitle() + " deleted with success !", Toast.LENGTH_SHORT).show();
+                ddm = new DictionaryDataModel(getApplicationContext());
+                ddm.delete(selectedDictionary.getId());
+                finish();
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+
+        alert.show();
     }
 
     /**
@@ -495,11 +615,11 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         @Override
         public void run() {
             loadingMore = true;
-            ArrayList<Word> tempList = new ArrayList<Word>();
+            ArrayList<Word> tempList = new ArrayList<>();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-
+                e.printStackTrace();
             }
             wordsOffset += 10;
             wdm = new WordDataModel(getApplicationContext());

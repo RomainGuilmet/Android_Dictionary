@@ -23,8 +23,9 @@
         android:paddingRight="5dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginEnd="5dp"/>
+        android:layout_marginRight="@dimen/edit_text_margin"
+        android:layout_marginEnd="@dimen/edit_text_margin"
+        android:onClick="advancedSearch" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -32,11 +33,11 @@
         android:id="@+id/listViewWords"
         android:layout_below="@+id/advancedSearch"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/filterWords"
-        android:layout_alignStart="@+id/filterWords"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -52,8 +53,8 @@
         android:layout_alignEnd="@+id/advancedSearch"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp" />
+        android:layout_marginLeft="@dimen/edit_text_margin"
+        android:layout_marginStart="@dimen/edit_text_margin" />
 
 
     <android.support.design.widget.FloatingActionButton
