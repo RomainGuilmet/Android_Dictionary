@@ -39,8 +39,6 @@ public class CSVImportActivity extends AppCompatActivity {
     Toolbar toolbar;
     ListView vue;
 
-    final String EXTRA_NEW_DICO_NAME = "namedico";
-
     String dictionaryName;
     List<Word> updatedWords;
     int addedWords;
@@ -61,7 +59,7 @@ public class CSVImportActivity extends AppCompatActivity {
         // Get data associated to the advanced search
         Intent intent = getIntent();
         if (intent != null){
-            dictionaryName = intent.getStringExtra(EXTRA_NEW_DICO_NAME);
+            dictionaryName = intent.getStringExtra(MainActivity.EXTRA_NEW_DICO_NAME);
         }
 
         // Get all available CSV files in the mobile
@@ -114,11 +112,11 @@ public class CSVImportActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.csvimport_popuppositive, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // pop up closes and the list of the words in this dictionary is displayed
-                                // TODO Redirect to list of words (made by Romain) with the dictionary id OR the list of words ?
-                                /*Dictionary d = dictionariesDisplay.get(position);
-                                Intent intent = new Intent(HomeFragment.this.getActivity(),ListWordsActivity.class);
-                                intent.putExtra(EXTRA_DICTIONARY, d);
-                                startActivity(intent);*/
+                                DictionaryDataModel ddm = new DictionaryDataModel(CSVImportActivity.this);
+                                Dictionary d = ddm.select(dictionaryName);
+                                Intent intent = new Intent(CSVImportActivity.this,ListWordsActivity.class);
+                                intent.putExtra(MainActivity.EXTRA_DICTIONARY, d);
+                                startActivity(intent);
                             }
                         })
                         .setNegativeButton(R.string.csvimport_popupnegative, new DialogInterface.OnClickListener() {

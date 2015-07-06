@@ -321,11 +321,10 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         builder.setNeutralButton(R.string.csv_button,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        final String EXTRA_NEW_DICO_NAME = "namedico";
                         String nameDico = nameBox.getText().toString();
                         if (ddm.select(nameDico) == null){
                             Intent intent = new Intent(HomeFragment.this.getActivity(), CSVImportActivity.class);
-                            intent.putExtra(EXTRA_NEW_DICO_NAME, nameDico);
+                            intent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, nameDico);
                             startActivity(intent);
                         } else {
                             Snackbar.make(rootLayout, R.string.dico_name_not_available, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
