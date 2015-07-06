@@ -39,7 +39,7 @@ public class CSVImportActivity extends AppCompatActivity {
     Toolbar toolbar;
     ListView vue;
 
-    final String EXTRA_NEW_DICO_NAME = "name dico";
+    final String EXTRA_NEW_DICO_NAME = "namedico";
 
     String dictionaryName;
     List<Word> updatedWords;
@@ -83,7 +83,7 @@ public class CSVImportActivity extends AppCompatActivity {
         for(int i = 0 ; i < csvDispo.size() ; i++) {
             // we add each word of the results list in this new list
             element = new HashMap<String, String>();
-            element.put("name", String.valueOf(csvDispo.get(i)));
+            element.put("name", String.valueOf(csvDispo.get(i).getName()));
             liste.add(element);
         }
 
@@ -102,17 +102,23 @@ public class CSVImportActivity extends AppCompatActivity {
             // When an item of the list is clicked
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Import the chosen CSV file in the previously specified dictionary
-                importCSV(csvDispo.get(position),updatedWords,addedWords);
+                updatedWords = new ArrayList<Word>();
+                addedWords = 0;
+                importCSV(csvDispo.get(position));
+
                 // Display a pop up window
-                final String message = R.string.csvimport_popupmessage1 + addedWords + "\n"
-                        + R.string.csvimport_popupmessage2 + updatedWords.size();
                 new AlertDialog.Builder(CSVImportActivity.this)
                         .setTitle(R.string.csvimport_popuptitle)
-                        .setMessage(message)
+                        .setMessage("Added words : " + addedWords + "\nUpdated words : "
+                                + updatedWords.size())
                         .setPositiveButton(R.string.csvimport_popuppositive, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // pop up closes and the list of the words in this dictionary is displayed
                                 // TODO Redirect to list of words (made by Romain) with the dictionary id OR the list of words ?
+                                /*Dictionary d = dictionariesDisplay.get(position);
+                                Intent intent = new Intent(HomeFragment.this.getActivity(),ListWordsActivity.class);
+                                intent.putExtra(EXTRA_DICTIONARY, d);
+                                startActivity(intent);*/
                             }
                         })
                         .setNegativeButton(R.string.csvimport_popupnegative, new DialogInterface.OnClickListener() {
@@ -184,13 +190,15 @@ public class CSVImportActivity extends AppCompatActivity {
      *          The CSV file providing the words to add in the dictionary
      * @return A list of updated words after the import
      */
-    private void importCSV(File fileToRead, List<Word> updatedWords, int addedWords){
+    private void importCSV(File fileToRead){
         // Get the dictionary in which the words have to be added
         DictionaryDataModel ddm = new DictionaryDataModel(this);
         Dictionary d = ddm.select(dictionaryName);
         // if a dictionary with this name dos not exist, we create it
-        if (d == null)
+        if (d == null){
             d = new Dictionary(dictionaryName);
+            ddm.insert(d);
+        }
         Long dicoID = d.getId();
 
         WordDataModel wdm = new WordDataModel(this);

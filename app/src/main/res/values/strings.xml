@@ -24,7 +24,7 @@
     <string name="csvimport_popupmessage2">Number of updated words :</string>
     <string name="csvimport_popuptitle">CSV imported</string>
     <string name="csvimport_popupnegative">See updated words</string>
-    <string name="csvimport_popuppositive">See updated dictionary</string>
+    <string name="csvimport_popuppositive">See dico</string>
     <string name="title_activity_csvimport">Import a CSV</string>
 
     <string name="csvexport_insertCSVname">Name of the CSV file :</string>
@@ -48,6 +48,7 @@
     <string name="add_button">Add</string>
     <string name="dictionary_added">Dictionary added !</string>
     <string name="dictionary_not_added">Can\'t add this dictionary. Name already taken.</string>
+    <string name="dico_name_not_available">Can\'t choose this dictionary name. Name already taken.</string>
     <string name="close_button">Close</string>
     <string name="cancel_button">Cancel</string>
     <string name="csv_button">Import a csv</string>
