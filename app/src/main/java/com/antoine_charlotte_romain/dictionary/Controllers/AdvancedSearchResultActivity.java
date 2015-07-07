@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -24,8 +22,11 @@ import java.util.List;
 
 public class AdvancedSearchResultActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
-    ListView vue;
+    private Toolbar toolbar;
+    private ListView vue;
+
+    private ArrayList<Word> results;
+    private WordDataModel wdm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,6 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        ArrayList<Word> results = new ArrayList<Word>();
 
         // Get data associated to the advanced search
         Intent intent = getIntent();
@@ -58,7 +57,7 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
             }
 
             // search
-            WordDataModel wdm = new WordDataModel(this);
+            wdm = new WordDataModel(this);
             if(headWhole.equals("head")){
                 results = wdm.selectHeadwordWithBeginMiddleEnd(begin, middle, end, id);
             } else {
@@ -71,77 +70,38 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
         List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
         HashMap<String, String> element;
 
-        // if there is no result to display
-        if(results.size()==0){
-            element = new HashMap<String, String>();
-            element.put("headword","Empty list");
-            liste.add(element);
-        }
+        if(results.size()>0) {
+            for (int i = 0; i < results.size(); i++) {
+                // we add each word of the results list in this new list
+                element = new HashMap<String, String>();
 
-        for(int i = 0 ; i < results.size() ; i++) {
-            // we add each word of the results list in this new list
-            element = new HashMap<String, String>();
+                element.put("headword", results.get(i).getHeadword());
+                element.put("translation", results.get(i).getTranslation());
 
-            element.put("id", String.valueOf(results.get(i).getId()));
-            element.put("dicoid", String.valueOf(results.get(i).getDictionaryID()));
-            element.put("headword", results.get(i).getHeadword());
-            element.put("translation", results.get(i).getTranslation());
-            element.put("note", results.get(i).getNote());
-
-            liste.add(element);
-        }
-
-        ListAdapter adapter = new SimpleAdapter(this,
-                liste,
-                android.R.layout.simple_list_item_2,
-                new String[] {"headword", "translation"},
-                new int[] {android.R.id.text1, android.R.id.text2 });
-
-        // Give ListView to the SimpleAdapter
-        vue.setAdapter(adapter);
-
-        vue.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                HashMap<String, String> item = (HashMap<String, String>) parent.getItemAtPosition(position);
-                Long idword = Long.parseLong(item.get("id"));
-                Long dicoid = Long.parseLong(item.get("dicoid"));
-                String headword = item.get("headword");
-                String translation = item.get("translation");
-                String note = item.get("note");
-
-                Intent intent = new Intent(AdvancedSearchResultActivity.this, WordActivity.class);
-                intent.putExtra(MainActivity.EXTRA_WORD, new Word(idword,dicoid,headword,translation,note));
-
-                DictionaryDataModel ddm = new DictionaryDataModel(getApplicationContext());
-                intent.putExtra(MainActivity.EXTRA_DICTIONARY, ddm.select(dicoid));
-
-                startActivity(intent);
+                liste.add(element);
             }
-        });
-    }
 
+            ListAdapter adapter = new SimpleAdapter(this,
+                    liste,
+                    android.R.layout.simple_list_item_2,
+                    new String[]{"headword", "translation"},
+                    new int[]{android.R.id.text1, android.R.id.text2});
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+            // Give ListView to the SimpleAdapter
+            vue.setAdapter(adapter);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+            vue.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent wordDetailIntent = new Intent(AdvancedSearchResultActivity.this, WordActivity.class);
+                    wordDetailIntent.putExtra(MainActivity.EXTRA_WORD, results.get(position));
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                    DictionaryDataModel ddm = new DictionaryDataModel(getApplicationContext());
+                    wordDetailIntent.putExtra(MainActivity.EXTRA_DICTIONARY, ddm.select(results.get(position).getDictionaryID()));
+
+                    startActivity(wordDetailIntent);
+                }
+            });
         }
-
-        return super.onOptionsItemSelected(item);
     }
-
 }

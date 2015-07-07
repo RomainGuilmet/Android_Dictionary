@@ -5,11 +5,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
@@ -24,27 +29,34 @@ import java.util.ArrayList;
  */
 public class SearchFragment extends Fragment {
 
-    private static final String ALL_DICO = "All";
+    private final String target = "Target dictionary : ";
 
     private View thisView;
+
     private Dictionary selectedDictionary;
+
+    private EditText beginningText;
+    private EditText containsText;
+    private EditText endText;
+    private EditText targetDictionary;
+    private FloatingActionButton searchFloatingButton;
+    private MenuItem searchTabButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.fragment_search,container,false);
 
-        ((MainActivity)getActivity()).setSearchFragment(this);
-
         Intent intent = getActivity().getIntent();
         selectedDictionary = (Dictionary)intent.getSerializableExtra(MainActivity.EXTRA_DICTIONARY);
 
-        if(selectedDictionary == null) {
-            ((Button) thisView.findViewById(R.id.dicoButton)).setText(MainActivity.ALL_DICO);
-        }
-        else {
-            ((Button) thisView.findViewById(R.id.dicoButton)).setText(selectedDictionary.getTitle());
-        }
+        beginningText = ((EditText) thisView.findViewById(R.id.beginString));
+        containsText = ((EditText) thisView.findViewById(R.id.middleString));
+        endText = ((EditText) thisView.findViewById(R.id.endString));
+        targetDictionary = ((EditText) thisView.findViewById(R.id.targetDico));
+        searchFloatingButton = ((FloatingActionButton) thisView.findViewById(R.id.searchFloatingButton));
+
+        setHasOptionsMenu(true);
 
         return thisView;
     }
@@ -53,9 +65,126 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        ((EditText) thisView.findViewById(R.id.beginString)).setText("");
-        ((EditText) thisView.findViewById(R.id.middleString)).setText("");
-        ((EditText) thisView.findViewById(R.id.endString)).setText("");
+        if(selectedDictionary == null) {
+            targetDictionary.setText(target + MainActivity.ALL_DICO);
+        }
+        else {
+            targetDictionary.setText(target + selectedDictionary.getTitle());
+        }
+
+        beginningText.setText("");
+        containsText.setText("");
+        endText.setText("");
+
+        targetDictionary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayDictionaries(v);
+            }
+        });
+
+        searchFloatingButton.setVisibility(View.GONE);
+
+        beginningText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                boolean isReady = beginningText.getText().toString().length() > 0;
+                searchTabButton.setVisible(isReady);
+                if(isReady){
+                    searchFloatingButton.setVisibility(View.VISIBLE);
+                }
+                else {
+                    searchFloatingButton.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
+        containsText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                boolean isReady = containsText.getText().toString().length() > 0;
+                searchTabButton.setVisible(isReady);
+                if(isReady){
+                    searchFloatingButton.setVisibility(View.VISIBLE);
+                }
+                else {
+                    searchFloatingButton.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
+        endText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                boolean isReady = endText.getText().toString().length() > 0;
+                searchTabButton.setVisible(isReady);
+                if(isReady){
+                    searchFloatingButton.setVisibility(View.VISIBLE);
+                }
+                else {
+                    searchFloatingButton.setVisibility(View.GONE);
+                }
+            }
+
+        });
+    }
+
+    /**
+     * This function creates the buttons on the toolBar
+     * @param menu
+     * @return
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menu.clear();
+        menuInflater.inflate(R.menu.menu_search_fragment, menu);
+        searchTabButton = menu.findItem(R.id.action_search);
+        searchTabButton.setVisible(false);
+    }
+
+    /**
+     * This function is called when the user click on a button of the toolBar
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.action_search:
+                advancedSearch(thisView);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void displayDictionaries(View v){
@@ -73,7 +202,7 @@ public class SearchFragment extends Fragment {
                 .setItems(names, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        ((Button)thisView.findViewById(R.id.dicoButton)).setText(names[which]);
+                        targetDictionary.setText(target + names[which]);
                     }
                 })
                 .setNegativeButton(R.string.advsearch_returnString, new DialogInterface.OnClickListener() {
@@ -89,24 +218,9 @@ public class SearchFragment extends Fragment {
     public void advancedSearch(View v){
         Intent intent = new Intent(getActivity(), AdvancedSearchResultActivity.class);
 
-        // Let's take the string indicated by the user
-        EditText beginS = (EditText) thisView.findViewById(R.id.beginString);
-        EditText middleS = (EditText) thisView.findViewById(R.id.middleString);
-        EditText endS = (EditText) thisView.findViewById(R.id.endString);
-
-        String bString = "";
-        String mString = "";
-        String eString = "";
-        if (beginS.getText() != null)
-            bString = beginS.getText().toString();
-        if (middleS.getText() != null)
-            mString = middleS.getText().toString();
-        if (beginS.getText() != null)
-            eString = endS.getText().toString();
-
-        intent.putExtra(MainActivity.EXTRA_BEGIN_STRING, bString);
-        intent.putExtra(MainActivity.EXTRA_MIDDLE_STRING, mString);
-        intent.putExtra(MainActivity.EXTRA_END_STRING, eString);
+        intent.putExtra(MainActivity.EXTRA_BEGIN_STRING, beginningText.getText().toString());
+        intent.putExtra(MainActivity.EXTRA_MIDDLE_STRING, containsText.getText().toString());
+        intent.putExtra(MainActivity.EXTRA_END_STRING, endText.getText().toString());
 
         // Let's see if the search has to be done on headword or whole word
         switch (((RadioGroup)thisView.findViewById(R.id.boutonsradio)).getCheckedRadioButtonId()) {
@@ -119,7 +233,8 @@ public class SearchFragment extends Fragment {
         }
 
         // Let's get the targeted dictionary
-        String dico = ((Button)thisView.findViewById(R.id.dicoButton)).getText().toString();
+        String temp = targetDictionary.getText().toString();
+        String dico = temp.replace(target, "");
         intent.putExtra(MainActivity.EXTRA_DICTIONARY, dico);
 
         startActivity(intent);
