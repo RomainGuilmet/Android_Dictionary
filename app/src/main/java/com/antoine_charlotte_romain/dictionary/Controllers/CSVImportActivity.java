@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
@@ -43,7 +44,6 @@ public class CSVImportActivity extends AppCompatActivity {
     ArrayList<String> updatedWords;
     int addedWords;
 
-    final String EXTRA_PRINT_UPDATED = "print";
     final String EXTRA_UPDATED_LIST = "listOfUpdatedWords";
 
     @Override
@@ -314,8 +314,9 @@ public class CSVImportActivity extends AppCompatActivity {
     }
 
     private void displayUpdatedWordslist(){
-        // Get all available CSV files in the mobile
-        final List<File> csvDispo = this.getAvailableCSV(Environment.getExternalStorageDirectory());
+        // Change name of the list
+        TextView tv = (TextView) findViewById(R.id.listName);
+        tv.setText(R.string.csvimport_wordsList);
 
         // Display results
         vue = (ListView) findViewById(R.id.resultsList);

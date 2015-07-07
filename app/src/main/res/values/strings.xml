@@ -25,6 +25,8 @@
     <string name="csvimport_popuptitle">CSV imported</string>
     <string name="csvimport_popupnegative">See updated words</string>
     <string name="csvimport_popuppositive">See dico</string>
+    <string name="csvimport_CSVlist">Available CSV files :</string>
+    <string name="csvimport_wordsList">Updated Words :</string>
     <string name="title_activity_csvimport">Import a CSV</string>
 
     <string name="csvexport_insertCSVname">Name of the CSV file :</string>
