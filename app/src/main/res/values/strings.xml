@@ -82,5 +82,6 @@
     <string name="modify">Modify</string>
     <string name="undo">Undo</string>
     <string name="all_dictionaries">All Dictionaries</string>
+    <string name="select_all">Select All</string>
 
 </resources>

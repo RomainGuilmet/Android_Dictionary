@@ -45,12 +45,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         setContentView(R.layout.activity_main);
 
         // Creating The Toolbar and setting it as the Toolbar for the activity
@@ -85,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         if(fragment != null && fragment.equalsIgnoreCase("advancedSearch")){
             pager.setCurrentItem(ADVANCED_SEARCH_FRAGMENT);
         }
+
     }
 
     @Override

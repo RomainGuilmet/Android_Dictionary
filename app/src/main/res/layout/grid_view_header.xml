@@ -6,7 +6,6 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/all_dictionaries"
         android:id="@+id/button_all"
         android:background="@color/white"
         android:gravity="left|center_vertical"

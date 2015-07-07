@@ -18,6 +18,7 @@ import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,11 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private ArrayList<Dictionary> dictionariesDisplay;
 
     /**
+     * List of dictionaries to delete
+     */
+    private ArrayList<Dictionary> deleteList;
+
+    /**
      * Allow to display a list of Objects.
      */
     private HeaderGridView gridView;
@@ -82,6 +88,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      * Custom ArrayAdapter to manage the different rows of the grid
      */
     private DictionaryAdapter adapter;
+
 
     /**
      * Used to display the snackBars
@@ -97,6 +104,8 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      * Used to handle a undo action after deleting a dictionary
      */
     private boolean undo;
+
+    private View header, deleteHeader;
 
     private EditText searchBox, nameBox;
 
@@ -121,13 +130,20 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     {
         v = inflater.inflate(R.layout.fragment_home,container,false);
         rootLayout = (CoordinatorLayout) v.findViewById(R.id.rootLayout);
+        setHasOptionsMenu(true);
+
+        return v;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         initData();
         initGridView();
         initEditText();
         initFloatingActionButton();
-
-        return v;
     }
 
     /**
@@ -150,9 +166,11 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         gridView = (HeaderGridView) v.findViewById(R.id.dictionary_list);
 
         //Adding the GridView header
-        View header = getActivity().getLayoutInflater().inflate(R.layout.grid_view_header, null);
+        gridView.removeHeaderView(header);
+        header = getActivity().getLayoutInflater().inflate(R.layout.grid_view_header, null);
         gridView.addHeaderView(header);
         Button b = (Button) header.findViewById(R.id.button_all);
+        b.setText(R.string.all_dictionaries);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +179,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         });
 
         //Populating the GridView
-        adapter = new DictionaryAdapter(getActivity(), android.R.layout.simple_list_item_1 , dictionariesDisplay);
+        adapter = new DictionaryAdapter(getActivity(), R.layout.dictionary_row , dictionariesDisplay);
         adapter.setCallback(this);
         gridView.setAdapter(adapter);
         gridView.setDrawSelectorOnTop(true);
@@ -193,6 +211,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         //Creating the EditText for searching inside the dictionaries list
         searchBox = (EditText) v.findViewById(R.id.search_field);
         searchBox.setMovementMethod(new ScrollingMovementMethod());
+        searchBox.setText("");
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -213,6 +232,9 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 adapter.notifyDataSetChanged();
             }
         });
+
+        //TODO : ALLER a
+
     }
 
     /**
@@ -220,6 +242,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     private void initFloatingActionButton()
     {
+        //TODO : animation
         FloatingActionButton addButton = (FloatingActionButton) v.findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
 
@@ -297,6 +320,9 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                     public void onClick(DialogInterface dialog, int which) {
                         Dictionary d = new Dictionary(nameBox.getText().toString());
                         if (ddm.insert(d) == 1) {
+                            dictionariesDisplay.add(d);
+                            dictionaries.add(d);
+                            searchBox.setText("");
                             read(dictionariesDisplay.indexOf(d));
                         } else {
                             Snackbar.make(rootLayout, R.string.dictionary_not_added, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
@@ -355,11 +381,13 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         alertDialog.show();
     }
 
+
     /**
      * Method which allows user to open a dictionary. It is Redirecting to the ListWordsActivity.
      *
      * @param position position of the dictionary to read in the dictionariesDisplay list.
      */
+    @Override
     public void read(int position)
     {
         Intent intent = new Intent(HomeFragment.this.getActivity(),ListWordsActivity.class);
@@ -368,11 +396,13 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         startActivity(intent);
     }
 
+
     /**
      * Method which allows user to rename a dictionary with a unique name.
      *
      * @param position position of the dictionary to update in the dictionariesDisplay list.
      */
+    @Override
     public void update(int position)
     {
         final Dictionary d = dictionariesDisplay.get(position);
@@ -452,6 +482,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      *
      * @param position position of the dictionary to delete in the dictionariesDisplay list.
      */
+    @Override
     public void delete(final int position)
     {
             final Dictionary d = dictionariesDisplay.get(position);
@@ -488,5 +519,53 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
 
     }
 
+    /**
+     * Method which allows user to add a dictionary to the deleteList
+     *
+     * @param position position of the dictionary to add
+     */
+    @Override
+    public void addToDeleteList(int position)
+    {
+        deleteList.add(dictionariesDisplay.get(position));
+    }
+
+    /**
+     * Method which allows user to remove a dictionary to the deleteList
+     *
+     * @param position position of the dictionary to remove
+     */
+    @Override
+    public void removeFromDeleteList(int position)
+    {
+        deleteList.remove(dictionariesDisplay.get(position));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_home, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.action_add_dictionary:
+                create();
+                return true;
+
+            case R.id.action_multiple_delete:
+                adapter = new DictionaryAdapter(getActivity(), R.layout.delete_dictionary_row , dictionariesDisplay);
+                adapter.setCallback(this);
+                gridView.setAdapter(adapter);
+                deleteList = new ArrayList<Dictionary>();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }

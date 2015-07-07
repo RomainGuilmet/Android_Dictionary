@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ public class DictionaryAdapter extends ArrayAdapter<Dictionary>{
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.dictionary_row, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(layoutResourceId, parent, false);
         }
 
         // Lookup view for data population
@@ -90,6 +91,43 @@ public class DictionaryAdapter extends ArrayAdapter<Dictionary>{
         // Populate the data into the template view using the data object
         title.setText(dictionary.getTitle());
 
+        /*//Configuring the checkbox if exists
+        if(layoutResourceId == R.layout.delete_dictionary_row) {
+            final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.delete_box);
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    if(checkBox.isChecked())
+                    {
+                        callback.addToDeleteList(position);
+                    }
+                    else
+                    {
+                        callback.removeFromDeleteList(position);
+                    }
+                }
+            });
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    if(checkBox.isChecked())
+                    {
+                        checkBox.setChecked(false);
+                        callback.removeFromDeleteList(position);
+                    }
+                    else
+                    {
+                        checkBox.setChecked(true);
+                        callback.addToDeleteList(position);
+                    }
+                }
+            });
+        }*/
+
+
+
         // Return the completed view to render on screen
         return convertView;
     }
@@ -104,6 +142,8 @@ public class DictionaryAdapter extends ArrayAdapter<Dictionary>{
         void delete(int position);
         void update(int position);
         void read(int position);
+        void addToDeleteList(int position);
+        void removeFromDeleteList(int position);
     }
 
 }

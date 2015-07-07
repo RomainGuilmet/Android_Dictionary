@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 package com.antoine_charlotte_romain.dictionary.Controllers.Lib;
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 import android.content.Context;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
