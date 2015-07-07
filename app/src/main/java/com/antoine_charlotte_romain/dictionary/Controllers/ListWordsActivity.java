@@ -41,7 +41,6 @@ import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 import java.util.ArrayList;
 
 /**
- * TODO rename and delete dictionary
  * TODO import csv
  * TODO suppression multiple
  * TODO gridView en paysage

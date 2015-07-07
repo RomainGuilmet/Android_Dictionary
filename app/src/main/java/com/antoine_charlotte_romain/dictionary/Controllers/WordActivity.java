@@ -259,4 +259,3 @@ public class WordActivity extends AppCompatActivity {
         }
     }
 }
-

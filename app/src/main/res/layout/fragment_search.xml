@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/search_fragment">
 
     <EditText
         android:id="@+id/beginString"
@@ -58,67 +60,55 @@
         android:orientation="vertical"
         android:checkedButton="@+id/headword"
         android:id="@+id/boutonsradio"
+        android:layout_alignRight="@+id/endString"
+        android:layout_alignEnd="@+id/endString"
         android:layout_below="@+id/endString"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginEnd="@dimen/edit_text_margin"
-        android:layout_marginRight="@dimen/edit_text_margin"
-        android:layout_marginLeft="@dimen/edit_text_margin"
-        android:layout_marginStart="@dimen/edit_text_margin">
+        android:layout_alignLeft="@+id/endString"
+        android:layout_alignStart="@+id/endString">
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/advsearch_headword_only"
             android:id="@+id/headword"
-            android:checked="false"
-            android:layout_below="@+id/endString"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textSize="16dp" />
+            android:checked="false" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/advsearch_whole_word"
-            android:id="@+id/whole"
-            android:layout_below="@+id/headword"
-            android:layout_toRightOf="@+id/boutonsradio"
-            android:layout_toEndOf="@+id/boutonsradio"
-            android:textSize="16dp" />
+            android:id="@+id/whole" />
 
     </RadioGroup>
 
-    <TextView
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/searchFloatingButton"
+        android:src="@drawable/ic_search_white_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/advsearch_actual_dico"
-        android:id="@+id/textCurrentDico"
+        android:layout_gravity="bottom|end"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        android:onClick="advancedSearch"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:layout_marginEnd="@dimen/fab_margin_right"
+        android:layout_marginStart="@dimen/fab_margin_left"
+        android:layout_marginLeft="@dimen/fab_margin_left"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/targetDico"
         android:layout_below="@+id/boutonsradio"
         android:layout_alignLeft="@+id/boutonsradio"
         android:layout_alignStart="@+id/boutonsradio"
-        android:textSize="16dp" />
-
-    <Button
-        android:id="@+id/dicoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/advsearch_allDico"
-        android:onClick="displayDictionaries"
-        android:layout_below="@+id/boutonsradio"
-        android:layout_alignRight="@+id/endString"
-        android:layout_alignEnd="@+id/endString"
-        android:layout_marginTop="-10dp" />
-
-    <Button
-        android:id="@+id/okButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/advsearch_search"
-        android:onClick="advancedSearch"
-        android:layout_below="@+id/dicoButton"
-        android:layout_alignLeft="@+id/dicoButton"
-        android:layout_alignStart="@+id/dicoButton" />
+        android:layout_alignRight="@+id/boutonsradio"
+        android:layout_alignEnd="@+id/boutonsradio"
+        android:focusable="false"
+        android:inputType="text" />
 
 </RelativeLayout>
