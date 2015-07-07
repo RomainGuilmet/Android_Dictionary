@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
@@ -39,11 +40,11 @@ public class CSVImportActivity extends AppCompatActivity {
     Toolbar toolbar;
     ListView vue;
 
-    final String EXTRA_NEW_DICO_NAME = "name dico";
-
     String dictionaryName;
-    List<Word> updatedWords;
+    ArrayList<String> updatedWords;
     int addedWords;
+
+    final String EXTRA_UPDATED_LIST = "listOfUpdatedWords";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,78 +55,25 @@ public class CSVImportActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
-        // Initialize attributes
-        updatedWords = new ArrayList<Word>();
-        addedWords = 0;
-
         // Get data associated to the advanced search
         Intent intent = getIntent();
         if (intent != null){
-            dictionaryName = intent.getStringExtra(EXTRA_NEW_DICO_NAME);
-        }
+            dictionaryName = intent.getStringExtra(MainActivity.EXTRA_NEW_DICO_NAME);
 
-        // Get all available CSV files in the mobile
-        final List<File> csvDispo = this.getAvailableCSV(Environment.getExternalStorageDirectory());
+            if (intent.getStringArrayListExtra(EXTRA_UPDATED_LIST) != null) { // Utile ? ou EXTRA UPDATED LIST != null
+                updatedWords = intent.getStringArrayListExtra(EXTRA_UPDATED_LIST);
+                // Display words list
+                displayUpdatedWordslist();
 
-        // Display results
-        vue = (ListView) findViewById(R.id.resultsList);
-        List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> element;
+            } else {
+                // Initialize attributes
+                updatedWords = new ArrayList<String>();
+                addedWords = 0;
 
-        // if there is no result to display
-        if(csvDispo.size()==0){
-            element = new HashMap<String, String>();
-            element.put("name", "No CSV found");
-            liste.add(element);
-        }
-
-        // Fill the list to display with the name of the CSV files found
-        for(int i = 0 ; i < csvDispo.size() ; i++) {
-            // we add each word of the results list in this new list
-            element = new HashMap<String, String>();
-            element.put("name", String.valueOf(csvDispo.get(i)));
-            liste.add(element);
-        }
-
-        ListAdapter adapter = new SimpleAdapter(this,
-                liste,
-                android.R.layout.simple_list_item_1,
-                new String[] {"name"},
-                new int[] {android.R.id.text1});
-
-        // Give ListView to the SimpleAdapter
-        vue.setAdapter(adapter);
-
-        // Listener on the list
-        vue.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            // When an item of the list is clicked
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Import the chosen CSV file in the previously specified dictionary
-                importCSV(csvDispo.get(position),updatedWords,addedWords);
-                // Display a pop up window
-                final String message = R.string.csvimport_popupmessage1 + addedWords + "\n"
-                        + R.string.csvimport_popupmessage2 + updatedWords.size();
-                new AlertDialog.Builder(CSVImportActivity.this)
-                        .setTitle(R.string.csvimport_popuptitle)
-                        .setMessage(message)
-                        .setPositiveButton(R.string.csvimport_popuppositive, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // pop up closes and the list of the words in this dictionary is displayed
-                                // TODO Redirect to list of words (made by Romain) with the dictionary id OR the list of words ?
-                            }
-                        })
-                        .setNegativeButton(R.string.csvimport_popupnegative, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // pop up closes and the list of the updated words is displayed
-                                // TODO display updated words (with list of words by Romain or new activity/update this one
-
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                // Display CSV files list
+                displayCSVlist();
             }
-        });
+        }
     }
 
     @Override
@@ -184,13 +132,15 @@ public class CSVImportActivity extends AppCompatActivity {
      *          The CSV file providing the words to add in the dictionary
      * @return A list of updated words after the import
      */
-    private void importCSV(File fileToRead, List<Word> updatedWords, int addedWords){
+    private void importCSV(File fileToRead){
         // Get the dictionary in which the words have to be added
         DictionaryDataModel ddm = new DictionaryDataModel(this);
         Dictionary d = ddm.select(dictionaryName);
         // if a dictionary with this name dos not exist, we create it
-        if (d == null)
+        if (d == null){
             d = new Dictionary(dictionaryName);
+            ddm.insert(d);
+        }
         Long dicoID = d.getId();
 
         WordDataModel wdm = new WordDataModel(this);
@@ -238,7 +188,7 @@ public class CSVImportActivity extends AppCompatActivity {
                             meanings = meanings + " - " + translation;
                             w.setTranslation(meanings);
                             wdm.update(w);
-                            updatedWords.add(w);
+                            updatedWords.add(w.getHeadword());
                         }
                     }
                 } else if (result == 0){
@@ -288,5 +238,150 @@ public class CSVImportActivity extends AppCompatActivity {
         return word;
     }
 
-}
+    private void displayCSVlist(){
+        // Get all available CSV files in the mobile
+        final List<File> csvDispo = this.getAvailableCSV(Environment.getExternalStorageDirectory());
 
+        // Display results
+        vue = (ListView) findViewById(R.id.resultsList);
+        List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> element;
+
+        // if there is no result to display
+        if(csvDispo.size()==0){
+            element = new HashMap<String, String>();
+            element.put("name", "No CSV found");
+            liste.add(element);
+        }
+
+        // Fill the list to display with the name of the CSV files found
+        for(int i = 0 ; i < csvDispo.size() ; i++) {
+            // we add each word of the results list in this new list
+            element = new HashMap<String, String>();
+            element.put("name", String.valueOf(csvDispo.get(i).getName()));
+            liste.add(element);
+        }
+
+        ListAdapter adapter = new SimpleAdapter(this,
+                liste,
+                android.R.layout.simple_list_item_1,
+                new String[] {"name"},
+                new int[] {android.R.id.text1});
+
+        // Give ListView to the SimpleAdapter
+        vue.setAdapter(adapter);
+
+        // Listener on the list
+        vue.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            // When an item of the list is clicked
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Import the chosen CSV file in the previously specified dictionary
+                updatedWords = new ArrayList<String>();
+                addedWords = 0;
+                importCSV(csvDispo.get(position));
+
+                // Display a pop up window
+                new AlertDialog.Builder(CSVImportActivity.this)
+                        .setTitle(R.string.csvimport_popuptitle)
+                        .setMessage("Added words : " + addedWords + "\nUpdated words : "
+                                + updatedWords.size())
+                        .setPositiveButton(R.string.csvimport_popuppositive, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // pop up closes and the list of the words in this dictionary is displayed
+                                DictionaryDataModel ddm = new DictionaryDataModel(CSVImportActivity.this);
+                                Dictionary d = ddm.select(dictionaryName);
+                                Intent intent = new Intent(CSVImportActivity.this,ListWordsActivity.class);
+                                intent.putExtra(MainActivity.EXTRA_DICTIONARY, d);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton(R.string.csvimport_popupnegative, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // pop up closes and the list of the updated words is displayed
+                                Intent intent = new Intent(CSVImportActivity.this,CSVImportActivity.class);
+
+                                intent.putStringArrayListExtra(EXTRA_UPDATED_LIST, updatedWords);
+                                intent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, dictionaryName);
+
+                                startActivity(intent);
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
+    }
+
+    private void displayUpdatedWordslist(){
+        // Change name of the list
+        TextView tv = (TextView) findViewById(R.id.listName);
+        tv.setText(R.string.csvimport_wordsList);
+
+        // Display results
+        vue = (ListView) findViewById(R.id.resultsList);
+        List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> element;
+
+        // if there is no result to display
+        if(updatedWords.size()==0){
+            element = new HashMap<String, String>();
+            element.put("headword", "No updated word");
+            liste.add(element);
+        }
+
+        DictionaryDataModel ddm = new DictionaryDataModel(CSVImportActivity.this);
+        final Dictionary d = ddm.select(dictionaryName);
+        long dicoid = d.getId();
+        WordDataModel wdm = new WordDataModel(CSVImportActivity.this);
+        Word w;
+
+        // Fill the list to display with the updated words
+        for(int i = 0 ; i < updatedWords.size() ; i++) {
+            // we add each word of the results list in this new list
+            element = new HashMap<String, String>();
+            ArrayList<Word> aw = wdm.selectFromHeadWord(updatedWords.get(i),dicoid);
+            if (aw.size() == 1){
+                w = aw.get(0);
+                element.put("id", String.valueOf(w.getId()));
+                element.put("diconame", dictionaryName);
+                element.put("dicoid", String.valueOf(dicoid));
+                element.put("headword", w.getHeadword());
+                element.put("translation", w.getTranslation());
+                element.put("note", w.getNote());
+                liste.add(element);
+            }
+        }
+
+        ListAdapter adapter = new SimpleAdapter(this,
+                liste,
+                android.R.layout.simple_list_item_2,
+                new String[] {"headword", "diconame"},
+                new int[] {android.R.id.text1, android.R.id.text2 });
+
+        // Give ListView to the SimpleAdapter
+        vue.setAdapter(adapter);
+
+        // Listener on the list
+        vue.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            // When an item of the list is clicked
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                HashMap<String, String> item = (HashMap<String, String>) parent.getItemAtPosition(position);
+                Long idword = Long.parseLong(item.get("id"));
+                Long dicoid = Long.parseLong(item.get("dicoid"));
+                String headword = item.get("headword");
+                String translation = item.get("translation");
+                String note = item.get("note");
+
+                Intent intent = new Intent(CSVImportActivity.this, WordActivity.class);
+                intent.putExtra(MainActivity.EXTRA_WORD, new Word(idword, dicoid, headword, translation, note));
+
+                intent.putExtra(MainActivity.EXTRA_DICTIONARY, d);
+
+                startActivity(intent);
+            }
+        });
+    }
+
+}

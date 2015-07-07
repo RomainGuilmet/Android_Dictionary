@@ -40,7 +40,7 @@ public class SearchFragment extends Fragment {
         selectedDictionary = (Dictionary)intent.getSerializableExtra(MainActivity.EXTRA_DICTIONARY);
 
         if(selectedDictionary == null) {
-            ((Button) thisView.findViewById(R.id.dicoButton)).setText(ALL_DICO);
+            ((Button) thisView.findViewById(R.id.dicoButton)).setText(MainActivity.ALL_DICO);
         }
         else {
             ((Button) thisView.findViewById(R.id.dicoButton)).setText(selectedDictionary.getTitle());
@@ -62,7 +62,7 @@ public class SearchFragment extends Fragment {
         DictionaryDataModel ddm = new DictionaryDataModel(this.getActivity());
         ArrayList<Dictionary> dico = ddm.select();
         String[] nameDico = new String[dico.size()+1];
-        nameDico[0] = ALL_DICO;
+        nameDico[0] = MainActivity.ALL_DICO;
         for (int i=0; i<dico.size(); i++){
             nameDico[i+1] = dico.get(i).getTitle();
         }

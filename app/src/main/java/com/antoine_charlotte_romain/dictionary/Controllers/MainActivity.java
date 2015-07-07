@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MIDDLE_STRING = "middle";
     public static final String EXTRA_END_STRING = "end";
     public static final String EXTRA_HEAD_OR_WHOLE = "headOrWhole";
+    public static final String EXTRA_NEW_DICO_NAME = "namedico";
+    public static final String ALL_DICO = "All";
 
     private Toolbar toolbar;
     private ViewPager pager;
@@ -39,12 +41,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private SearchFragment searchFragment;
-    private DictionaryDataModel dd;
-    private ArrayList<Dictionary> listDictionaries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         setContentView(R.layout.activity_main);
 
         // Creating The Toolbar and setting it as the Toolbar for the activity

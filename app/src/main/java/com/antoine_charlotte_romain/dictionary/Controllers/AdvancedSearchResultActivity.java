@@ -27,14 +27,6 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
     Toolbar toolbar;
     ListView vue;
 
-    final String ALL_DICO = "All";
-
-    final String EXTRA_BEGIN_STRING = "begin";
-    final String EXTRA_MIDDLE_STRING = "middle";
-    final String EXTRA_END_STRING = "end";
-    final String EXTRA_HEAD_OR_WHOLE = "headOrWhole";
-    final String EXTRA_TARGET_DICO = "target";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,16 +42,16 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
         // Get data associated to the advanced search
         Intent intent = getIntent();
         if (intent != null){
-            String begin = intent.getStringExtra(EXTRA_BEGIN_STRING);
-            String middle = intent.getStringExtra(EXTRA_MIDDLE_STRING);
-            String end = intent.getStringExtra(EXTRA_END_STRING);
-            String headWhole = intent.getStringExtra(EXTRA_HEAD_OR_WHOLE);
-            String dico = intent.getStringExtra(EXTRA_TARGET_DICO);
+            String begin = intent.getStringExtra(MainActivity.EXTRA_BEGIN_STRING);
+            String middle = intent.getStringExtra(MainActivity.EXTRA_MIDDLE_STRING);
+            String end = intent.getStringExtra(MainActivity.EXTRA_END_STRING);
+            String headWhole = intent.getStringExtra(MainActivity.EXTRA_HEAD_OR_WHOLE);
+            String dico = intent.getStringExtra(MainActivity.EXTRA_DICTIONARY);
 
             // find id of the dictionary
             long id;
             DictionaryDataModel ddm = new DictionaryDataModel(this);
-            if(!dico.equals(ALL_DICO)) {
+            if(!dico.equals(MainActivity.ALL_DICO)) {
                 id = ddm.select(dico).getId();
             } else {
                 id = Word.ALL_DICTIONARIES;
@@ -119,10 +111,10 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
                 String note = item.get("note");
 
                 Intent intent = new Intent(AdvancedSearchResultActivity.this, WordActivity.class);
-                intent.putExtra("selectedWord", new Word(idword,dicoid,headword,translation,note));
+                intent.putExtra(MainActivity.EXTRA_WORD, new Word(idword,dicoid,headword,translation,note));
 
                 DictionaryDataModel ddm = new DictionaryDataModel(getApplicationContext());
-                intent.putExtra("selectedDictionary", ddm.select(dicoid));
+                intent.putExtra(MainActivity.EXTRA_DICTIONARY, ddm.select(dicoid));
 
                 startActivity(intent);
             }

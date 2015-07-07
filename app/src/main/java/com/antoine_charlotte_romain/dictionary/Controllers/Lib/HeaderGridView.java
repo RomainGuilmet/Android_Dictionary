@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 package com.antoine_charlotte_romain.dictionary.Controllers.Lib;
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 import android.content.Context;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
@@ -31,6 +34,10 @@ import android.widget.WrapperListAdapter;
 import java.util.ArrayList;
 /**
  * A {@link GridView} that supports adding header rows in a
+<<<<<<< HEAD
+=======
+ * very similar way to {@link ListView}.
+>>>>>>> origin/master
  * See {@link HeaderGridView#addHeaderView(View, Object, boolean)}
  */
 public class HeaderGridView extends GridView {
