@@ -27,14 +27,6 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
     Toolbar toolbar;
     ListView vue;
 
-    /*final String ALL_DICO = "All";
-
-    final String EXTRA_BEGIN_STRING = "begin";
-    final String EXTRA_MIDDLE_STRING = "middle";
-    final String EXTRA_END_STRING = "end";
-    final String EXTRA_HEAD_OR_WHOLE = "headOrWhole";
-    final String EXTRA_TARGET_DICO = "target";*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,15 +105,10 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HashMap<String, String> item = (HashMap<String, String>) parent.getItemAtPosition(position);
                 Long idword = Long.parseLong(item.get("id"));
-                System.out.println(idword);
                 Long dicoid = Long.parseLong(item.get("dicoid"));
-                System.out.println(dicoid);
                 String headword = item.get("headword");
-                System.out.println(headword);
                 String translation = item.get("translation");
-                System.out.println(translation);
                 String note = item.get("note");
-                System.out.println(note);
 
                 Intent intent = new Intent(AdvancedSearchResultActivity.this, WordActivity.class);
                 intent.putExtra(MainActivity.EXTRA_WORD, new Word(idword,dicoid,headword,translation,note));

@@ -191,15 +191,10 @@ public class DictionaryDataModel extends DAOBase{
      *          The name of the dictionary to delete
      */
     public void delete(String dictionaryName){
-        // Gets the data repository in write mode
-        //this.open();
-
         // Find the dictionary associated to this name
         Dictionary result = select(dictionaryName);
         if (result != null){
             // if there is a dictionary with this name, suppress its words and then suppress the dictionary
-            //WordDataModel wdm = new WordDataModel(context);
-            //wdm.deleteAll(result.getId());
             delete(result.getId());
         }
 
