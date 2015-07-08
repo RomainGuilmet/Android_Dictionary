@@ -60,7 +60,7 @@
             app:borderWidth="0dp"
             app:fabSize="normal" />
 
-
     </android.support.design.widget.CoordinatorLayout>
+
 
 </android.support.v4.widget.DrawerLayout>

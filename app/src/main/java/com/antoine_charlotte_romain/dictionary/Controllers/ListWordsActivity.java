@@ -197,6 +197,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
         {
+            case R.id.action_export_csv:
+                exportCsv(findViewById(R.id.list_words_layout));
+                return true;
+
             case R.id.action_import_csv:
                 importCsv(findViewById(R.id.list_words_layout));
                 return true;
@@ -328,6 +332,20 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         newWordIntent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
 
         startActivity(newWordIntent);
+    }
+
+    /**
+     * This function is called when the user click on the exportCsv button, it launch the view exportACsv
+     * @param view
+     */
+    public void exportCsv(View view){
+        if(open){
+            showFloatingMenu(view);
+        }
+        Intent importCSVintent = new Intent(this, CSVExportActivity.class);
+        importCSVintent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, selectedDictionary.getTitle());
+
+        startActivity(importCSVintent);
     }
 
     /**

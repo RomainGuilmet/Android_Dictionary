@@ -91,7 +91,7 @@ public class DictionaryAdapter extends ArrayAdapter<Dictionary>{
         // Populate the data into the template view using the data object
         title.setText(dictionary.getTitle());
 
-        /*//Configuring the checkbox if exists
+        //Configuring the checkbox if exists
         if(layoutResourceId == R.layout.delete_dictionary_row) {
             final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.delete_box);
             checkBox.setOnClickListener(new View.OnClickListener() {
@@ -124,13 +124,14 @@ public class DictionaryAdapter extends ArrayAdapter<Dictionary>{
                     }
                 }
             });
-        }*/
+        }
 
 
 
         // Return the completed view to render on screen
         return convertView;
     }
+
 
 
 

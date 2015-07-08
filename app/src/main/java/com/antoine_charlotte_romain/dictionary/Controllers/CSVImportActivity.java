@@ -57,6 +57,7 @@ public class CSVImportActivity extends AppCompatActivity {
         // Creating The Toolbar and setting it as the Toolbar for the activity
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ddm = new DictionaryDataModel(CSVImportActivity.this);
         wdm = new WordDataModel(CSVImportActivity.this);
@@ -190,7 +191,6 @@ public class CSVImportActivity extends AppCompatActivity {
                         w.setId(databaseWord.get(0).getId());
                         // if the CSV word translation does not appear in the already existing word translation
                         if (!meanings.contains(translation)){
-                            // TODO CHOOSE HOW TO REPRESENT ANOTHER MEANING
                             meanings = meanings + " - " + translation;
                             w.setTranslation(meanings);
                             wdm.update(w);
