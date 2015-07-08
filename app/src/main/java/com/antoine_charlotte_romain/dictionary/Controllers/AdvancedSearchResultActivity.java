@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Word;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
@@ -23,7 +26,7 @@ import java.util.List;
 public class AdvancedSearchResultActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private ListView vue;
+    private ListView listResults;
 
     private ArrayList<Word> results;
     private WordDataModel wdm;
@@ -66,7 +69,7 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
         }
 
         // Display results
-        vue = (ListView) findViewById(R.id.resultsList);
+        listResults = (ListView) findViewById(R.id.resultsList);
         List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
         HashMap<String, String> element;
 
@@ -88,9 +91,9 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
                     new int[]{android.R.id.text1, android.R.id.text2});
 
             // Give ListView to the SimpleAdapter
-            vue.setAdapter(adapter);
+            listResults.setAdapter(adapter);
 
-            vue.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent wordDetailIntent = new Intent(AdvancedSearchResultActivity.this, WordActivity.class);
@@ -102,6 +105,18 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
                     startActivity(wordDetailIntent);
                 }
             });
+        }
+
+        else {
+            LinearLayout advancedSearchLayout = (LinearLayout)findViewById(R.id.advanced_search);
+
+            advancedSearchLayout.removeView(listResults);
+
+            TextView textResult = new TextView(this);
+            textResult.setText("No result");
+            textResult.setGravity(Gravity.CENTER);
+            textResult.setPadding(0, 10, 0, 0);
+            advancedSearchLayout.addView(textResult);
         }
     }
 }
