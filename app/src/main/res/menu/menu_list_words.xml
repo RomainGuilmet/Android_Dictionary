@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Controllers.ListWordsActivity">
 
+    <item android:id="@+id/action_export_csv"
+        android:title="@string/export_csv"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
     <item android:id="@+id/action_import_csv"
         android:title="@string/import_csv"
         android:orderInCategory="100"

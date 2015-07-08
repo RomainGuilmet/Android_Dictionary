@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private SlidingTabLayout tabs;
     private int numbOfTabs =3;
 
+    private SearchFragment searchFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,5 +101,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setSearchFragment(SearchFragment f){
+        this.searchFragment = f;
+    }
+
+    public void displayDictionaries(View v){
+        this.searchFragment.displayDictionaries(v);
+    }
+
+    public void advancedSearch(View v){
+        this.searchFragment.advancedSearch(v);
     }
 }
