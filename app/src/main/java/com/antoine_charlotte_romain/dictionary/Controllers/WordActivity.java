@@ -18,7 +18,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
+import com.antoine_charlotte_romain.dictionary.Business.SearchDate;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
+import com.antoine_charlotte_romain.dictionary.DataModel.SearchDateDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
@@ -129,6 +131,10 @@ public class WordActivity extends AppCompatActivity {
         noteText.setText(selectedWord.getNote());
 
         getSupportActionBar().setTitle("Details : " + selectedWord.getHeadword());
+
+        SearchDateDataModel sddm = new SearchDateDataModel(getApplicationContext());
+        SearchDate sd = new SearchDate(selectedWord);
+        sddm.insert(sd);
     }
 
     /**

@@ -154,7 +154,7 @@ public class CSVExportActivity extends AppCompatActivity {
         long dicoID = ddm.select(dictionaryName).getId();
 
         WordDataModel wdm = new WordDataModel(this);
-        List<Word> words = wdm.selectAllFromDictionary(dicoID);
+        List<Word> words = wdm.selectAll(dicoID);
 
         if (!file.exists()){
             BufferedWriter bw;

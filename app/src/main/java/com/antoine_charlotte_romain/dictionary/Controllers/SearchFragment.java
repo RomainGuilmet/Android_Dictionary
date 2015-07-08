@@ -43,11 +43,8 @@ public class SearchFragment extends Fragment {
     private MenuItem searchTabButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.fragment_search,container,false);
-
-        ((MainActivity)getActivity()).setSearchFragment(this);
 
         Intent intent = getActivity().getIntent();
         selectedDictionary = (Dictionary)intent.getSerializableExtra(MainActivity.EXTRA_DICTIONARY);
@@ -82,6 +79,13 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 displayDictionaries(v);
+            }
+        });
+
+        searchFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                advancedSearch(v);
             }
         });
 

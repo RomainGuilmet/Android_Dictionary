@@ -83,5 +83,6 @@
     <string name="undo">Undo</string>
     <string name="all_dictionaries">All Dictionaries</string>
     <string name="select_all">Select All</string>
+    <string name="rowMenu">rowMenu</string>
 
 </resources>
