@@ -57,6 +57,7 @@ public class CSVImportActivity extends AppCompatActivity {
         // Creating The Toolbar and setting it as the Toolbar for the activity
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ddm = new DictionaryDataModel(CSVImportActivity.this);
         wdm = new WordDataModel(CSVImportActivity.this);

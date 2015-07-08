@@ -41,7 +41,7 @@
     <string name="csvexport_popuptitle1">Oups...</string>
     <string name="csvexport_popupnegative1">EEEE</string>
     <string name="csvexport_popuppositive1">Change file name</string>
-    <string name="title_activity_csvexport">CSVExportActivity</string>
+    <string name="title_activity_csvexport">Export dictionary</string>
 
     <string name="title_activity_test">TestActivity</string>
     <string name="jump_to">Jump to&#8230;</string>
