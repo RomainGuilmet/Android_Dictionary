@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
@@ -52,6 +54,8 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private final int CONTEXT_MENU_READ = 0;
     private final int CONTEXT_MENU_UPDATE = 1;
     private final int CONTEXT_MENU_DELETE = 2;
+    private final int NORMAL_STATE = 0;
+    private final int DELETE_STATE = 1;
 
     /*---------------------------------------------------------
     *                     INSTANCE VARIABLES
@@ -89,7 +93,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     private DictionaryAdapter adapter;
 
-
     /**
      * Used to display the snackBars
      */
@@ -105,7 +108,17 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     private boolean undo;
 
-    private View header, deleteHeader;
+    /**
+     * Header of the gridView
+     */
+    private View header;
+
+    private int state;
+
+    /**
+     * Toolbar menu
+     */
+    private Menu menu;
 
     private EditText searchBox, nameBox;
 
@@ -131,20 +144,15 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         v = inflater.inflate(R.layout.fragment_home,container,false);
         rootLayout = (CoordinatorLayout) v.findViewById(R.id.rootLayout);
         setHasOptionsMenu(true);
-
-        return v;
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
+        state = NORMAL_STATE;
 
         initData();
         initGridView();
-        initEditText();
         initFloatingActionButton();
+        initEditText();
+        return v;
     }
+
 
     /**
      * Initialising the data model and selecting all the dictionaries
@@ -164,35 +172,60 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     {
         //Creating the GridView
         gridView = (HeaderGridView) v.findViewById(R.id.dictionary_list);
-
-        //Adding the GridView header
-        gridView.removeHeaderView(header);
-        header = getActivity().getLayoutInflater().inflate(R.layout.grid_view_header, null);
-        gridView.addHeaderView(header);
-        Button b = (Button) header.findViewById(R.id.button_all);
-        b.setText(R.string.all_dictionaries);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                read(-1);
-            }
-        });
-
-        //Populating the GridView
-        adapter = new DictionaryAdapter(getActivity(), R.layout.dictionary_row , dictionariesDisplay);
-        adapter.setCallback(this);
-        gridView.setAdapter(adapter);
         gridView.setDrawSelectorOnTop(true);
 
-        //Configuring the ListView listener
-        gridView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        read(position - 1);
+        if(state == NORMAL_STATE)
+        {
+            //Adding the GridView header
+            gridView.removeHeaderView(header);
+            header = getActivity().getLayoutInflater().inflate(R.layout.grid_view_header, null);
+            gridView.addHeaderView(header);
+            Button b = (Button) header.findViewById(R.id.button_all);
+            b.setText(R.string.all_dictionaries);
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    read(-1);
+                }
+            });
+
+            //Configuring the ListView listener
+            gridView.setOnItemClickListener(
+                    new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            read(position - 1);
+                        }
+                    }
+            );
+
+            //Populating the GridView
+            adapter = new DictionaryAdapter(getActivity(), R.layout.dictionary_row, dictionariesDisplay);
+            adapter.setCallback(this);
+            gridView.setAdapter(adapter);
+        }
+        else if(state == DELETE_STATE)
+        {
+            //Adding the GridView header
+            gridView.removeHeaderView(header);
+            header = getActivity().getLayoutInflater().inflate(R.layout.grid_view_header, null);
+            gridView.addHeaderView(header);
+            Button b = (Button) header.findViewById(R.id.button_all);
+            b.setText(R.string.select_all);
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for ( int i=0; i < adapter.getCount(); i++) {
+
                     }
                 }
-        );
+            });
+
+            adapter = new DictionaryAdapter(getActivity(), R.layout.delete_dictionary_row, dictionariesDisplay);
+            adapter.setCallback(this);
+            gridView.setAdapter(adapter);
+            deleteList = new ArrayList<Dictionary>();
+        }
 
         //Adding the context menu on each rows
         registerForContextMenu(gridView);
@@ -202,6 +235,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         anim.start();
 
     }
+
 
     /**
      * Initialising the search box to dynamically researching on the dictionary list
@@ -253,7 +287,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
 
         });
     }
-
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -485,37 +518,38 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     @Override
     public void delete(final int position)
     {
-            final Dictionary d = dictionariesDisplay.get(position);
-            dictionariesDisplay.remove(d);
-            adapter.notifyDataSetChanged();
-            undo = false;
-            Snackbar snack = Snackbar.make(rootLayout, d.getTitle() + getString(R.string.deleted), Snackbar.LENGTH_LONG).setAction(R.string.undo_button, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    undo = true;
-                }
-            });
-            snack.getView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                @Override
-                public void onViewAttachedToWindow(View v) {
-                }
+        final Dictionary d = dictionariesDisplay.get(position);
+        dictionariesDisplay.remove(d);
+        adapter.notifyDataSetChanged();
+        undo = false;
+        Snackbar snack = Snackbar.make(rootLayout, d.getTitle() + getString(R.string.deleted), Snackbar.LENGTH_LONG).setAction(R.string.undo_button, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                undo = true;
+            }
+        });
+        snack.getView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+            }
 
-                @Override
-                public void onViewDetachedFromWindow(View v) {
-                    //Once snackbar is closed, whatever the way : undo button clicked, change activity, an other snackbar, etc.
-                    if (!undo)
-                    {
-                        dictionaries.remove(d);
-                        ddm.delete(d.getId());
-                    }
-                    else
-                    {
-                        dictionariesDisplay.add(position, d);
-                        adapter.notifyDataSetChanged();
-                    }
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                //Once snackbar is closed, whatever the way : undo button clicked, change activity, an other snackbar, etc.
+                if (!undo)
+                {
+                    dictionaries.remove(d);
+                    deleteList.remove(d);
+                    ddm.delete(d.getId());
                 }
-            });
-            snack.show();
+                else
+                {
+                    dictionariesDisplay.add(position, d);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+        snack.show();
 
     }
 
@@ -528,6 +562,9 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     public void addToDeleteList(int position)
     {
         deleteList.add(dictionariesDisplay.get(position));
+        int s = deleteList.size();
+        menu.findItem(R.id.nb_item_selected).setTitle(s + " selected");
+        menu.findItem(R.id.action_delete_list).setVisible(s>0);
     }
 
     /**
@@ -539,13 +576,30 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     public void removeFromDeleteList(int position)
     {
         deleteList.remove(dictionariesDisplay.get(position));
+        int s = deleteList.size();
+        menu.findItem(R.id.nb_item_selected).setTitle(s + " selected");
+        menu.findItem(R.id.action_delete_list).setVisible(s > 0);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu m, MenuInflater inflater)
+    {
+        menu = m;
         super.onCreateOptionsMenu(menu, inflater);
+        showMenu();
+    }
+
+    public void showMenu()
+    {
         menu.clear();
-        inflater.inflate(R.menu.menu_home, menu);
+        if(state == NORMAL_STATE)
+            getActivity().getMenuInflater().inflate(R.menu.menu_home, menu);
+        else if (state == DELETE_STATE) {
+            getActivity().getMenuInflater().inflate(R.menu.menu_home_delete, menu);
+            int s = deleteList.size();
+            menu.findItem(R.id.nb_item_selected).setTitle(deleteList.size() + " selected");
+            menu.findItem(R.id.action_delete_list).setVisible(s > 0);
+        }
     }
 
     @Override
@@ -557,10 +611,33 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 return true;
 
             case R.id.action_multiple_delete:
-                adapter = new DictionaryAdapter(getActivity(), R.layout.delete_dictionary_row , dictionariesDisplay);
-                adapter.setCallback(this);
-                gridView.setAdapter(adapter);
-                deleteList = new ArrayList<Dictionary>();
+                state = DELETE_STATE;
+                initGridView();
+                showMenu();
+                return true;
+            case R.id.action_delete_list:
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setMessage(getString(R.string.delete) + " " + deleteList.size() + " " + getString(R.string.dictionaries) +  " ?");
+                alert.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        for (int i = 0; i < deleteList.size() ; i++)
+                        {
+                            dictionaries.remove(deleteList.get(i));
+                            dictionariesDisplay.remove(deleteList.get(i));
+                            ddm.delete(deleteList.get(i).getId());
+                        }
+                        state = NORMAL_STATE;
+                        initGridView();
+                        showMenu();
+                    }
+                });
+
+                alert.setNegativeButton(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                });
+
+                alert.show();
                 return true;
 
             default:

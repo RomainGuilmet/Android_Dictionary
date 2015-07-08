@@ -77,11 +77,14 @@
     <string name="action_rename">Rename</string>
     <string name="dictionary">Dictionary :</string>
 
+
     <string name="import_csv">Import a csv</string>
     <string name="add_word">Add a word</string>
     <string name="modify">Modify</string>
     <string name="undo">Undo</string>
     <string name="all_dictionaries">All Dictionaries</string>
     <string name="select_all">Select All</string>
+    <string name="delete_selected">Delete selected dictionaries</string>
+    <string name="dictionaries">dictionaries</string>
 
 </resources>
