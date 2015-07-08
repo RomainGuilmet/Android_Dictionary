@@ -69,6 +69,42 @@ tools:context=".AdvancedSearchResultActivity">
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_below="@id/nom"
+            android:id="@+id/dicoField"
+            android:layout_marginBottom="20sp">
+
+            <TextView
+                android:id="@+id/textDico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/csvexport_dico"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:layout_marginRight="8sp"
+                />
+
+            <TextView
+                android:id="@+id/nameDico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_toRightOf="@+id/textDico"
+                android:text="dico"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/dicoField"
             android:id="@+id/validate">
 
             <Button

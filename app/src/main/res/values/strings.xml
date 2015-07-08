@@ -29,6 +29,7 @@
     <string name="csvimport_wordsList">Updated Words :</string>
     <string name="title_activity_csvimport">Import a CSV</string>
 
+    <string name="csvexport_dico">Dictionary : </string>
     <string name="csvexport_insertCSVname">Name of the CSV file :</string>
     <string name="csvexport_CSVname">CSV name</string>
     <string name="csvexport_export">Export !</string>
@@ -78,6 +79,7 @@
     <string name="dictionary">Dictionary :</string>
 
     <string name="import_csv">Import a csv</string>
+    <string name="export_csv">Export dictionary</string>
     <string name="add_word">Add a word</string>
     <string name="modify">Modify</string>
     <string name="undo">Undo</string>

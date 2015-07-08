@@ -190,7 +190,6 @@ public class CSVImportActivity extends AppCompatActivity {
                         w.setId(databaseWord.get(0).getId());
                         // if the CSV word translation does not appear in the already existing word translation
                         if (!meanings.contains(translation)){
-                            // TODO CHOOSE HOW TO REPRESENT ANOTHER MEANING
                             meanings = meanings + " - " + translation;
                             w.setTranslation(meanings);
                             wdm.update(w);

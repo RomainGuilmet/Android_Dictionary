@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Word;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
@@ -30,7 +30,7 @@ public class CSVExportActivity extends AppCompatActivity {
 
     Toolbar toolbar;
 
-    final String EXTRA_NEW_DICO_NAME = "name dico";
+    EditText fileName;
 
     String dictionaryName;
 
@@ -43,10 +43,15 @@ public class CSVExportActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+        fileName = (EditText) findViewById(R.id.nameCSVfile);
+
         // Get data associated to the advanced search
         Intent intent = getIntent();
         if (intent != null){
-            dictionaryName = intent.getStringExtra(EXTRA_NEW_DICO_NAME);
+            dictionaryName = intent.getStringExtra(MainActivity.EXTRA_NEW_DICO_NAME);
+
+            TextView nameDicoText = (TextView) findViewById(R.id.nameDico);
+            nameDicoText.setText(dictionaryName);
         }
 
         // Au clic sur le bouton, on recup le dictionnaire associ au nom transmis
@@ -78,12 +83,10 @@ public class CSVExportActivity extends AppCompatActivity {
     }
 
     public void export(View v){
-        EditText fileName = (EditText) v.findViewById(R.id.nameCSVfile);
-
         List<String> existingCSV = getAvailableCSV(Environment.getExternalStorageDirectory());
 
         // if the specified name do not already exists
-        if (!existingCSV.contains(fileName.getText().toString()+".csv")){
+        if (!existingCSV.contains(fileName.getText().toString())){
             exportCSV(fileName.getText().toString());
             new AlertDialog.Builder(CSVExportActivity.this)
                     .setTitle(R.string.csvexport_popuptitle)
@@ -169,9 +172,9 @@ public class CSVExportActivity extends AppCompatActivity {
                 bw = new BufferedWriter(fw);
                     // Pour chaque mot du dictionnaire
                 for (Word w : words){
-                    headword = w.getHeadword();
-                    translation = w.getTranslation();
-                    note = w.getNote();
+                    headword = filterComma(w.getHeadword());
+                    translation = filterComma(w.getTranslation());
+                    note = filterComma(w.getNote());
 
                     bw.write(headword + comma + translation + comma + note);
                     bw.newLine();
@@ -181,9 +184,15 @@ public class CSVExportActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
+    }
+
+    private String filterComma (String stringToFilter){
+        String result = stringToFilter;
+        if (stringToFilter.contains(",")){
+            result.replace(',',';');
+        }
+        return result;
     }
 
 }
