@@ -47,6 +47,8 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.fragment_search,container,false);
 
+        ((MainActivity)getActivity()).setSearchFragment(this);
+
         Intent intent = getActivity().getIntent();
         selectedDictionary = (Dictionary)intent.getSerializableExtra(MainActivity.EXTRA_DICTIONARY);
 
