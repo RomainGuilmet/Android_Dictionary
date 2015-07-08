@@ -162,6 +162,7 @@ public class CSVImportActivity extends AppCompatActivity {
             Word w = null;
             List<Word> databaseWord = null;
             String meanings = "";
+            String dbNotes = "";
             while ((line = br.readLine()) != null) {
                 // Split the line with comma as a separator
                 wordInfo = line.split(cvsSplitBy);
@@ -183,8 +184,10 @@ public class CSVImportActivity extends AppCompatActivity {
                     // Get the already existing word
                     databaseWord = wdm.selectFromHeadWord(w.getHeadword(),dicoID);
                     if (databaseWord.size() == 1){
-                        // Get its translation
+                        // Get its translation and its note
                         meanings = databaseWord.get(0).getTranslation();
+                        dbNotes = databaseWord.get(0).getNote();
+                        w.setId(databaseWord.get(0).getId());
                         // if the CSV word translation does not appear in the already existing word translation
                         if (!meanings.contains(translation)){
                             // TODO CHOOSE HOW TO REPRESENT ANOTHER MEANING
@@ -192,6 +195,16 @@ public class CSVImportActivity extends AppCompatActivity {
                             w.setTranslation(meanings);
                             wdm.update(w);
                             updatedWords.add(w.getHeadword());
+                        }
+                        // if the CSV word note does not appear in the already existing word note
+                        if (!note.equals("") && !dbNotes.contains(note)){
+                            dbNotes = dbNotes + " - " + note;
+                            w.setNote(dbNotes);
+                            wdm.update(w);
+                            // to make sure the headword won t be twice in the list of updated words
+                            if (!updatedWords.contains(w.getHeadword())){
+                                updatedWords.add(w.getHeadword());
+                            }
                         }
                     }
                 } else if (result == 0){
