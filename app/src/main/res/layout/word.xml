@@ -84,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/dictionary_word_details"
+        android:text="@string/dictionary_title"
         android:id="@+id/textViewDictionary"
         android:layout_below="@+id/tool_bar"
         android:layout_alignParentLeft="true"

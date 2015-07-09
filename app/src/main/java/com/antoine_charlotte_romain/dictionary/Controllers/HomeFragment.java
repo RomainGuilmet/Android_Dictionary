@@ -16,7 +16,6 @@ import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,9 +30,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
@@ -345,7 +342,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         builder.setView(layout);
 
         //Dialog positive action
-        builder.setPositiveButton(R.string.add_button,
+        builder.setPositiveButton(R.string.add,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Dictionary d = new Dictionary(nameBox.getText().toString());
@@ -367,7 +364,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 });
 
         //Dialog negative action
-        builder.setNegativeButton(R.string.cancel_button,
+        builder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -453,7 +450,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         builder.setView(layout);
 
 
-        builder.setPositiveButton(R.string.rename_button,
+        builder.setPositiveButton(R.string.rename,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final String title = d.getTitle();
@@ -481,7 +478,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                     }
                 });
 
-        builder.setNegativeButton(R.string.cancel_button,
+        builder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -519,7 +516,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         dictionariesDisplay.remove(d);
         adapter.notifyDataSetChanged();
         undo = false;
-        Snackbar snack = Snackbar.make(rootLayout, d.getTitle() + getString(R.string.deleted), Snackbar.LENGTH_LONG).setAction(R.string.undo_button, new View.OnClickListener() {
+        Snackbar snack = Snackbar.make(rootLayout, d.getTitle() + getString(R.string.deleted), Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 undo = true;
@@ -602,7 +599,12 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
             case R.id.action_delete_list:
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                 final int s = adapter.getDeleteList().size();
-                alert.setMessage(getString(R.string.delete) + " " + s + " " + getString(R.string.dictionaries) +  " ?");
+                if(s == 1){
+                    alert.setMessage(getString(R.string.delete) + " " + s + " " + getString(R.string.dictionaries) + " ?");
+                }
+                else {
+                    alert.setMessage(getString(R.string.delete) + " " + s + " " + getString(R.string.dictionaries) + " ?");
+                }
                 alert.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         for (int i = 0; i < s ; i++)
@@ -619,7 +621,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                     }
                 });
 
-                alert.setNegativeButton(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+                alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                     }
                 });

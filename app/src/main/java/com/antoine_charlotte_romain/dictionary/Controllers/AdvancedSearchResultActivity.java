@@ -70,13 +70,13 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
 
         // Display results
         listResults = (ListView) findViewById(R.id.resultsList);
-        List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
+        List<HashMap<String, String>> liste = new ArrayList<>();
         HashMap<String, String> element;
 
         if(results.size()>0) {
             for (int i = 0; i < results.size(); i++) {
                 // we add each word of the results list in this new list
-                element = new HashMap<String, String>();
+                element = new HashMap<>();
 
                 element.put("headword", results.get(i).getHeadword());
                 element.put("translation", results.get(i).getTranslation());
@@ -113,7 +113,7 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
             advancedSearchLayout.removeView(listResults);
 
             TextView textResult = new TextView(this);
-            textResult.setText("No result");
+            textResult.setText(getString(R.string.no_result));
             textResult.setGravity(Gravity.CENTER);
             textResult.setPadding(0, 10, 0, 0);
             advancedSearchLayout.addView(textResult);

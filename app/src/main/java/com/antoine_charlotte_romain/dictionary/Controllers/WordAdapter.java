@@ -18,23 +18,21 @@ import com.antoine_charlotte_romain.dictionary.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by summer1 on 30/06/2015.
- */
 public class WordAdapter extends ArrayAdapter<Word> {
 
     private Context context;
     private int layoutResourceId;
     private ArrayList<Word> aw = null;
+    private ArrayList<Word> deleteList = new ArrayList<>();
     private boolean selectedDictionary;
+    private boolean allSelected;
     private WordAdapterCallback callback;
 
     /**
      * This function creates a custom ArrayAdapter of words
-     *
-     * @param context
-     * @param resource
-     * @param data
+     * @param context the context of the application
+     * @param resource the layout to inflate
+     * @param data the ArrayList of words
      * @param selectedDictionary if true the row will show the headWord and its translation else it will show the headWord and the dictionary title instead
      */
     public WordAdapter(Context context, int resource, ArrayList<Word> data, boolean selectedDictionary) {
@@ -63,19 +61,26 @@ public class WordAdapter extends ArrayAdapter<Word> {
         return position;
     }
 
+    public ArrayList<Word> getDeleteList() {
+        return deleteList;
+    }
+
+    public boolean isAllSelected() {
+        return allSelected;
+    }
+
     /**
-     * This function is used to show the word in the listView each word in a custom layout "row_word"
-     *
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
+     * This function is used to show the word in the listView each word in a custom layout
+     * @param position the position of the item the user is interacting with
+     * @param convertView the rowView
+     * @param parent the listView
+     * @return the rowView completed
      */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         // Get the data item for this position
-        Word word = getItem(position);
+        final Word word = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -85,6 +90,15 @@ public class WordAdapter extends ArrayAdapter<Word> {
         // Lookup view for data population
         TextView mainItem = (TextView) convertView.findViewById(R.id.textHeader);
         TextView subItem = (TextView) convertView.findViewById(R.id.textSub);
+
+        // Populate the data into the template view using the data object
+        mainItem.setText(word.getHeadword());
+        if (selectedDictionary) {
+            subItem.setText(word.getTranslation());
+        } else {
+            DictionaryDataModel ddm = new DictionaryDataModel(context);
+            subItem.setText((ddm.select(word.getDictionaryID())).getTitle());
+        }
 
         if(layoutResourceId == R.layout.row_word) {
             ImageButton menuButton = (ImageButton) convertView.findViewById(R.id.imageButtonWord);
@@ -128,49 +142,67 @@ public class WordAdapter extends ArrayAdapter<Word> {
         }
         else {
             final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.deleteWordBox);
+
+            checkBox.setChecked(deleteList.contains(word));
+
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    if(checkBox.isChecked())
-                    {
-                        callback.addToDeleteList(position);
-                    }
-                    else
-                    {
-                        callback.removeFromDeleteList(position);
+                public void onClick(View v) {
+                    if (checkBox.isChecked()) {
+                        addToDeleteList(word);
+                    } else {
+                        removeFromDeleteList(word);
                     }
                 }
             });
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
-                    if(checkBox.isChecked())
-                    {
+                public void onClick(View v) {
+                    if (checkBox.isChecked()) {
                         checkBox.setChecked(false);
-                        callback.removeFromDeleteList(position);
-                    }
-                    else
-                    {
+                        removeFromDeleteList(word);
+                    } else {
                         checkBox.setChecked(true);
-                        callback.addToDeleteList(position);
+                        addToDeleteList(word);
                     }
                 }
             });
         }
 
-        // Populate the data into the template view using the data object
-        mainItem.setText(word.getHeadword());
-        if (selectedDictionary) {
-            subItem.setText(word.getTranslation());
-        } else {
-            DictionaryDataModel ddm = new DictionaryDataModel(context);
-            subItem.setText((ddm.select(word.getDictionaryID())).getTitle());
-        }
-
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    private void addToDeleteList(Word w)
+    {
+        if(!deleteList.contains(w)) {
+            deleteList.add(w);
+            callback.notifyDeleteListChanged();
+        }
+    }
+
+    private void removeFromDeleteList(Word w)
+    {
+        deleteList.remove(w);
+        allSelected = false;
+        callback.notifyDeleteListChanged();
+    }
+
+    public void selectAll()
+    {
+        allSelected = !allSelected;
+        if(allSelected)
+        {
+            for (int i = 0; i < aw.size(); i++) {
+                addToDeleteList(aw.get(i));
+            }
+        }
+        else {
+            deleteList.clear();
+            callback.notifyDeleteListChanged();
+        }
+
+        notifyDataSetChanged();
     }
 
     public void setCallback(WordAdapterCallback callback){
@@ -182,8 +214,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
         void modifyPressed(int position);
         boolean getOpen();
         void showFloatingMenu(View v);
-        void addToDeleteList(int position);
-        void removeFromDeleteList(int position);
+        void notifyDeleteListChanged();
     }
 
 }

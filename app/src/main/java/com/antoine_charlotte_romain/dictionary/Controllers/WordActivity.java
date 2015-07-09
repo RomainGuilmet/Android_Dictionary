@@ -39,10 +39,6 @@ public class WordActivity extends AppCompatActivity {
     private Word selectedWord;
     private Dictionary selectedDictionary;
 
-    /**
-     * This function is called when the Activity start
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,11 +70,6 @@ public class WordActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    /**
-     * This function creates the buttons on the toolBar
-     * @param menu
-     * @return
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -94,11 +85,6 @@ public class WordActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * This function is called when the user click on a button of the toolBar
-     * @param item
-     * @return
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
@@ -130,7 +116,7 @@ public class WordActivity extends AppCompatActivity {
         translationText.setText(selectedWord.getTranslation());
         noteText.setText(selectedWord.getNote());
 
-        getSupportActionBar().setTitle("Details : " + selectedWord.getHeadword());
+        getSupportActionBar().setTitle(getString(R.string.details) + selectedWord.getHeadword());
 
         SearchDateDataModel sddm = new SearchDateDataModel(getApplicationContext());
         SearchDate sd = new SearchDate(selectedWord);
@@ -147,7 +133,7 @@ public class WordActivity extends AppCompatActivity {
         translationText.setText("");
         noteText.setText("");
 
-        getSupportActionBar().setTitle("New word");
+        getSupportActionBar().setTitle(R.string.new_word);
 
         saveButton.setVisible(false);
 
@@ -178,7 +164,7 @@ public class WordActivity extends AppCompatActivity {
         selectedWord.setNote(noteText.getText().toString());
         wdm.update(selectedWord);
 
-        Toast.makeText(this, selectedWord.getHeadword() + " updated with success !", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, selectedWord.getHeadword() + getString(R.string.updated), Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -196,38 +182,38 @@ public class WordActivity extends AppCompatActivity {
 
         switch (i){
             case 0:
-                Toast.makeText(this, w.getHeadword() + " created with success !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, w.getHeadword() + getString(R.string.created), Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case 1:
-                Toast.makeText(this, "Error : " + w.getHeadword() + " already exists.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.error) + " : " + w.getHeadword() + getString(R.string.already_exists), Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                Toast.makeText(this, "Error : this dictionary doesn't exists.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.error) + " " + getString(R.string.dico_not_exists), Toast.LENGTH_SHORT).show();
                 break;
             case 3:
-                Toast.makeText(this, "Error : no dictionary selected.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.error) + " " + getString(R.string.no_selected_dico), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
     /**
      * This function is called on click on the deleteButton, it asks for a confirmation and then delete the selected word.
-     * @param view
+     * @param view the view which launched this function
      */
     public void deleteWord(View view) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage("Delete this word ?");
-        alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        alert.setMessage(getString(R.string.delete_word) + " ?");
+        alert.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Toast.makeText(getApplicationContext(), selectedWord.getHeadword() + " deleted with success !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), selectedWord.getHeadword() + getString(R.string.deleted), Toast.LENGTH_SHORT).show();
                 wdm = new WordDataModel(getApplicationContext());
                 wdm.delete(selectedWord.getId());
                 finish();
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
             }
         });
@@ -237,7 +223,7 @@ public class WordActivity extends AppCompatActivity {
 
     /**
      * This function is used to hide the keyBoard on click outside an editText
-     * @param view
+     * @param view the view which launched this function
      */
     public void setupUI(View view) {
         //Set up touch listener for non-text box views to hide keyboard.

@@ -39,6 +39,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="@dimen/edit_text_margin"
         android:layout_marginRight="@dimen/edit_text_margin"
-        android:contentDescription="@string/rowMenu" />
+        android:contentDescription="" />
 
 </RelativeLayout>

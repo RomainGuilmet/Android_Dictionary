@@ -79,7 +79,7 @@ public class CSVImportActivity extends AppCompatActivity {
 
             } else {
                 // Initialize attributes
-                updatedWords = new ArrayList<String>();
+                updatedWords = new ArrayList<>();
                 addedWords = 0;
 
                 // Display CSV files list
@@ -117,7 +117,7 @@ public class CSVImportActivity extends AppCompatActivity {
      *          A list of CSV file names
      */
     private List<File> getAvailableCSV(File f){
-        List<File> csvDispo = new ArrayList<File>();
+        List<File> csvDispo = new ArrayList<>();
 
         // if the specified file is a directory
         if (f.isDirectory()){
@@ -142,7 +142,6 @@ public class CSVImportActivity extends AppCompatActivity {
      *
      * @param fileToRead
      *          The CSV file providing the words to add in the dictionary
-     * @return A list of updated words after the import
      */
     private void importCSV(File fileToRead){
         // Get the dictionary in which the words have to be added
@@ -155,7 +154,7 @@ public class CSVImportActivity extends AppCompatActivity {
         Long dicoID = d.getId();
 
         BufferedReader br = null;
-        String line = "";
+        String line;
         // Each line of the CSV file will by split by the comma character
         String cvsSplitBy = ",";
         try {
@@ -165,10 +164,10 @@ public class CSVImportActivity extends AppCompatActivity {
             String[] wordInfo;
             String note;
             String translation;
-            Word w = null;
-            List<Word> databaseWord = null;
-            String meanings = "";
-            String dbNotes = "";
+            Word w;
+            List<Word> databaseWord ;
+            String meanings;
+            String dbNotes;
             while ((line = br.readLine()) != null) {
                 // Split the line with comma as a separator
                 wordInfo = line.split(cvsSplitBy);
@@ -267,7 +266,7 @@ public class CSVImportActivity extends AppCompatActivity {
 
         // Display results
         vue = (ListView) findViewById(R.id.resultsList);
-        List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
+        List<HashMap<String, String>> liste = new ArrayList<>();
         HashMap<String, String> element;
 
         // if there is at least one result to display
@@ -275,7 +274,7 @@ public class CSVImportActivity extends AppCompatActivity {
             // Fill the list to display with the name of the CSV files found
             for(int i = 0 ; i < csvDispo.size() ; i++) {
                 // we add each word of the results list in this new list
-                element = new HashMap<String, String>();
+                element = new HashMap<>();
                 element.put("name", String.valueOf(csvDispo.get(i).getName()));
                 liste.add(element);
             }
@@ -295,7 +294,7 @@ public class CSVImportActivity extends AppCompatActivity {
                 // When an item of the list is clicked
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     // Import the chosen CSV file in the previously specified dictionary
-                    updatedWords = new ArrayList<String>();
+                    updatedWords = new ArrayList<>();
                     addedWords = 0;
                     vue.setVisibility(View.GONE);
                     //animation.setVisibility(View.VISIBLE);
@@ -307,8 +306,8 @@ public class CSVImportActivity extends AppCompatActivity {
                     // Display a pop up window
                     new AlertDialog.Builder(CSVImportActivity.this)
                             .setTitle(R.string.csv_imported)
-                            .setMessage(R.string.nb_added_words + " : " + addedWords + "\nUpdated words : "
-                                    + updatedWords.size())
+                            .setMessage(R.string.nb_added_words + " : " + addedWords + "\n" +
+                                    R.string.nb_uptaded_words + " " + + updatedWords.size())
                             .setPositiveButton(R.string.see_dico, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // pop up closes and the list of the words in this dictionary is displayed
@@ -343,7 +342,7 @@ public class CSVImportActivity extends AppCompatActivity {
 
         // Display results
         vue = (ListView) findViewById(R.id.resultsList);
-        List<HashMap<String, String>> liste = new ArrayList<HashMap<String, String>>();
+        List<HashMap<String, String>> liste = new ArrayList<>();
         HashMap<String, String> element;
 
         // if there is at least one result to display
@@ -355,7 +354,7 @@ public class CSVImportActivity extends AppCompatActivity {
             // Fill the list to display with the updated words
             for(int i = 0 ; i < updatedWords.size() ; i++) {
                 // we add each word of the results list in this new list
-                element = new HashMap<String, String>();
+                element = new HashMap<>();
                 ArrayList<Word> aw = wdm.select(updatedWords.get(i),dicoid);
                 if (aw.size() == 1){
                     w = aw.get(0);

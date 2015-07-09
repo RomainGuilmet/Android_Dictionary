@@ -19,26 +19,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by summer2 on 29/06/2015.
- */
 public class DictionaryAdapter extends ArrayAdapter<Dictionary>{
 
     private Context context;
     private int layoutResourceId;
     private ArrayList<Dictionary> data = null;
+    private ArrayList<Dictionary> deleteList = new ArrayList<>();
     private DictionaryAdapterCallback callback;
     private boolean all_selected;
-
-    public ArrayList<Dictionary> getDeleteList() {
-        return deleteList;
-    }
-
-    public boolean isAll_selected() {
-        return all_selected;
-    }
-
-    private ArrayList<Dictionary> deleteList = new ArrayList<Dictionary>();
 
     public DictionaryAdapter(Context context, int layoutResourceId, ArrayList<Dictionary> data) {
         super(context, layoutResourceId, data);
@@ -46,6 +34,14 @@ public class DictionaryAdapter extends ArrayAdapter<Dictionary>{
         this.context = context;
         this.data = data;
         this.all_selected = false;
+    }
+
+    public ArrayList<Dictionary> getDeleteList() {
+        return deleteList;
+    }
+
+    public boolean isAll_selected() {
+        return all_selected;
     }
 
     @Override

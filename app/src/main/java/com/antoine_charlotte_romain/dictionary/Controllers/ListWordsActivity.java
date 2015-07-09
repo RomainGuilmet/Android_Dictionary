@@ -64,12 +64,12 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private EditText nameBox;
     private View header;
     private Menu menu;
+    private Button headerButton;
 
     private WordDataModel wdm;
     private DictionaryDataModel ddm;
     private Dictionary selectedDictionary;
     private ArrayList<Word> myWordsList;
-    private ArrayList<Word> deleteList;
     private WordAdapter myAdapter;
 
     private boolean open;
@@ -81,10 +81,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private int myLastFirstVisibleItem;
     private int actualListSize;
 
-    /**
-     * This function is called when the Activity start
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,11 +175,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         initListView();
     }
 
-    /**
-     * This function creates the buttons on the toolBar
-     * @param menu
-     * @return
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -194,11 +185,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         return true;
     }
 
-    /**
-     * This function is called when the user click on a button of the toolBar
-     * @param item
-     * @return
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
@@ -224,15 +210,15 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                 return true;
 
             case R.id.action_delete_words:
-                multipleDeleteMode(findViewById(R.id.list_words_layout));
+                multipleDeleteMode();
                 return true;
 
             case R.id.action_cancel_list:
-
+                normalMode();
                 return true;
 
             case R.id.action_delete_list:
-                deleteSelectedWords(findViewById(R.id.list_words_layout));
+                deleteSelectedWords();
                 return true;
 
             default:
@@ -254,7 +240,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             importText.setVisibility(View.GONE);
             addButton.setVisibility(View.GONE);
             addText.setVisibility(View.GONE);
-            getSupportActionBar().setTitle("All dictionaries");
+            getSupportActionBar().setTitle(R.string.allDico);
             select = false;
         }
         else{
@@ -475,7 +461,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         myWordsList.remove(w);
         myAdapter.notifyDataSetChanged();
 
-        Snackbar.make(findViewById(R.id.list_words_layout), w.getHeadword() + " deleted with success.", Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
+        Snackbar.make(findViewById(R.id.list_words_layout), w.getHeadword() + getString(R.string.deleted), Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myWordsList.add(pos, w);
@@ -543,14 +529,14 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         builder.setView(layout);
 
 
-        builder.setPositiveButton(R.string.rename_button,
+        builder.setPositiveButton(R.string.rename,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final String title = selectedDictionary.getTitle();
                         selectedDictionary.setTitle(nameBox.getText().toString());
                         ddm = new DictionaryDataModel(getApplicationContext());
                         if (ddm.update(selectedDictionary) == 1) {
-                            Snackbar.make(findViewById(R.id.list_words_layout), R.string.dictionary_renamed, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                            Snackbar.make(findViewById(R.id.list_words_layout), getString(R.string.dictionary_renamed), Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
@@ -560,7 +546,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                             getSupportActionBar().setTitle(selectedDictionary.getTitle());
                         } else {
                             selectedDictionary.setTitle(title);
-                            Snackbar.make(findViewById(R.id.list_words_layout), R.string.dictionary_not_renamed, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                            Snackbar.make(findViewById(R.id.list_words_layout), getString(R.string.dictionary_not_renamed), Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
@@ -571,7 +557,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                     }
                 });
 
-        builder.setNegativeButton(R.string.cancel_button,
+        builder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -602,17 +588,17 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
      */
     public void deleteDictionary(View view){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage("Delete this dictionary ?");
-        alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        alert.setMessage(getString(R.string.delete_dictionary) +" ?");
+        alert.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Toast.makeText(getApplicationContext(), selectedDictionary.getTitle() + " deleted with success !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), selectedDictionary.getTitle() + getString(R.string.deleted), Toast.LENGTH_SHORT).show();
                 ddm = new DictionaryDataModel(getApplicationContext());
                 ddm.delete(selectedDictionary.getId());
                 finish();
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
             }
         });
@@ -621,58 +607,69 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     }
 
     /**
-     * This function allows the user to delete multiple words at the same time
-     * @param view
+     * This function leave the deletion mode
      */
-    public void multipleDeleteMode(View view){
+    private void normalMode(){
+        myAdapter = new WordAdapter(getApplicationContext(), R.layout.row_word, myWordsList, true);
+        myAdapter.setCallback(this);
+        listViewWords.setAdapter(myAdapter);
+
+        menu.clear();
+        onCreateOptionsMenu(menu);
+        listViewWords.removeHeaderView(header);
+        getSupportActionBar().setTitle(selectedDictionary.getTitle());
+    }
+
+    /**
+     * This function allows the user to delete multiple words at the same time
+     */
+    private void multipleDeleteMode(){
         header = this.getLayoutInflater().inflate(R.layout.grid_view_header, null);
         listViewWords.addHeaderView(header);
-        Button b = (Button) header.findViewById(R.id.button_all);
-        b.setText(R.string.select_all);
-        b.setOnClickListener(new View.OnClickListener() {
+        headerButton = (Button) header.findViewById(R.id.button_all);
+        headerButton.setText(R.string.select_all);
+        headerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < myAdapter.getCount(); i++) {
-
-                }
+                myAdapter.selectAll();
             }
         });
 
         myAdapter = new WordAdapter(getApplicationContext(), R.layout.row_delete_word, myWordsList, true);
         myAdapter.setCallback(this);
         listViewWords.setAdapter(myAdapter);
-        deleteList = new ArrayList<>();
 
         menu.clear();
         getMenuInflater().inflate(R.menu.menu_word_delete, menu);
-        getSupportActionBar().setTitle(deleteList.size() + " selected");
+        getSupportActionBar().setTitle("0 " + getString(R.string.item));
         menu.findItem(R.id.action_delete_list).setVisible(false);
     }
 
     /**
      * This function deletes all the words selected by the user.
-     * @param view
      */
-    public void deleteSelectedWords(View view){
+    private void deleteSelectedWords(){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        if(deleteList.size() == 1){
-            alert.setMessage(getString(R.string.delete) + " " + deleteList.size() + " " + getString(R.string.word) + " ?");
+        final int s = myAdapter.getDeleteList().size();
+        if(s == 1){
+            alert.setMessage(getString(R.string.delete) + " " + s + " " + getString(R.string.word) + " ?");
         }
         else {
-            alert.setMessage(getString(R.string.delete) + " " + deleteList.size() + " " + getString(R.string.words) + " ?");
+            alert.setMessage(getString(R.string.delete) + " " + s + " " + getString(R.string.words) + " ?");
         }
         alert.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                for (int i = 0; i < deleteList.size() ; i++)
+                for (int i = 0; i < s ; i++)
                 {
-                    myWordsList.remove(deleteList.get(i));
-                    wdm.delete(deleteList.get(i).getId());
+                    myWordsList.remove(myAdapter.getDeleteList().get(i));
+                    wdm.delete(myAdapter.getDeleteList().get(i).getId());
                 }
-                onCreateOptionsMenu(menu);
+                myAdapter.notifyDataSetChanged();
+                normalMode();
             }
         });
 
-        alert.setNegativeButton(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
             }
         });
@@ -708,29 +705,18 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     }
 
     /**
-     * Method which allows user to add a dictionary to the deleteList
-     *
-     * @param position position of the dictionary to add
+     * Method that notify the view that the deleteList has changed
      */
     @Override
-    public void addToDeleteList(int position)
+    public void notifyDeleteListChanged()
     {
-        deleteList.add(myWordsList.get(position));
-        getSupportActionBar().setTitle(deleteList.size() + " selected");
-        menu.findItem(R.id.action_delete_list).setVisible(deleteList.size() > 0);
-    }
-
-    /**
-     * Method which allows user to remove a dictionary to the deleteList
-     *
-     * @param position position of the dictionary to remove
-     */
-    @Override
-    public void removeFromDeleteList(int position)
-    {
-        deleteList.remove(myWordsList.get(position));
-        getSupportActionBar().setTitle(deleteList.size() + " selected");
-        menu.findItem(R.id.action_delete_list).setVisible(deleteList.size() > 0);
+        int s = myAdapter.getDeleteList().size();
+        getSupportActionBar().setTitle(s + getString(R.string.item));
+        menu.findItem(R.id.action_delete_list).setVisible(s > 0);
+        if (myAdapter.isAllSelected())
+            headerButton.setText(R.string.deselect_all);
+        else
+            headerButton.setText(R.string.select_all);
     }
 
     /**

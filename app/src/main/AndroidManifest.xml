@@ -30,7 +30,7 @@
         </activity>
         <activity
             android:name=".Controllers.WordActivity"
-            android:label="@string/word_activity"
+            android:label="@string/details"
             android:parentActivityName=".Controllers.ListWordsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
