@@ -54,7 +54,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/edit_text_margin"
-        android:layout_marginStart="@dimen/edit_text_margin" />
+        android:layout_marginStart="@dimen/edit_text_margin"
+        android:imeOptions="actionGo|flagNoExtractUi"/>
 
 
     <android.support.design.widget.FloatingActionButton

@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -78,54 +79,89 @@ public class WordAdapter extends ArrayAdapter<Word> {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_word, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(layoutResourceId, parent, false);
         }
 
         // Lookup view for data population
-        TextView header = (TextView) convertView.findViewById(R.id.textHeader);
+        TextView mainItem = (TextView) convertView.findViewById(R.id.textHeader);
         TextView subItem = (TextView) convertView.findViewById(R.id.textSub);
-        ImageButton menuButton = (ImageButton) convertView.findViewById(R.id.imageButtonWord);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!callback.getOpen()) {
-                    switch (v.getId()) {
-                        case R.id.imageButtonWord:
-                            PopupMenu popup = new PopupMenu(context, v);
-                            popup.getMenuInflater().inflate(R.menu.context_menu_word, popup.getMenu());
-                            popup.show();
-                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                @Override
-                                public boolean onMenuItemClick(MenuItem item) {
-                                    switch (item.getItemId()) {
-                                        case R.id.modify:
-                                            callback.modifyPressed(position);
-                                            break;
 
-                                        case R.id.delete:
-                                            callback.deletePressed(position);
-                                            break;
+        if(layoutResourceId == R.layout.row_word) {
+            ImageButton menuButton = (ImageButton) convertView.findViewById(R.id.imageButtonWord);
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!callback.getOpen()) {
+                        switch (v.getId()) {
+                            case R.id.imageButtonWord:
+                                PopupMenu popup = new PopupMenu(context, v);
+                                popup.getMenuInflater().inflate(R.menu.context_menu_word, popup.getMenu());
+                                popup.show();
+                                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem item) {
+                                        switch (item.getItemId()) {
+                                            case R.id.modify:
+                                                callback.modifyPressed(position);
+                                                break;
 
-                                        default:
-                                            break;
+                                            case R.id.delete:
+                                                callback.deletePressed(position);
+                                                break;
+
+                                            default:
+                                                break;
+                                        }
+                                        return true;
                                     }
-                                    return true;
-                                }
-                            });
-                            break;
+                                });
+                                break;
 
-                        default:
-                            break;
+                            default:
+                                break;
+                        }
+                    } else {
+                        callback.showFloatingMenu(v);
                     }
                 }
-                else{
-                    callback.showFloatingMenu(v);
+            });
+        }
+        else {
+            final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.deleteWordBox);
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    if(checkBox.isChecked())
+                    {
+                        callback.addToDeleteList(position);
+                    }
+                    else
+                    {
+                        callback.removeFromDeleteList(position);
+                    }
                 }
-            }
-        });
+            });
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    if(checkBox.isChecked())
+                    {
+                        checkBox.setChecked(false);
+                        callback.removeFromDeleteList(position);
+                    }
+                    else
+                    {
+                        checkBox.setChecked(true);
+                        callback.addToDeleteList(position);
+                    }
+                }
+            });
+        }
 
         // Populate the data into the template view using the data object
-        header.setText(word.getHeadword());
+        mainItem.setText(word.getHeadword());
         if (selectedDictionary) {
             subItem.setText(word.getTranslation());
         } else {
@@ -146,6 +182,8 @@ public class WordAdapter extends ArrayAdapter<Word> {
         void modifyPressed(int position);
         boolean getOpen();
         void showFloatingMenu(View v);
+        void addToDeleteList(int position);
+        void removeFromDeleteList(int position);
     }
 
 }

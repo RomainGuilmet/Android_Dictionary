@@ -17,7 +17,9 @@ import com.antoine_charlotte_romain.dictionary.R;
 
 import java.util.ArrayList;
 
-
+/**
+ * TODO faire du tri dans les strings
+ */
 public class MainActivity extends AppCompatActivity {
 
     public final static int ADVANCED_HOME_FRAGMENT = 0;

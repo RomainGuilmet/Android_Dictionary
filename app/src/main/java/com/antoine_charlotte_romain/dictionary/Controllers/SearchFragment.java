@@ -29,8 +29,6 @@ import java.util.ArrayList;
  */
 public class SearchFragment extends Fragment {
 
-    private final String target = "Target dictionary : ";
-
     private View thisView;
 
     private Dictionary selectedDictionary;
@@ -65,10 +63,10 @@ public class SearchFragment extends Fragment {
         super.onResume();
 
         if(selectedDictionary == null) {
-            targetDictionary.setText(target + MainActivity.ALL_DICO);
+            targetDictionary.setText(getString(R.string.target_dico) + MainActivity.ALL_DICO);
         }
         else {
-            targetDictionary.setText(target + selectedDictionary.getTitle());
+            targetDictionary.setText(getString(R.string.target_dico)+ selectedDictionary.getTitle());
         }
 
         beginningText.setText("");
@@ -208,7 +206,7 @@ public class SearchFragment extends Fragment {
                 .setItems(names, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        targetDictionary.setText(target + names[which]);
+                        targetDictionary.setText(getString(R.string.target_dico) + names[which]);
                     }
                 })
                 .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
@@ -240,7 +238,7 @@ public class SearchFragment extends Fragment {
 
         // Let's get the targeted dictionary
         String temp = targetDictionary.getText().toString();
-        String dico = temp.replace(target, "");
+        String dico = temp.replace(getString(R.string.target_dico), "");
         intent.putExtra(MainActivity.EXTRA_DICTIONARY, dico);
 
         startActivity(intent);
