@@ -4,8 +4,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 tools:context=".Controllers.HomeFragment">
 
-    <item android:id="@+id/nb_item_selected"
-        android:title=""
+    <item android:id="@+id/action_cancel"
+        android:title="@string/cancel"
         app:showAsAction="ifRoom"  />
 
     <item android:id="@+id/action_delete_list"

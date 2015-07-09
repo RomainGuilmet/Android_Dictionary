@@ -295,7 +295,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         ImageView imageView = new ImageView(context);
 
         int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
-        imageView.setPadding(padding, padding, padding, padding);
+        imageView.setPadding(padding, padding/2, padding, padding);
 
         int width = (int) (getResources().getDisplayMetrics().widthPixels / mViewPager.getAdapter().getCount());
         imageView.setMinimumWidth(width);

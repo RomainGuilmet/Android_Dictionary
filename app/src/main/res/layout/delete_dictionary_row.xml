@@ -5,16 +5,6 @@
     android:descendantFocusability="blocksDescendants">
 
 
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/delete_box"
-        android:layout_alignBottom="@+id/dictionary_title"
-        android:background="@color/white"
-        android:layout_alignParentTop="true" />
-
-
     <TextView
         android:id="@+id/dictionary_title"
         android:layout_width="wrap_content"
@@ -22,21 +12,21 @@
         android:text="DicoName"
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
-        android:paddingLeft="10dp"
+        android:paddingRight="14dp"
+        android:paddingLeft="14dp"
         android:textColor="@color/textColor"
         android:singleLine="true"
         android:textSize="16sp"
         android:background="@color/white"
-        android:layout_toLeftOf="@+id/dico_more_button"
-        android:layout_toRightOf="@+id/delete_box"
-        android:layout_toEndOf="@+id/delete_box" />
+        android:layout_toLeftOf="@+id/delete_box"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-    <ImageButton
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/dico_more_button"
+        android:id="@+id/delete_box"
         android:background="@color/white"
-        android:src="@drawable/ic_more_vert_black_24dp"
         android:paddingRight="@dimen/more_button_padding"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
