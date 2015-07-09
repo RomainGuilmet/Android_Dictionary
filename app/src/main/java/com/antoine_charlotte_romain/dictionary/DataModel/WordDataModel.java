@@ -28,6 +28,14 @@ public class WordDataModel extends DAOBase{
 
     public static final String SQL_DELETE_WORD = "DROP TABLE IF EXISTS " + WordEntry.TABLE_NAME;
 
+    public static abstract class WordEntry implements BaseColumns {
+        public static final String TABLE_NAME = "word";
+        public static final String COLUMN_NAME_DICTIONARY_ID = "dictionaryID";
+        public static final String COLUMN_NAME_HEADWORD = "headword";
+        public static final String COLUMN_NAME_TRANSLATION = "translation";
+        public static final String COLUMN_NAME_NOTE = "note";
+    }
+
     private static final String SQL_SELECT_WORD_FROM_ID = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry._ID + " = ?;";
 
     private static final String SQL_SELECT_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?"
@@ -37,17 +45,6 @@ public class WordDataModel extends DAOBase{
                     " WHERE UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?" +
                     " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
                      " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
-
-    private static final String SQL_SELECT_WORD_FROM_WHOLE_WORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
-                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
-                    " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
-                    " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?;";
-
-    private static final String SQL_SELECT_WORD_FROM_WHOLE_WORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
-                    " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
-                    " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
-                    " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
             " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
@@ -79,14 +76,6 @@ public class WordDataModel extends DAOBase{
 
     private static final String SQL_SELECT_ALL_LIMIT = "SELECT * FROM " + WordEntry.TABLE_NAME + " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC LIMIT ? OFFSET ?;";
 
-    public static abstract class WordEntry implements BaseColumns {
-        public static final String TABLE_NAME = "word";
-        public static final String COLUMN_NAME_DICTIONARY_ID = "dictionaryID";
-        public static final String COLUMN_NAME_HEADWORD = "headword";
-        public static final String COLUMN_NAME_TRANSLATION = "translation";
-        public static final String COLUMN_NAME_NOTE = "note";
-    }
-
     public WordDataModel(Context context){
         super(context);
     }
@@ -102,10 +91,10 @@ public class WordDataModel extends DAOBase{
             // Gets the data repository in write mode
             SQLiteDatabase db = open();
 
-            DictionaryDataModel dd = new DictionaryDataModel(context);
-            Dictionary d = dd.select(w.getDictionaryID());
+            DictionaryDataModel ddm = new DictionaryDataModel(context);
+            Dictionary d = ddm.select(w.getDictionaryID());
             if(d != null) {
-                ArrayList<Word> aw = selectFromHeadWord(w.getHeadword(), w.getDictionaryID());
+                ArrayList<Word> aw = select(w.getHeadword(), w.getDictionaryID());
                 if (aw.size() == 0) {
                     // Create a new map of values, where column names are the keys
                     ContentValues values = new ContentValues();
@@ -132,7 +121,7 @@ public class WordDataModel extends DAOBase{
      * @param id the ID of the word to find
      * @return the word or null if the word was not found
      */
-    public Word selectFromID(long id){
+    public Word select(long id){
         SQLiteDatabase db = open();
 
         Cursor c = db.rawQuery(SQL_SELECT_WORD_FROM_ID, new String[]{String.valueOf(id)});
@@ -161,7 +150,7 @@ public class WordDataModel extends DAOBase{
      * @param dictionaryID the ID of the dictionary in we wish we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
      * @return A list of word which have this headword in the selected dictionary
      */
-    public ArrayList<Word> selectFromHeadWord(String headWord, long dictionaryID){
+    public ArrayList<Word> select(String headWord, long dictionaryID){
         SQLiteDatabase db = open();
 
         Cursor c;
@@ -174,33 +163,7 @@ public class WordDataModel extends DAOBase{
 
         ArrayList<Word> listWord = new ArrayList<Word>();
         while (c.moveToNext()) {
-            Word w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
-            listWord.add(w);
-        }
-        c.close();
-        return listWord;
-    }
-
-    /**
-     * Find a word in a dictionary with the wholeword (i.e its headword, its translation and its note)
-     * @param word the headword, the translation or the note of the word we are wanted to find
-     * @param dictionaryID the ID of the dictionary in we wish we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
-     * @return A list of word which have this headword, this translation or this note in the selected dictionary
-     */
-    public ArrayList<Word> selectFromWholeWord(String word, long dictionaryID){
-        SQLiteDatabase db = open();
-
-        Cursor c;
-        if(dictionaryID == Word.ALL_DICTIONARIES) {
-            c = db.rawQuery(SQL_SELECT_WORD_FROM_WHOLE_WORD, new String[]{String.valueOf(word), String.valueOf(word), String.valueOf(word)});
-        }
-        else{
-            c = db.rawQuery(SQL_SELECT_WORD_FROM_WHOLE_WORD_AND_DICTIONARY, new String[]{String.valueOf(word), String.valueOf(word), String.valueOf(word), String.valueOf(dictionaryID)});
-        }
-
-        ArrayList<Word> listWord = new ArrayList<Word>();
-        while (c.moveToNext()) {
-            Word w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            Word w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
             listWord.add(w);
         }
         c.close();
@@ -215,7 +178,7 @@ public class WordDataModel extends DAOBase{
      * @param dictionaryID the ID of the dictionary in we wish we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
      * @return A list of word which have this begin, this middle and this end in the headword
      */
-    public ArrayList<Word> selectHeadwordWithBeginMiddleEnd(String begin, String middle, String end, long dictionaryID){
+    public ArrayList<Word> selectHeadword(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
         String search = begin+"%"+middle+"%"+end;
@@ -230,7 +193,7 @@ public class WordDataModel extends DAOBase{
         ArrayList<Word> listWord = new ArrayList<Word>();
         Word w;
         while (c.moveToNext()) {
-            w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
             listWord.add(w);
         }
         c.close();
@@ -245,7 +208,7 @@ public class WordDataModel extends DAOBase{
      * @param dictionaryID the ID of the dictionary in we wish we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
      * @return A list of word which have this begin, this middle and this end in the headword, translation or note
      */
-    public ArrayList<Word> selectWholeWordWithBeginMiddleEnd(String begin, String middle, String end, long dictionaryID){
+    public ArrayList<Word> selectWholeWord(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
         String search = begin+"%"+middle+"%"+end;
@@ -259,7 +222,7 @@ public class WordDataModel extends DAOBase{
 
         ArrayList<Word> listWord = new ArrayList<Word>();
         while (c.moveToNext()) {
-            Word w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            Word w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
             listWord.add(w);
         }
         c.close();
@@ -271,7 +234,7 @@ public class WordDataModel extends DAOBase{
      * @param dictionaryID the ID of the dictionary in which we want to find all the words
      * @return A list of all the words present in the selected dictionary
      */
-    public ArrayList<Word> selectAllFromDictionary(long dictionaryID){
+    public ArrayList<Word> selectAll(long dictionaryID){
         SQLiteDatabase db = open();
 
         Cursor c;
@@ -285,7 +248,7 @@ public class WordDataModel extends DAOBase{
 
         ArrayList<Word> listWord = new ArrayList<Word>();
         while (c.moveToNext()) {
-            Word w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            Word w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
             listWord.add(w);
         }
         c.close();
@@ -299,7 +262,7 @@ public class WordDataModel extends DAOBase{
      * @param offset the number of first rows to not return
      * @return A list of all the words present in the selected dictionary
      */
-    public ArrayList<Word> selectAllFromDictionary(long dictionaryID, int limit, int offset){
+    public ArrayList<Word> selectAll(long dictionaryID, int limit, int offset){
         SQLiteDatabase db = open();
 
         Cursor c;
@@ -313,7 +276,7 @@ public class WordDataModel extends DAOBase{
 
         ArrayList<Word> listWord = new ArrayList<Word>();
         while (c.moveToNext()) {
-            Word w = selectFromID(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            Word w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
             listWord.add(w);
         }
         c.close();
@@ -343,6 +306,10 @@ public class WordDataModel extends DAOBase{
         // Gets the data repository in write mode
         SQLiteDatabase db = open();
 
+        // suppress its search
+        SearchDateDataModel sddm = new SearchDateDataModel(context);
+        sddm.deleteAll(id);
+
         // Define 'where' part of query.
         String selection = WordEntry._ID + " LIKE ?";
 
@@ -362,14 +329,10 @@ public class WordDataModel extends DAOBase{
             // Gets the data repository in write mode
             SQLiteDatabase db = open();
 
-            // Define 'where' part of query.
-            String selection = WordEntry.COLUMN_NAME_DICTIONARY_ID + " LIKE ?";
-
-            // Specify arguments in placeholder order.
-            String[] selectionArgs = {String.valueOf(dictionaryId)};
-
-            // Issue SQL statement.
-            db.delete(WordEntry.TABLE_NAME, selection, selectionArgs);
+            ArrayList<Word> aw = selectAll(dictionaryId);
+            for(int i=0; i<aw.size(); i++){
+                delete(aw.get(i).getId());
+            }
         }
     }
 

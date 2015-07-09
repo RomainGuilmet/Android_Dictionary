@@ -62,9 +62,9 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
             // search
             wdm = new WordDataModel(this);
             if(headWhole.equals("head")){
-                results = wdm.selectHeadwordWithBeginMiddleEnd(begin, middle, end, id);
+                results = wdm.selectHeadword(begin, middle, end, id);
             } else {
-                results = wdm.selectWholeWordWithBeginMiddleEnd(begin, middle, end, id);
+                results = wdm.selectWholeWord(begin, middle, end, id);
             }
         }
 

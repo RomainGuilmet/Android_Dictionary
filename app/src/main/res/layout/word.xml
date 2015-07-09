@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/headword"
-        android:id="@+id/textViewHeadword"
+        android:id="@+id/textHeadword"
         android:layout_below="@+id/editTextDictionary"
         android:layout_alignLeft="@+id/editTextDictionary"
         android:layout_alignStart="@+id/editTextDictionary"
@@ -28,11 +28,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/editTextHeadword"
         android:inputType="text"
-        android:layout_below="@+id/textViewHeadword"
-        android:layout_alignLeft="@+id/textViewHeadword"
-        android:layout_alignStart="@+id/textViewHeadword"
-        android:layout_alignRight="@+id/textViewHeadword"
-        android:layout_alignEnd="@+id/textViewHeadword" />
+        android:layout_below="@+id/textHeadword"
+        android:layout_alignLeft="@+id/textHeadword"
+        android:layout_alignStart="@+id/textHeadword"
+        android:layout_alignRight="@+id/textHeadword"
+        android:layout_alignEnd="@+id/textHeadword" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -41,7 +41,6 @@ import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 import java.util.ArrayList;
 
 /**
- * TODO import csv
  * TODO suppression multiple
  * TODO gridView en paysage
  * TODO Garder l'état des activités au changement d'orientation
@@ -231,7 +230,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         final boolean select;
 
         if(selectedDictionary == null) {
-            myWordsList = wdm.selectAllFromDictionary(Word.ALL_DICTIONARIES, wordsLimit, wordsOffset);
+            myWordsList = wdm.selectAll(Word.ALL_DICTIONARIES, wordsLimit, wordsOffset);
             menuButton.setVisibility(View.GONE);
             importCsvButton.setVisibility(View.GONE);
             importText.setVisibility(View.GONE);
@@ -241,7 +240,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             select = false;
         }
         else{
-            myWordsList = wdm.selectAllFromDictionary(selectedDictionary.getId(), wordsLimit, wordsOffset);
+            myWordsList = wdm.selectAll(selectedDictionary.getId(), wordsLimit, wordsOffset);
             menuButton.setVisibility(View.VISIBLE);
             getSupportActionBar().setTitle(selectedDictionary.getTitle());
             select = true;
@@ -275,11 +274,12 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                     if (s.length() > 0) {
                         String search = s.toString();
                         if (select) {
-                            tempList = wdm.selectFromHeadWord(search.toUpperCase(), selectedDictionary.getId());
+                            tempList = wdm.select(search.toUpperCase(), selectedDictionary.getId());
                         } else {
-                            tempList = wdm.selectFromHeadWord(search.toUpperCase(), Word.ALL_DICTIONARIES);
+                            tempList = wdm.select(search.toUpperCase(), Word.ALL_DICTIONARIES);
                         }
-                    } else {
+                    }
+                    else {
                         wordsOffset = 0;
                         if (listViewWords.getFooterViewsCount() == 0) {
                             listViewWords.addFooterView(loading);
@@ -287,9 +287,9 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                             listViewWords.setPadding(0, 0, 0, 0);
                         }
                         if (select) {
-                            tempList = wdm.selectAllFromDictionary(selectedDictionary.getId(), wordsLimit, wordsOffset);
+                            tempList = wdm.selectAll(selectedDictionary.getId(), wordsLimit, wordsOffset);
                         } else {
-                            tempList = wdm.selectAllFromDictionary(Word.ALL_DICTIONARIES, wordsLimit, wordsOffset);
+                            tempList = wdm.selectAll(Word.ALL_DICTIONARIES, wordsLimit, wordsOffset);
                         }
                     }
 
@@ -646,9 +646,9 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             wdm = new WordDataModel(getApplicationContext());
             if(filterWords.getText().toString().length()==0) {
                 if (selectedDictionary == null) {
-                    tempList = wdm.selectAllFromDictionary(Word.ALL_DICTIONARIES, wordsLimit, wordsOffset);
+                    tempList = wdm.selectAll(Word.ALL_DICTIONARIES, wordsLimit, wordsOffset);
                 } else {
-                    tempList = wdm.selectAllFromDictionary(selectedDictionary.getId(), wordsLimit, wordsOffset);
+                    tempList = wdm.selectAll(selectedDictionary.getId(), wordsLimit, wordsOffset);
                 }
             }
 

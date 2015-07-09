@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DataBaseHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "dictionary_database.db";
 
     public DataBaseHelper(Context context) {
@@ -18,10 +18,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DictionaryDataModel.SQL_CREATE_DICTIONARY);
         db.execSQL(WordDataModel.SQL_CREATE_WORD);
+        db.execSQL(SearchDateDataModel.SQL_CREATE_SEARCH_DATE);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
+        db.execSQL(SearchDateDataModel.SQL_DELETE_SEARCH_DATE);
         db.execSQL(WordDataModel.SQL_DELETE_WORD);
         db.execSQL(DictionaryDataModel.SQL_DELETE_DICTIONARY);
         onCreate(db);

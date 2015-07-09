@@ -189,7 +189,7 @@ public class CSVImportActivity extends AppCompatActivity {
                     // if the headword of the word we try to insert already exists in this dictionary
                     if (result == 1) {
                         // Get the already existing word
-                        databaseWord = wdm.selectFromHeadWord(w.getHeadword(), dicoID);
+                        databaseWord = wdm.select(w.getHeadword(), dicoID);
                         if (databaseWord.size() == 1) {
                             // Get its translation and its note
                             meanings = databaseWord.get(0).getTranslation();
@@ -356,7 +356,7 @@ public class CSVImportActivity extends AppCompatActivity {
             for(int i = 0 ; i < updatedWords.size() ; i++) {
                 // we add each word of the results list in this new list
                 element = new HashMap<String, String>();
-                ArrayList<Word> aw = wdm.selectFromHeadWord(updatedWords.get(i),dicoid);
+                ArrayList<Word> aw = wdm.select(updatedWords.get(i),dicoid);
                 if (aw.size() == 1){
                     w = aw.get(0);
                     element.put("id", String.valueOf(w.getId()));
