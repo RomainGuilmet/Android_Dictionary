@@ -200,14 +200,14 @@ public class SearchFragment extends Fragment {
         final String[] names = nameDico.clone();
 
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.advsearch_choose_dico)
+                .setTitle(R.string.choose_dictionary)
                 .setItems(names, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         targetDictionary.setText(target + names[which]);
                     }
                 })
-                .setNegativeButton(R.string.advsearch_returnString, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }

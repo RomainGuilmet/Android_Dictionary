@@ -19,7 +19,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/csvimport_CSVlist"
+        android:text="@string/available_csv_files"
         android:id="@+id/listName"
         android:textSize="25sp" />
 
@@ -29,5 +29,17 @@
         android:layout_height="fill_parent"
         android:choiceMode="multipleChoice">
     </ListView>
+
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
 
 </LinearLayout> 

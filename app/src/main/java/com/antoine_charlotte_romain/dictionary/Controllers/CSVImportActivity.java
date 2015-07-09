@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ public class CSVImportActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     ListView vue;
+    RelativeLayout animation;
 
     DictionaryDataModel ddm;
     WordDataModel wdm;
@@ -58,6 +60,9 @@ public class CSVImportActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        animation = (RelativeLayout) findViewById(R.id.loadingPanel);
+        //animation.setVisibility(View.GONE);
 
         ddm = new DictionaryDataModel(CSVImportActivity.this);
         wdm = new WordDataModel(CSVImportActivity.this);
@@ -178,38 +183,40 @@ public class CSVImportActivity extends AppCompatActivity {
                     note = extractWord(wordInfo[2]);
                 // Add the word in the database
                 w = new Word(dicoID,extractWord(wordInfo[0]),translation,note);
-                int result = wdm.insert(w);
+                if (!w.getHeadword().equals("")) {
+                    int result = wdm.insert(w);
 
-                // if the headword of the word we try to insert already exists in this dictionary
-                if (result == 1){
-                    // Get the already existing word
-                    databaseWord = wdm.selectFromHeadWord(w.getHeadword(),dicoID);
-                    if (databaseWord.size() == 1){
-                        // Get its translation and its note
-                        meanings = databaseWord.get(0).getTranslation();
-                        dbNotes = databaseWord.get(0).getNote();
-                        w.setId(databaseWord.get(0).getId());
-                        // if the CSV word translation does not appear in the already existing word translation
-                        if (!meanings.contains(translation)){
-                            meanings = meanings + " - " + translation;
-                            w.setTranslation(meanings);
-                            wdm.update(w);
-                            updatedWords.add(w.getHeadword());
-                        }
-                        // if the CSV word note does not appear in the already existing word note
-                        if (!note.equals("") && !dbNotes.contains(note)){
-                            dbNotes = dbNotes + " - " + note;
-                            w.setNote(dbNotes);
-                            wdm.update(w);
-                            // to make sure the headword won t be twice in the list of updated words
-                            if (!updatedWords.contains(w.getHeadword())){
+                    // if the headword of the word we try to insert already exists in this dictionary
+                    if (result == 1) {
+                        // Get the already existing word
+                        databaseWord = wdm.selectFromHeadWord(w.getHeadword(), dicoID);
+                        if (databaseWord.size() == 1) {
+                            // Get its translation and its note
+                            meanings = databaseWord.get(0).getTranslation();
+                            dbNotes = databaseWord.get(0).getNote();
+                            w.setId(databaseWord.get(0).getId());
+                            // if the CSV word translation does not appear in the already existing word translation
+                            if (!meanings.contains(translation)) {
+                                meanings = meanings + " - " + translation;
+                                w.setTranslation(meanings);
+                                wdm.update(w);
                                 updatedWords.add(w.getHeadword());
                             }
+                            // if the CSV word note does not appear in the already existing word note
+                            if (!note.equals("") && !dbNotes.contains(note)) {
+                                dbNotes = dbNotes + " - " + note;
+                                w.setNote(dbNotes);
+                                wdm.update(w);
+                                // to make sure the headword won t be twice in the list of updated words
+                                if (!updatedWords.contains(w.getHeadword())) {
+                                    updatedWords.add(w.getHeadword());
+                                }
+                            }
                         }
+                    } else if (result == 0) {
+                        // if the word was successfully added in the database
+                        addedWords = addedWords + 1;
                     }
-                } else if (result == 0){
-                    // if the word was successfully added in the database
-                    addedWords = addedWords + 1;
                 }
             }
         } catch (FileNotFoundException e) {
@@ -290,14 +297,19 @@ public class CSVImportActivity extends AppCompatActivity {
                     // Import the chosen CSV file in the previously specified dictionary
                     updatedWords = new ArrayList<String>();
                     addedWords = 0;
+                    vue.setVisibility(View.GONE);
+                    //animation.setVisibility(View.VISIBLE);
+
                     importCSV(csvDispo.get(position));
+
+                    //animation.setVisibility(View.GONE);
 
                     // Display a pop up window
                     new AlertDialog.Builder(CSVImportActivity.this)
-                            .setTitle(R.string.csvimport_popuptitle)
-                            .setMessage("Added words : " + addedWords + "\nUpdated words : "
+                            .setTitle(R.string.csv_imported)
+                            .setMessage(R.string.nb_added_words + " : " + addedWords + "\nUpdated words : "
                                     + updatedWords.size())
-                            .setPositiveButton(R.string.csvimport_popuppositive, new DialogInterface.OnClickListener() {
+                            .setPositiveButton(R.string.see_dico, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // pop up closes and the list of the words in this dictionary is displayed
                                     Dictionary d = ddm.select(dictionaryName);
@@ -306,7 +318,7 @@ public class CSVImportActivity extends AppCompatActivity {
                                     startActivity(intent);
                                 }
                             })
-                            .setNegativeButton(R.string.csvimport_popupnegative, new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.updated_words, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // pop up closes and the list of the updated words is displayed
                                     Intent intent = new Intent(CSVImportActivity.this,CSVImportActivity.class);
@@ -327,7 +339,7 @@ public class CSVImportActivity extends AppCompatActivity {
     private void displayUpdatedWordslist(){
         // Change name of the list
         TextView tv = (TextView) findViewById(R.id.listName);
-        tv.setText(R.string.csvimport_wordsList);
+        tv.setText(R.string.updated_words + " : ");
 
         // Display results
         vue = (ListView) findViewById(R.id.resultsList);
