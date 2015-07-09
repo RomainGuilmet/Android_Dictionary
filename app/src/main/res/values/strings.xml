@@ -32,6 +32,7 @@
     <string name="csvexport_insertCSVname">Name of the CSV file :</string>
     <string name="csvexport_CSVname">CSV name</string>
     <string name="csvexport_export">Export !</string>
+    <string name="csvexport_dico">Export !</string>
     <string name="csvexport_popupmessage">The dictionary was exported</string>
     <string name="csvexport_popuptitle">Success</string>
     <string name="csvexport_popupnegative">EEEE</string>
@@ -75,7 +76,7 @@
     <string name="action_import_csv">Import a csv</string>
     <string name="action_add_word">Add a word</string>
     <string name="action_rename">Rename</string>
-    <string name="dictionary">Dictionary :</string>
+    <string name="dictionary_word_details">Dictionary :</string>
 
     <string name="import_csv">Import a csv</string>
     <string name="add_word">Add a word</string>
