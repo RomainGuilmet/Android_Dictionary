@@ -90,9 +90,9 @@ public class CSVExportActivity extends AppCompatActivity {
         if (!existingCSV.contains(fileName.getText().toString())){
             exportCSV(fileName.getText().toString());
             new AlertDialog.Builder(CSVExportActivity.this)
-                    .setTitle(R.string.csvexport_popuptitle)
-                    .setMessage(R.string.csvexport_popupmessage)
-                    .setPositiveButton(R.string.csvexport_popuppositive, new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.success)
+                    .setMessage(R.string.dictionary_exported)
+                    .setPositiveButton(R.string.return_to_dictionaries, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(CSVExportActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -107,9 +107,9 @@ public class CSVExportActivity extends AppCompatActivity {
                     .show();
         } else {
             new AlertDialog.Builder(CSVExportActivity.this)
-                    .setTitle(R.string.csvexport_popuptitle1)
-                    .setMessage(R.string.csvexport_popupmessage1)
-                    .setPositiveButton(R.string.csvexport_popuppositive1, new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.oups)
+                    .setMessage(R.string.name_already_exists)
+                    .setPositiveButton(R.string.change_file_name, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
@@ -158,7 +158,7 @@ public class CSVExportActivity extends AppCompatActivity {
         long dicoID = ddm.select(dictionaryName).getId();
 
         WordDataModel wdm = new WordDataModel(this);
-        List<Word> words = wdm.selectAllFromDictionary(dicoID);
+        List<Word> words = wdm.selectAll(dicoID);
 
         if (!file.exists()){
             BufferedWriter bw;

@@ -43,11 +43,8 @@ public class SearchFragment extends Fragment {
     private MenuItem searchTabButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.fragment_search,container,false);
-
-        ((MainActivity)getActivity()).setSearchFragment(this);
 
         Intent intent = getActivity().getIntent();
         selectedDictionary = (Dictionary)intent.getSerializableExtra(MainActivity.EXTRA_DICTIONARY);
@@ -82,6 +79,13 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 displayDictionaries(v);
+            }
+        });
+
+        searchFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                advancedSearch(v);
             }
         });
 
@@ -200,14 +204,14 @@ public class SearchFragment extends Fragment {
         final String[] names = nameDico.clone();
 
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.advsearch_choose_dico)
+                .setTitle(R.string.choose_dictionary)
                 .setItems(names, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         targetDictionary.setText(target + names[which]);
                     }
                 })
-                .setNegativeButton(R.string.advsearch_returnString, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
