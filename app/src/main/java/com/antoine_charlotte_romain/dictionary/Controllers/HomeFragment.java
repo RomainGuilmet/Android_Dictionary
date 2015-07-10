@@ -27,6 +27,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -82,6 +83,11 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private HeaderGridView gridView;
 
     /**
+     * Button on the right corner of the screen to add dictionaries
+     */
+    private FloatingActionButton addButton;
+
+    /**
      * Custom ArrayAdapter to manage the different rows of the grid
      */
     private DictionaryAdapter adapter;
@@ -117,6 +123,9 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
 
     private EditText searchBox, nameBox;
 
+    private int myLastFirstVisibleItem;
+    private boolean hidden;
+
 
     /*---------------------------------------------------------
     *                       CONSTRUCTORS
@@ -139,15 +148,19 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         v = inflater.inflate(R.layout.fragment_home,container,false);
         rootLayout = (CoordinatorLayout) v.findViewById(R.id.rootLayout);
         setHasOptionsMenu(true);
-        state = NORMAL_STATE;
-
-        initData();
-        initGridView();
-        initFloatingActionButton();
-        initEditText();
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        state = NORMAL_STATE;
+
+        initData();
+        initFloatingActionButton();
+        initGridView();
+        initEditText();
+    }
 
     /**
      * Initialising the data model and selecting all the dictionaries
@@ -223,7 +236,44 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
             gridView.setAdapter(adapter);
         }
 
+        //Animating the gridView on Scroll
+        myLastFirstVisibleItem = 0;
+        hidden = false;
+        addButton.animate().translationY(0);
+        gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                final int currentFirstVisibleItem = gridView.getFirstVisiblePosition();
+                if (scrollState == SCROLL_STATE_TOUCH_SCROLL || scrollState == SCROLL_STATE_FLING) {
+                    if (currentFirstVisibleItem > myLastFirstVisibleItem) {
+                        if (!hidden) {
+                            addButton.animate().translationY(350);
+                            hidden = true;
+                        }
+                    } else if (currentFirstVisibleItem < myLastFirstVisibleItem) {
+                        if (hidden) {
+                            addButton.animate().translationY(0);
+                            hidden = false;
+                        }
+                    }
+                }
+                myLastFirstVisibleItem = currentFirstVisibleItem;
+            }
 
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                int lastInScreen = firstVisibleItem + visibleItemCount;
+                if ((lastInScreen == totalItemCount)) {
+                    if (hidden) {
+                        addButton.animate().translationY(0);
+                        hidden = false;
+                    }
+                }
+            }
+        });
+
+
+        //Animating the gridView on appear
         Animation anim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left);
         gridView.setAnimation(anim);
         anim.start();
@@ -234,6 +284,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     /**
      * Initialising the search box to dynamically researching on the dictionary list
      */
+
     private void initEditText()
     {
         //Creating the EditText for searching inside the dictionaries list
@@ -261,7 +312,14 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
             }
         });
 
-        //TODO : ALLER a
+        searchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (!dictionariesDisplay.isEmpty())
+                    read(0);
+                return true;
+            }
+        });
 
     }
 
@@ -270,8 +328,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     private void initFloatingActionButton()
     {
-        //TODO : animation
-        FloatingActionButton addButton = (FloatingActionButton) v.findViewById(R.id.add_button);
+        addButton = (FloatingActionButton) v.findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -287,7 +344,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo  info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
-        String title = (adapter.getItem(info.position)).getTitle();
+        String title = (adapter.getItem(info.position - 1)).getTitle();
         menu.setHeaderTitle(title);
 
         menu.add(Menu.NONE, CONTEXT_MENU_READ, Menu.NONE, R.string.open);
@@ -300,13 +357,13 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case CONTEXT_MENU_READ:
-                read(info.position);
+                read(info.position - 1);
                 return true;
             case CONTEXT_MENU_UPDATE:
-                update(info.position);
+                update(info.position - 1);
                 return true;
             case CONTEXT_MENU_DELETE:
-                delete(info.position);
+                delete(info.position - 1);
                 return true;
             default:
                 return super.onContextItemSelected(item);
