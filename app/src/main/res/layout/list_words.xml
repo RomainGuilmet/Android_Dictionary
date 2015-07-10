@@ -58,6 +58,65 @@
         android:layout_marginStart="@dimen/edit_text_margin"
         android:imeOptions="actionGo|flagNoExtractUi"/>
 
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/surfaceView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#88676767"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/add_word"
+        android:id="@+id/textAddAWord"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:layout_alignBottom="@+id/addWordButton"
+        android:layout_toLeftOf="@+id/addWordButton"
+        android:layout_toStartOf="@+id/addWordButton"
+        android:layout_marginBottom="@dimen/fab_menuText_margin_bottom"
+        android:layout_marginRight="@dimen/fab_menuText_margin_right"
+        android:layout_marginEnd="@dimen/fab_menuText_margin_right"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/import_csv"
+        android:id="@+id/textImportACsv"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:layout_alignBottom="@+id/importCsvButton"
+        android:layout_toLeftOf="@+id/addWordButton"
+        android:layout_toStartOf="@+id/addWordButton"
+        android:layout_marginBottom="@dimen/fab_menuText_margin_bottom"
+        android:layout_marginRight="@dimen/fab_menuText_margin_right"
+        android:layout_marginEnd="@dimen/fab_menuText_margin_right"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/export_csv"
+        android:id="@+id/textExportACsv"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:layout_alignBottom="@+id/exportCsvButton"
+        android:layout_toLeftOf="@+id/addWordButton"
+        android:layout_toStartOf="@+id/addWordButton"
+        android:layout_marginBottom="@dimen/fab_menuText_margin_bottom"
+        android:layout_marginRight="@dimen/fab_menuText_margin_right"
+        android:layout_marginEnd="@dimen/fab_menuText_margin_right"
+        android:textColor="@android:color/white" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingMenuButton"
@@ -111,33 +170,21 @@
         android:layout_alignRight="@+id/floatingMenuButton"
         android:layout_alignEnd="@+id/floatingMenuButton" />
 
-    <TextView
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/exportCsvButton"
+        android:src="@drawable/ic_file_upload_white_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/add_word"
-        android:id="@+id/textAddAWord"
+        android:layout_gravity="bottom|end"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        android:onClick="exportCsv"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
         android:scaleX="0"
         android:scaleY="0"
-        android:layout_alignBottom="@+id/addWordButton"
-        android:layout_toLeftOf="@+id/addWordButton"
-        android:layout_toStartOf="@+id/addWordButton"
-        android:layout_marginBottom="@dimen/fab_menuText_margin_bottom"
-        android:layout_marginRight="@dimen/fab_menuText_margin_right"
-        android:layout_marginEnd="@dimen/fab_menuText_margin_right" />
+        android:layout_alignTop="@+id/floatingMenuButton"
+        android:layout_alignRight="@+id/floatingMenuButton"
+        android:layout_alignEnd="@+id/floatingMenuButton" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/import_csv"
-        android:id="@+id/textImportACsv"
-        android:scaleX="0"
-        android:scaleY="0"
-        android:layout_alignBottom="@+id/importCsvButton"
-        android:layout_toLeftOf="@+id/addWordButton"
-        android:layout_toStartOf="@+id/addWordButton"
-        android:layout_marginBottom="@dimen/fab_menuText_margin_bottom"
-        android:layout_marginRight="@dimen/fab_menuText_margin_right"
-        android:layout_marginEnd="@dimen/fab_menuText_margin_right" />
 </RelativeLayout>

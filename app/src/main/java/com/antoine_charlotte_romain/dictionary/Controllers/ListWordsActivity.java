@@ -5,6 +5,14 @@ import android.animation.PropertyValuesHolder;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.Shader;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,9 +27,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -61,11 +73,14 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private TextView addText;
     private FloatingActionButton importCsvButton;
     private TextView importText;
+    private FloatingActionButton exportCsvButton;
+    private TextView exportText;
     private View loading;
     private EditText nameBox;
     private View header;
     private Menu menu;
     private Button headerButton;
+    private View backgroundMenuView;
 
     private WordDataModel wdm;
     private DictionaryDataModel ddm;
@@ -102,8 +117,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         addText = (TextView) findViewById(R.id.textAddAWord);
         importCsvButton = (FloatingActionButton) findViewById(R.id.importCsvButton);
         importText = (TextView) findViewById(R.id.textImportACsv);
+        exportCsvButton = (FloatingActionButton) findViewById(R.id.exportCsvButton);
+        exportText = (TextView) findViewById(R.id.textExportACsv);
         loading = getLayoutInflater().inflate(R.layout.loading, null);
-
+        backgroundMenuView = findViewById(R.id.surfaceView);
 
         listViewWords.setOnItemClickListener(this);
 
@@ -130,8 +147,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                         }
                     }
                     myLastFirstVisibleItem = currentFirstVisibleItem;
-                } else {
-                    showFloatingMenu(view);
                 }
             }
 
@@ -169,6 +184,13 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
         listViewWords.removeHeaderView(header);
         stateMode = NORMAL_STATE;
+        backgroundMenuView.setVisibility(View.GONE);
+        backgroundMenuView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFloatingMenu(v);
+            }
+        });
 
         if(listViewWords.getFooterViewsCount() == 0) {
             listViewWords.addFooterView(loading);
@@ -242,10 +264,12 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         if(selectedDictionary == null) {
             myWordsList = wdm.selectAll(Word.ALL_DICTIONARIES, wordsLimit, wordsOffset);
             menuButton.setVisibility(View.GONE);
-            importCsvButton.setVisibility(View.GONE);
-            importText.setVisibility(View.GONE);
             addButton.setVisibility(View.GONE);
             addText.setVisibility(View.GONE);
+            importCsvButton.setVisibility(View.GONE);
+            importText.setVisibility(View.GONE);
+            exportCsvButton.setVisibility(View.GONE);
+            exportText.setVisibility(View.GONE);
             getSupportActionBar().setTitle(R.string.allDico);
             select = false;
         }
@@ -266,9 +290,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (open) {
-                    showFloatingMenu(findViewById(R.id.list_words_layout));
-                }
             }
 
             @Override
@@ -323,9 +344,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(!open){
             modify(position);
-        }
-        else {
-            showFloatingMenu(view);
         }
     }
 
@@ -392,6 +410,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     @Override
     public void showFloatingMenu(View view) {
         if(open){
+            backgroundMenuView.setVisibility(View.GONE);
+
+            animationCloseMenu(exportCsvButton, 3);
+            animationCloseMenu(exportText, 3);
             animationCloseMenu(importCsvButton, 2);
             animationCloseMenu(importText, 2);
             animationCloseMenu(addButton, 1);
@@ -403,6 +425,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             open = false;
         }
         else {
+            backgroundMenuView.setVisibility(View.VISIBLE);
+
+            animationOpenMenu(exportCsvButton, 3);
+            animationOpenMenu(exportText, 3);
             animationOpenMenu(importCsvButton, 2);
             animationOpenMenu(importText, 2);
             animationOpenMenu(addButton, 1);
@@ -430,9 +456,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
             menu.add(Menu.NONE, CONTEXT_MENU_MODIFY, Menu.NONE, R.string.modify);
             menu.add(Menu.NONE, CONTEXT_MENU_DELETE, Menu.NONE, R.string.delete);
-        }
-        else {
-            showFloatingMenu(v);
         }
     }
     /**
