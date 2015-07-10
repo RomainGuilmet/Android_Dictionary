@@ -5,6 +5,14 @@ import android.animation.PropertyValuesHolder;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.Shader;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +27,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -70,6 +80,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private View header;
     private Menu menu;
     private Button headerButton;
+    private View backgroundMenuView;
 
     private WordDataModel wdm;
     private DictionaryDataModel ddm;
@@ -109,7 +120,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         exportCsvButton = (FloatingActionButton) findViewById(R.id.exportCsvButton);
         exportText = (TextView) findViewById(R.id.textExportACsv);
         loading = getLayoutInflater().inflate(R.layout.loading, null);
-
+        backgroundMenuView = findViewById(R.id.surfaceView);
 
         listViewWords.setOnItemClickListener(this);
 
@@ -136,8 +147,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                         }
                     }
                     myLastFirstVisibleItem = currentFirstVisibleItem;
-                } else {
-                    showFloatingMenu(view);
                 }
             }
 
@@ -175,6 +184,13 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
         listViewWords.removeHeaderView(header);
         stateMode = NORMAL_STATE;
+        backgroundMenuView.setVisibility(View.GONE);
+        backgroundMenuView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFloatingMenu(v);
+            }
+        });
 
         if(listViewWords.getFooterViewsCount() == 0) {
             listViewWords.addFooterView(loading);
@@ -199,10 +215,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(open){
-            showFloatingMenu(findViewById(R.id.list_words_layout));
-        }
-
         switch(item.getItemId())
         {
             case R.id.action_export_csv:
@@ -278,9 +290,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (open) {
-                    showFloatingMenu(findViewById(R.id.list_words_layout));
-                }
             }
 
             @Override
@@ -336,9 +345,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         if(!open){
             modify(position);
         }
-        else {
-            showFloatingMenu(view);
-        }
     }
 
     /**
@@ -389,10 +395,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
      * @param view
      */
     public void advancedSearch(View view){
-        if(open){
-            showFloatingMenu(view);
-        }
-
         Intent advancedSearchIntent = new Intent(this, MainActivity.class);
 
         advancedSearchIntent.putExtra(MainActivity.EXTRA_FRAGMENT, "advancedSearch");
@@ -408,6 +410,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     @Override
     public void showFloatingMenu(View view) {
         if(open){
+            backgroundMenuView.setVisibility(View.GONE);
+
             animationCloseMenu(exportCsvButton, 3);
             animationCloseMenu(exportText, 3);
             animationCloseMenu(importCsvButton, 2);
@@ -421,6 +425,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             open = false;
         }
         else {
+            backgroundMenuView.setVisibility(View.VISIBLE);
+
             animationOpenMenu(exportCsvButton, 3);
             animationOpenMenu(exportText, 3);
             animationOpenMenu(importCsvButton, 2);
@@ -450,9 +456,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
             menu.add(Menu.NONE, CONTEXT_MENU_MODIFY, Menu.NONE, R.string.modify);
             menu.add(Menu.NONE, CONTEXT_MENU_DELETE, Menu.NONE, R.string.delete);
-        }
-        else {
-            showFloatingMenu(v);
         }
     }
     /**
