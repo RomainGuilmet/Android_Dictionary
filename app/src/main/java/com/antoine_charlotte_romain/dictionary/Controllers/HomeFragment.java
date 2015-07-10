@@ -53,6 +53,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private final int CONTEXT_MENU_READ = 0;
     private final int CONTEXT_MENU_UPDATE = 1;
     private final int CONTEXT_MENU_DELETE = 2;
+    private final int CONTEXT_MENU_EXPORT = 3;
     private final int NORMAL_STATE = 0;
     private final int DELETE_STATE = 1;
 
@@ -148,18 +149,13 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         v = inflater.inflate(R.layout.fragment_home,container,false);
         rootLayout = (CoordinatorLayout) v.findViewById(R.id.rootLayout);
         setHasOptionsMenu(true);
-        return v;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         state = NORMAL_STATE;
 
         initData();
         initFloatingActionButton();
         initGridView();
         initEditText();
+        return v;
     }
 
     /**
@@ -350,6 +346,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         menu.add(Menu.NONE, CONTEXT_MENU_READ, Menu.NONE, R.string.open);
         menu.add(Menu.NONE, CONTEXT_MENU_UPDATE, Menu.NONE, R.string.rename);
         menu.add(Menu.NONE, CONTEXT_MENU_DELETE, Menu.NONE, R.string.delete);
+        menu.add(Menu.NONE, CONTEXT_MENU_EXPORT, Menu.NONE, R.string.csvexport_export);
     }
 
     @Override
@@ -364,6 +361,8 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 return true;
             case CONTEXT_MENU_DELETE:
                 delete(info.position - 1);
+                return true;
+            case CONTEXT_MENU_EXPORT:
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -607,7 +606,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     public void notifyDeleteListChanged()
     {
         int s = adapter.getDeleteList().size();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(s + getString(R.string.item));
+        menu.findItem(R.id.nb_items).setTitle(s + " " + getString(R.string.item));
         menu.findItem(R.id.action_delete_list).setVisible(s > 0);
         if (adapter.isAll_selected())
             headerButton.setText(R.string.deselect_all);
@@ -629,13 +628,12 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         if(state == NORMAL_STATE)
         {
             getActivity().getMenuInflater().inflate(R.menu.menu_home, menu);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.app_name));
         }
         else if (state == DELETE_STATE)
         {
             getActivity().getMenuInflater().inflate(R.menu.menu_home_delete, menu);
             int s = adapter.getDeleteList().size();
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(s + getString(R.string.item));
+            menu.findItem(R.id.nb_items).setTitle(s + " " + getString(R.string.item));
             menu.findItem(R.id.action_delete_list).setVisible(s > 0);
         }
     }
@@ -657,7 +655,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                 final int s = adapter.getDeleteList().size();
                 if(s == 1){
-                    alert.setMessage(getString(R.string.delete) + " " + s + " " + getString(R.string.dictionaries) + " ?");
+                    alert.setMessage(getString(R.string.delete) + " " + s + " " + getString(R.string.dictionary) + " ?");
                 }
                 else {
                     alert.setMessage(getString(R.string.delete) + " " + s + " " + getString(R.string.dictionaries) + " ?");
@@ -696,9 +694,4 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         }
     }
 
-    @Override
-    public void onDestroyOptionsMenu() {
-        super.onDestroyOptionsMenu();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.app_name));
-    }
 }

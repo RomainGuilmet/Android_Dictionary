@@ -83,16 +83,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void hideBar()
-    {
-        //getSupportActionBar().hide();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
 
-
-    }
-
-    public void showBar()
-    {
-        getSupportActionBar().show();
     }
 
     @Override

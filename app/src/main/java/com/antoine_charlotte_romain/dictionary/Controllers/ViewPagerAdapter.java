@@ -34,17 +34,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0)
         {
-            System.out.println("Home");
             return new HomeFragment();
         }
         else if (position == 1)
         {
-            System.out.println("History");
             return  new HistoryFragment();
         }
         else
         {
-            System.out.println("Search");
             return new SearchFragment();
         }
     }
@@ -60,6 +57,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         return drawablesIds[position];
     }
 
-
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
 
 }

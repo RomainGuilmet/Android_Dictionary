@@ -87,6 +87,9 @@ public class DictionaryAdapter extends ArrayAdapter<Dictionary>{
                                             callback.delete(position);
                                             break;
 
+                                        case R.id.export:
+                                            callback.delete(position);
+                                            break;
                                         default:
                                             break;
                                     }

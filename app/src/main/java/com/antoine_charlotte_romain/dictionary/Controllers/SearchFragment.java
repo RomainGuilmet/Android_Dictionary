@@ -52,7 +52,6 @@ public class SearchFragment extends Fragment {
         endText = ((EditText) thisView.findViewById(R.id.endString));
         targetDictionary = ((EditText) thisView.findViewById(R.id.targetDico));
         searchFloatingButton = ((FloatingActionButton) thisView.findViewById(R.id.searchFloatingButton));
-
         setHasOptionsMenu(true);
 
         return thisView;
