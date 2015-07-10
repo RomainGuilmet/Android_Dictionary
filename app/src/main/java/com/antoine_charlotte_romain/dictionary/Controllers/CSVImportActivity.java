@@ -296,40 +296,42 @@ public class CSVImportActivity extends AppCompatActivity {
                     // Import the chosen CSV file in the previously specified dictionary
                     updatedWords = new ArrayList<>();
                     addedWords = 0;
-                    vue.setVisibility(View.GONE);
+                    //vue.setVisibility(View.GONE);
                     //animation.setVisibility(View.VISIBLE);
 
                     importCSV(csvDispo.get(position));
 
-                    //animation.setVisibility(View.GONE);
+                    animation.setVisibility(View.GONE);
+
+                    final String msg = getString(R.string.nb_added_words) + " : " + addedWords + "\n" +
+                            getString(R.string.nb_uptaded_words) + " : " + updatedWords.size();
 
                     // Display a pop up window
                     new AlertDialog.Builder(CSVImportActivity.this)
                             .setTitle(R.string.csv_imported)
-                            .setMessage(R.string.nb_added_words + " : " + addedWords + "\n" +
-                                    R.string.nb_uptaded_words + " " + + updatedWords.size())
-                            .setPositiveButton(R.string.see_dico, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // pop up closes and the list of the words in this dictionary is displayed
-                                    Dictionary d = ddm.select(dictionaryName);
-                                    Intent intent = new Intent(CSVImportActivity.this,ListWordsActivity.class);
-                                    intent.putExtra(MainActivity.EXTRA_DICTIONARY, d);
-                                    startActivity(intent);
-                                }
-                            })
-                            .setNegativeButton(R.string.updated_words, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // pop up closes and the list of the updated words is displayed
-                                    Intent intent = new Intent(CSVImportActivity.this,CSVImportActivity.class);
+                            .setMessage(msg)
+                                    .setPositiveButton(R.string.see_dico, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // pop up closes and the list of the words in this dictionary is displayed
+                                            Dictionary d = ddm.select(dictionaryName);
+                                            Intent intent = new Intent(CSVImportActivity.this, ListWordsActivity.class);
+                                            intent.putExtra(MainActivity.EXTRA_DICTIONARY, d);
+                                            startActivity(intent);
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.updated_words, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // pop up closes and the list of the updated words is displayed
+                                            Intent intent = new Intent(CSVImportActivity.this, CSVImportActivity.class);
 
-                                    intent.putStringArrayListExtra(EXTRA_UPDATED_LIST, updatedWords);
-                                    intent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, dictionaryName);
+                                            intent.putStringArrayListExtra(EXTRA_UPDATED_LIST, updatedWords);
+                                            intent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, dictionaryName);
 
-                                    startActivity(intent);
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                                            startActivity(intent);
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
                 }
             });
         }
@@ -338,7 +340,7 @@ public class CSVImportActivity extends AppCompatActivity {
     private void displayUpdatedWordslist(){
         // Change name of the list
         TextView tv = (TextView) findViewById(R.id.listName);
-        tv.setText(R.string.updated_words + " : ");
+        tv.setText(getString(R.string.updated_words) + " : ");
 
         // Display results
         vue = (ListView) findViewById(R.id.resultsList);
