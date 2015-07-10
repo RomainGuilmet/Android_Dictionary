@@ -58,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
+        pager.setOffscreenPageLimit(numbOfTabs);
         pager.setAdapter(adapter);
+
 
         // Assigning the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
@@ -79,6 +81,18 @@ public class MainActivity extends AppCompatActivity {
             pager.setCurrentItem(ADVANCED_SEARCH_FRAGMENT);
         }
 
+    }
+
+    public void hideBar()
+    {
+        //getSupportActionBar().hide();
+
+
+    }
+
+    public void showBar()
+    {
+        getSupportActionBar().show();
     }
 
     @Override

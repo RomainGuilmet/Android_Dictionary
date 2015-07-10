@@ -3,12 +3,15 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+
 import com.antoine_charlotte_romain.dictionary.R;
 
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     int numbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
+    private long baseId = 0;
 
     //Store the icons ids
     int[] drawablesIds = {
@@ -31,14 +34,17 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0)
         {
+            System.out.println("Home");
             return new HomeFragment();
         }
         else if (position == 1)
         {
+            System.out.println("History");
             return  new HistoryFragment();
         }
         else
         {
+            System.out.println("Search");
             return new SearchFragment();
         }
     }
@@ -53,6 +59,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public int getDrawableId(int position){
         return drawablesIds[position];
     }
+
 
 
 }
