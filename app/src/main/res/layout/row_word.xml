@@ -13,8 +13,12 @@
         android:id="@+id/textHeader"
         android:text="Head"
         android:textColor="@android:color/black"
-        android:layout_marginLeft="@dimen/edit_text_margin"
-        android:layout_marginStart="@dimen/edit_text_margin" />
+        android:paddingRight="@dimen/edit_text_margin"
+        android:paddingEnd="@dimen/edit_text_margin"
+        android:singleLine="true"
+        android:layout_toLeftOf="@+id/imageButtonWord"
+        android:layout_alignLeft="@+id/textSub"
+        android:layout_alignStart="@+id/textSub" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +31,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/edit_text_margin"
-        android:layout_marginStart="@dimen/edit_text_margin"/>
+        android:layout_marginStart="@dimen/edit_text_margin"
+        android:paddingRight="@dimen/edit_text_margin"
+        android:paddingEnd="@dimen/edit_text_margin"
+        android:singleLine="true"
+        android:layout_toLeftOf="@+id/imageButtonWord"
+        android:layout_toStartOf="@+id/imageButtonWord" />
 
     <ImageButton
         android:layout_width="wrap_content"

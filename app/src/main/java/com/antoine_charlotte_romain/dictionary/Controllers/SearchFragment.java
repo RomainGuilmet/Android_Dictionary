@@ -37,7 +37,6 @@ public class SearchFragment extends Fragment {
     private EditText containsText;
     private EditText endText;
     private EditText targetDictionary;
-    private FloatingActionButton searchFloatingButton;
     private MenuItem searchTabButton;
 
     @Override
@@ -51,7 +50,6 @@ public class SearchFragment extends Fragment {
         containsText = ((EditText) thisView.findViewById(R.id.middleString));
         endText = ((EditText) thisView.findViewById(R.id.endString));
         targetDictionary = ((EditText) thisView.findViewById(R.id.targetDico));
-        searchFloatingButton = ((FloatingActionButton) thisView.findViewById(R.id.searchFloatingButton));
 
         setHasOptionsMenu(true);
 
@@ -80,15 +78,6 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        searchFloatingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                advancedSearch(v);
-            }
-        });
-
-        searchFloatingButton.setVisibility(View.GONE);
-
         beginningText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -102,12 +91,6 @@ public class SearchFragment extends Fragment {
             public void afterTextChanged(Editable arg0) {
                 boolean isReady = beginningText.getText().toString().length() > 0;
                 searchTabButton.setVisible(isReady);
-                if(isReady){
-                    searchFloatingButton.setVisibility(View.VISIBLE);
-                }
-                else {
-                    searchFloatingButton.setVisibility(View.GONE);
-                }
             }
 
         });
@@ -125,12 +108,6 @@ public class SearchFragment extends Fragment {
             public void afterTextChanged(Editable arg0) {
                 boolean isReady = containsText.getText().toString().length() > 0;
                 searchTabButton.setVisible(isReady);
-                if(isReady){
-                    searchFloatingButton.setVisibility(View.VISIBLE);
-                }
-                else {
-                    searchFloatingButton.setVisibility(View.GONE);
-                }
             }
 
         });
@@ -148,12 +125,6 @@ public class SearchFragment extends Fragment {
             public void afterTextChanged(Editable arg0) {
                 boolean isReady = endText.getText().toString().length() > 0;
                 searchTabButton.setVisible(isReady);
-                if(isReady){
-                    searchFloatingButton.setVisibility(View.VISIBLE);
-                }
-                else {
-                    searchFloatingButton.setVisibility(View.GONE);
-                }
             }
 
         });

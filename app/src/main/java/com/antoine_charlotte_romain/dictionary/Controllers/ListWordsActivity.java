@@ -22,6 +22,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -61,6 +63,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private TextView addText;
     private FloatingActionButton importCsvButton;
     private TextView importText;
+    private FloatingActionButton exportCsvButton;
+    private TextView exportText;
     private View loading;
     private EditText nameBox;
     private View header;
@@ -102,6 +106,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         addText = (TextView) findViewById(R.id.textAddAWord);
         importCsvButton = (FloatingActionButton) findViewById(R.id.importCsvButton);
         importText = (TextView) findViewById(R.id.textImportACsv);
+        exportCsvButton = (FloatingActionButton) findViewById(R.id.exportCsvButton);
+        exportText = (TextView) findViewById(R.id.textExportACsv);
         loading = getLayoutInflater().inflate(R.layout.loading, null);
 
 
@@ -193,6 +199,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(open){
+            showFloatingMenu(findViewById(R.id.list_words_layout));
+        }
+
         switch(item.getItemId())
         {
             case R.id.action_export_csv:
@@ -242,10 +252,12 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         if(selectedDictionary == null) {
             myWordsList = wdm.selectAll(Word.ALL_DICTIONARIES, wordsLimit, wordsOffset);
             menuButton.setVisibility(View.GONE);
-            importCsvButton.setVisibility(View.GONE);
-            importText.setVisibility(View.GONE);
             addButton.setVisibility(View.GONE);
             addText.setVisibility(View.GONE);
+            importCsvButton.setVisibility(View.GONE);
+            importText.setVisibility(View.GONE);
+            exportCsvButton.setVisibility(View.GONE);
+            exportText.setVisibility(View.GONE);
             getSupportActionBar().setTitle(R.string.allDico);
             select = false;
         }
@@ -377,6 +389,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
      * @param view
      */
     public void advancedSearch(View view){
+        if(open){
+            showFloatingMenu(view);
+        }
+
         Intent advancedSearchIntent = new Intent(this, MainActivity.class);
 
         advancedSearchIntent.putExtra(MainActivity.EXTRA_FRAGMENT, "advancedSearch");
@@ -392,6 +408,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     @Override
     public void showFloatingMenu(View view) {
         if(open){
+            animationCloseMenu(exportCsvButton, 3);
+            animationCloseMenu(exportText, 3);
             animationCloseMenu(importCsvButton, 2);
             animationCloseMenu(importText, 2);
             animationCloseMenu(addButton, 1);
@@ -403,6 +421,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             open = false;
         }
         else {
+            animationOpenMenu(exportCsvButton, 3);
+            animationOpenMenu(exportText, 3);
             animationOpenMenu(importCsvButton, 2);
             animationOpenMenu(importText, 2);
             animationOpenMenu(addButton, 1);

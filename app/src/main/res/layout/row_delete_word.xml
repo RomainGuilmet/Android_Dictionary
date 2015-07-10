@@ -13,8 +13,12 @@
         android:text="Head"
         android:id="@+id/textHeader"
         android:textColor="@android:color/black"
-        android:layout_marginLeft="@dimen/edit_text_margin"
-        android:layout_marginStart="@dimen/edit_text_margin" />
+        android:paddingRight="@dimen/edit_text_margin"
+        android:paddingEnd="@dimen/edit_text_margin"
+        android:singleLine="true"
+        android:layout_toLeftOf="@+id/deleteWordBox"
+        android:layout_alignLeft="@+id/textSub"
+        android:layout_alignStart="@+id/textSub" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,11 +27,16 @@
         android:text="Sub"
         android:id="@+id/textSub"
         android:textColor="@android:color/darker_gray"
-        android:layout_below="@+id/textHeader"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/edit_text_margin"
-        android:layout_marginStart="@dimen/edit_text_margin"/>
+        android:layout_marginStart="@dimen/edit_text_margin"
+        android:paddingRight="@dimen/edit_text_margin"
+        android:paddingEnd="@dimen/edit_text_margin"
+        android:singleLine="true"
+        android:layout_below="@+id/textHeader"
+        android:layout_toLeftOf="@+id/deleteWordBox"
+        android:layout_toStartOf="@+id/deleteWordBox" />
 
     <CheckBox
         android:layout_width="wrap_content"
