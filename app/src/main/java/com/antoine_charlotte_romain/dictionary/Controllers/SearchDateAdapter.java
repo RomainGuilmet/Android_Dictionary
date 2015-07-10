@@ -78,12 +78,10 @@ public class SearchDateAdapter extends ArrayAdapter<SearchDate> {
 
         // Lookup view for data population
         TextView textHeadword = (TextView) convertView.findViewById(R.id.textHeadword);
-        TextView textTranslation = (TextView) convertView.findViewById(R.id.textTranslation);
         TextView textDate  = (TextView) convertView.findViewById(R.id.textDate);
 
         // Populate the data into the template view using the data object
         textHeadword.setText(sd.getWord().getHeadword());
-        textTranslation.setText(sd.getWord().getTranslation());
         textDate.setText(sd.getDate());
 
         // Return the completed view to render on screen

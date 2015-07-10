@@ -37,7 +37,6 @@ public class SearchDateDataModel extends DAOBase{
     private static final String SQL_SELECT_SEARCH_DATE_FROM_WORD_AND_DATE = "SELECT * FROM " + SearchDateEntry.TABLE_NAME +
             " sd INNER JOIN " + WordDataModel.WordEntry.TABLE_NAME + " w ON sd." + SearchDateEntry.COLUMN_NAME_WORD_ID + "=w." + WordDataModel.WordEntry._ID +
             " WHERE w." + WordDataModel.WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
-            " OR w." + WordDataModel.WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
             " OR sd." + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " LIKE ? ORDER BY " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " DESC;";
 
     private static final String SQL_SELECT_ALL_SEARCH_DATE = "SELECT * FROM " + SearchDateEntry.TABLE_NAME + " ORDER BY " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " DESC" +
@@ -76,6 +75,11 @@ public class SearchDateDataModel extends DAOBase{
         return 2;
     }
 
+    /**
+     * Select a searchDate by its id in the database
+     * @param id the id of the searchDate we are wanted to find
+     * @return the searchDate if it exists
+     */
     public SearchDate select(long id){
         SQLiteDatabase db = open();
 
@@ -100,10 +104,15 @@ public class SearchDateDataModel extends DAOBase{
         return sd;
     }
 
+    /**
+     * Select all the searchDate where the headword starts with the string in param or the date contains this string
+     * @param search the string in which we are wanted to find
+     * @return all the searchDate in which the headword starts with the search string or the date contains this search string
+     */
     public ArrayList<SearchDate> select(String search){
         SQLiteDatabase db = open();
 
-        Cursor c = db.rawQuery(SQL_SELECT_SEARCH_DATE_FROM_WORD_AND_DATE, new String[]{String.valueOf(search)+"%", String.valueOf(search)+"%", "%"+String.valueOf(search)+"%"});
+        Cursor c = db.rawQuery(SQL_SELECT_SEARCH_DATE_FROM_WORD_AND_DATE, new String[]{String.valueOf(search)+"%", "%"+String.valueOf(search)+"%"});
 
         ArrayList<SearchDate> listDate = new ArrayList<>();
         while (c.moveToNext()) {
@@ -115,11 +124,23 @@ public class SearchDateDataModel extends DAOBase{
         return listDate;
     }
 
+    /**
+     *
+     * @param w
+     * @param date
+     * @return
+     */
     public ArrayList<SearchDate> select(Word w, String date){
         ArrayList<SearchDate> listDate = new ArrayList<>();
         return listDate;
     }
 
+    /**
+     * Select all the searchDate of the database ORDER_BY the date DESC
+     * @param limit the limit of row to return
+     * @param offset the first row to return
+     * @return all the selected searchDate
+     */
     public ArrayList<SearchDate> selectAll(int limit, int offset){
         SQLiteDatabase db = open();
 
@@ -134,6 +155,10 @@ public class SearchDateDataModel extends DAOBase{
         return listDate;
     }
 
+    /**
+     * Delete a row in the searchDate database
+     * @param id the id of the searchDate we want to delete
+     */
     public void delete(long id){
         // Gets the data repository in write mode
         SQLiteDatabase db = open();
@@ -148,6 +173,10 @@ public class SearchDateDataModel extends DAOBase{
         db.delete(SearchDateEntry.TABLE_NAME, selection, selectionArgs);
     }
 
+    /**
+     * Delete the search history of a word
+     * @param id the id of the word we want to clear the history
+     */
     public void deleteAll(long id){
         // Gets the data repository in write mode
         SQLiteDatabase db = open();
@@ -160,5 +189,14 @@ public class SearchDateDataModel extends DAOBase{
 
         // Issue SQL statement.
         db.delete(SearchDateEntry.TABLE_NAME, selection, selectionArgs);
+    }
+
+    /**
+     * Delete all the row of the searchDate table in the database
+     */
+    public void deleteAll(){
+        SQLiteDatabase db = open();
+
+        db.delete(SearchDateEntry.TABLE_NAME, null, null);
     }
 }

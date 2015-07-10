@@ -42,7 +42,6 @@ import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 import java.util.ArrayList;
 
 /**
- * TODO suppression multiple
  * TODO gridView en paysage
  * TODO Garder l'état des activités au changement d'orientation
  * Created by summer1 on 24/06/2015.
@@ -51,6 +50,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
     private final int CONTEXT_MENU_MODIFY = 0;
     private final int CONTEXT_MENU_DELETE = 1;
+    private final int NORMAL_STATE = 0;
+    private final int DELETE_STATE = 1;
 
     private EditText filterWords;
     private ListView listViewWords;
@@ -75,11 +76,12 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private boolean open;
     private boolean undo;
     private boolean loadingMore;
+    private boolean hidden;
     private int wordsLimit;
     private int wordsOffset;
-    private boolean hidden;
     private int myLastFirstVisibleItem;
     private int actualListSize;
+    private int stateMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +166,9 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         hidden = false;
         myLastFirstVisibleItem = 0;
         filterWords.setText("");
+
         listViewWords.removeHeaderView(header);
+        stateMode = NORMAL_STATE;
 
         if(listViewWords.getFooterViewsCount() == 0) {
             listViewWords.addFooterView(loading);
@@ -173,6 +177,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         }
 
         initListView();
+
+        showToolbarMenu();
     }
 
     @Override
@@ -607,23 +613,40 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     }
 
     /**
+     * This function is used to modify and show the toolbar menu when the stateMode changes
+     */
+    private void showToolbarMenu(){
+        if(menu != null) {
+            menu.clear();
+            if (stateMode == NORMAL_STATE) {
+                getMenuInflater().inflate(R.menu.menu_list_words, menu);
+                getSupportActionBar().setTitle(selectedDictionary.getTitle());
+            } else if (stateMode == DELETE_STATE) {
+                getMenuInflater().inflate(R.menu.menu_word_delete, menu);
+                getSupportActionBar().setTitle("0 " + getString(R.string.item));
+                menu.findItem(R.id.action_delete_list).setVisible(false);
+            }
+        }
+    }
+
+    /**
      * This function leave the deletion mode
      */
     private void normalMode(){
+        stateMode = NORMAL_STATE;
         myAdapter = new WordAdapter(getApplicationContext(), R.layout.row_word, myWordsList, true);
         myAdapter.setCallback(this);
         listViewWords.setAdapter(myAdapter);
-
-        menu.clear();
-        onCreateOptionsMenu(menu);
         listViewWords.removeHeaderView(header);
-        getSupportActionBar().setTitle(selectedDictionary.getTitle());
+        showToolbarMenu();
     }
 
     /**
      * This function allows the user to delete multiple words at the same time
      */
     private void multipleDeleteMode(){
+        stateMode = DELETE_STATE;
+
         header = this.getLayoutInflater().inflate(R.layout.grid_view_header, null);
         listViewWords.addHeaderView(header);
         headerButton = (Button) header.findViewById(R.id.button_all);
@@ -639,10 +662,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         myAdapter.setCallback(this);
         listViewWords.setAdapter(myAdapter);
 
-        menu.clear();
-        getMenuInflater().inflate(R.menu.menu_word_delete, menu);
-        getSupportActionBar().setTitle("0 " + getString(R.string.item));
-        menu.findItem(R.id.action_delete_list).setVisible(false);
+        showToolbarMenu();
     }
 
     /**
