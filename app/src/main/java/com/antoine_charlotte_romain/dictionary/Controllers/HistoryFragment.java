@@ -1,18 +1,25 @@
 package com.antoine_charlotte_romain.dictionary.Controllers;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.SearchDate;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
@@ -51,7 +58,28 @@ public class HistoryFragment extends Fragment implements SearchDateAdapter.Searc
 
         initListView();
 
+        setHasOptionsMenu(true);
+
         return thisView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu m, MenuInflater inflater)
+    {
+        inflater.inflate(R.menu.menu_history, m);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.action_clear_history:
+                clearHistory();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -143,6 +171,28 @@ public class HistoryFragment extends Fragment implements SearchDateAdapter.Searc
         wordDetailIntent.putExtra(MainActivity.EXTRA_DICTIONARY, ddm.select(mySearchDateList.get(position).getWord().getDictionaryID()));
 
         startActivity(wordDetailIntent);
+    }
+
+    /**
+     * This function is used to clear the search history of the app
+     */
+    private void clearHistory(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        alert.setMessage(getString(R.string.clearHistory) + " ?");
+        alert.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(getActivity(), getString(R.string.historyCleared), Toast.LENGTH_SHORT).show();
+                sddm.deleteAll();
+                initListView();
+            }
+        });
+
+        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+
+        alert.show();
     }
 
     /**

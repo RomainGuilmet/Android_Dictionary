@@ -12,6 +12,7 @@
         android:id="@+id/historySearch"
         android:hint="@string/search"
         android:drawableLeft="@drawable/ic_search_black_18dp"
+        android:drawablePadding="5dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

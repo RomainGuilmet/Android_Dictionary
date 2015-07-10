@@ -45,6 +45,7 @@
         android:id="@+id/filterWords"
         android:drawableLeft="@drawable/ic_search_black_18dp"
         android:drawableStart="@drawable/ic_search_black_18dp"
+        android:drawablePadding="5dp"
         android:editable="false"
         android:inputType="textFilter"
         android:hint="@string/search"

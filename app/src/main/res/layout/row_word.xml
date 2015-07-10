@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/textHeader"
+        android:text="Head"
         android:textColor="@android:color/black"
         android:layout_marginLeft="@dimen/edit_text_margin"
         android:layout_marginStart="@dimen/edit_text_margin" />
@@ -20,6 +21,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textSub"
+        android:text="Sub"
         android:textColor="@android:color/darker_gray"
         android:layout_below="@+id/textHeader"
         android:layout_alignParentLeft="true"
