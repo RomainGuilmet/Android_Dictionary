@@ -427,7 +427,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                     }
                 });
 
-        builder.setNeutralButton(R.string.csv_button,
+        builder.setNeutralButton(R.string.import_csv,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String nameDico = nameBox.getText().toString();
@@ -600,6 +600,17 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         });
         snack.show();
 
+    }
+
+    /**
+     * This function is called when the user click on the exportCsv button, it launch the view exportACsv
+     *
+     */
+    public void export(int position)
+    {
+        Intent importCSVintent = new Intent(getActivity(), CSVExportActivity.class);
+        importCSVintent.putExtra(MainActivity.EXTRA_DICTIONARY, dictionariesDisplay.get(position));
+        startActivity(importCSVintent);
     }
 
     @Override

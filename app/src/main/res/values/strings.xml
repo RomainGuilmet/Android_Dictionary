@@ -15,7 +15,7 @@
 
     <string name="title_activity_csvimport">Import a CSV</string>
 
-    <string name="csvexport_insertCSVname">Name of the CSV file :</string>
+    <string name="csvexport_insertCSVname">File name :</string>
     <string name="csvexport_CSVname">CSV name</string>
     <string name="csvexport_export">Export</string>
     <string name="title_activity_csvexport">CSVExportActivity</string>
@@ -27,7 +27,7 @@
     <string name="available_csv_files">Available CSV files</string>
     <string name="dictionary_exported">Dictionary exported</string>
     <string name="success">Success</string>
-    <string name="return_to_dictionaries">Return to dictionaries</string>
+    <string name="return_to_dictionaries">Return</string>
     <string name="name_already_exists">The specified name already exists</string>
     <string name="already_exists">already exists.</string>
     <string name="error">Error</string>
@@ -86,5 +86,11 @@
     <string name="no_result">No result</string>
     <string name="clearHistory">Clear the history</string>
     <string name="historyCleared">The history has been cleared.</string>
+    <string name="exporting">"Exporting "</string>
+    <string name="file_already_exists">File already exists</string>
+    <string name="overwrite">Overwrite</string>
+    <string name="export_progress">Export in progress</string>
+    <string name="open_it">Open the csv</string>
+    <string name="no_apps">No supported apps installed</string>
 
 </resources>

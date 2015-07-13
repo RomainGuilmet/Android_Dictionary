@@ -1,18 +1,30 @@
 package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.Selection;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
@@ -22,7 +34,6 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -32,11 +43,13 @@ import java.util.List;
 
 public class CSVExportActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
-    EditText fileName;
+    private EditText fileName;
 
-    String dictionaryName;
+    private Dictionary dictionary;
+
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,151 +61,188 @@ public class CSVExportActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        fileName = (EditText) findViewById(R.id.nameCSVfile);
 
-        // Get data associated to the advanced search
+        fileName = (EditText) findViewById(R.id.editTextFile);
+
+        // Getting the dictionary to export
         Intent intent = getIntent();
         if (intent != null){
-            dictionaryName = intent.getStringExtra(MainActivity.EXTRA_NEW_DICO_NAME);
+            dictionary = (Dictionary)intent.getSerializableExtra(MainActivity.EXTRA_DICTIONARY);
 
-            TextView nameDicoText = (TextView) findViewById(R.id.nameDico);
-            nameDicoText.setText(dictionaryName);
+            fileName.setText(dictionary.getTitle() + ".csv");
+            fileName.setSelection(0,dictionary.getTitle().length());
+            getSupportActionBar().setTitle(getString(R.string.exporting) + dictionary.getTitle());
         }
 
-        // Au clic sur le bouton, on recup le dictionnaire associ au nom transmis
-        // on recup tous les mots de ce dictionnaire et on les ajoute dans un nouveau fichier
-        // Changer AndroidManifest.xml ???
 
-    }
+        //Setting the EditText to always have the suffix .csv
+        fileName.addTextChangedListener(new TextWatcher() {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_csvexport, menu);
-        return true;
-    }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+            }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO Auto-generated method stub
 
-        return super.onOptionsItemSelected(item);
-    }
+            }
 
-    public void export(View v){
-        List<String> existingCSV = getAvailableCSV(Environment.getExternalStorageDirectory());
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!s.toString().endsWith(".csv")){
+                    fileName.setText(".csv");
+                    fileName.setSelection(0);
+                }
 
-        // if the specified name do not already exists
-        if (!existingCSV.contains(fileName.getText().toString())){
-            exportCSV(fileName.getText().toString());
-            new AlertDialog.Builder(CSVExportActivity.this)
-                    .setTitle(R.string.success)
-                    .setMessage(R.string.dictionary_exported)
-                    .setPositiveButton(R.string.return_to_dictionaries, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(CSVExportActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }
-                    })
-                /*.setNegativeButton(R.string.csvimport_popupnegative, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // pop up closes and it is possible to import another CSV file
-                    }
-                })*/
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        } else {
-            new AlertDialog.Builder(CSVExportActivity.this)
-                    .setTitle(R.string.oups)
-                    .setMessage(R.string.name_already_exists)
-                    .setPositiveButton(R.string.change_file_name, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+            }
+        });
 
-                        }
-                    })
-                /*.setNegativeButton(R.string.csvimport_popupnegative, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // pop up closes and it is possible to import another CSV file
-                    }
-                })*/
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        }
+        //Displaying the keyboard
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
     }
 
     /**
-     * Find all CSV files available on the mobile
-     *
-     * @return
-     *          A list of CSV file names
+     * Method called when the user click on the export button
+     * @param v
      */
-    private List<String> getAvailableCSV(File f){
-        List<String> csvDispo = new ArrayList<String>();
+    public void export(View v)
+    {
+        //Creating the file
+        final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + fileName.getText().toString());
 
-        // if the specified file is a directory
-        if (f.isDirectory()){
-            // if it contains other files
-            if (f.listFiles() != null) {
-                // for each file it contains, get all CSV files available in it
-                for (File childFile : f.listFiles()) {
-                    csvDispo.addAll(getAvailableCSV(childFile));
-                }
-            }
-        } else if (f.isFile()){
-            // Check if the file is a CSV file or not
-            if (f.getName().endsWith(".csv") || f.getName().endsWith(".CSV")){
-                csvDispo.add(f.getName());
-            }
+        //If the file doesn't already exists it is exported
+        if (!file.exists())
+        {
+            exportCSV(file);
+
         }
-        return csvDispo;
+        //Else the user can overwrie the existing file
+        else
+        {
+            new AlertDialog.Builder(CSVExportActivity.this)
+                    .setTitle(R.string.file_already_exists)
+                    .setPositiveButton(R.string.overwrite, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            exportCSV(file);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+
+
     }
 
-    private void exportCSV(String fileName){
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + fileName + ".csv");
-        DictionaryDataModel ddm = new DictionaryDataModel(this);
-        long dicoID = ddm.select(dictionaryName).getId();
+    /**
+     * Method which create a CSV file containing the word list of the current dictionary.
+     * If the file already exists it is overwritted.
+     *
+     * @param file Exported .csv file
+     */
+    private void exportCSV(final File file)
+    {
+        final WordDataModel wdm = new WordDataModel(this);
 
-        WordDataModel wdm = new WordDataModel(this);
-        List<Word> words = wdm.selectAll(dicoID);
+        //Initialising the progressBar
+        progress = new ProgressDialog(this);
+        progress.setMessage(getString(R.string.export_progress));
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setProgress(0);
+        progress.show();
 
-        if (!file.exists()){
-            BufferedWriter bw;
-            String comma = ",";
-            String headword = "";
-            String translation = "";
-            String note = "";
+        //Handling the end of the export
+        final Handler handler = new Handler()
+        {
+            @Override
+            public void handleMessage(Message msg) {
+                progress.dismiss();
+                new AlertDialog.Builder(CSVExportActivity.this)
+                        .setTitle(R.string.success)
+                        .setMessage(R.string.dictionary_exported)
+                        .setNegativeButton(R.string.return_to_dictionaries, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(CSVExportActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setPositiveButton(R.string.open_it, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent viewDoc = new Intent(Intent.ACTION_VIEW);
+                                viewDoc.setDataAndType(
+                                        Uri.fromFile(file),
+                                        "text/csv");
+                                try {
+                                    startActivity(viewDoc);
+                                } catch (ActivityNotFoundException e) {
+                                    Snackbar.make(findViewById(R.id.export_layout), getString(R.string.no_apps), Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
 
-            try {
-                file.createNewFile();
+                                        }
+                                    }).show();
 
-                OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-                // ISO-8859-1 interprets accents correctly
-                bw = new BufferedWriter(new OutputStreamWriter(os,"ISO-8859-1"));
+                                }
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
+            }
+        };
+
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                //Selecting the words
+                List<Word> words = wdm.selectAll(dictionary.getId());
+                progress.setMax(words.size());
+
+                //Initialising the variables
+                BufferedWriter bw;
+                String comma = ",";
+                String headword = "";
+                String translation = "";
+                String note = "";
+
+                try
+                {
+                    file.createNewFile();
+                    OutputStream os = new BufferedOutputStream(new FileOutputStream(file, false));
+                    // ISO-8859-1 interprets accents correctly
+                    bw = new BufferedWriter(new OutputStreamWriter(os, "ISO-8859-1"));
 
                     // For each word in the dictionary
-                for (Word w : words){
-                    headword = filterComma(w.getHeadword());
-                    translation = filterComma(w.getTranslation());
-                    note = filterComma(w.getNote());
+                    for (Word w : words){
 
-                    bw.write(headword + comma + translation + comma + note);
-                    bw.newLine();
-                    // bw.flush(); // ???
+                        headword = filterComma(w.getHeadword());
+                        translation = filterComma(w.getTranslation());
+                        note = filterComma(w.getNote());
+
+                        bw.write(headword + comma + translation + comma + note);
+                        bw.newLine();
+                        progress.incrementProgressBy(1);
+                    }
+                    bw.close();
                 }
-                bw.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+
+                //Sending a message to the handler to notify that the thread is done
+                handler.sendEmptyMessage(0);
             }
-        }
+        };
+        t.start();
+
     }
 
     private String filterComma (String stringToFilter){
@@ -202,6 +252,8 @@ public class CSVExportActivity extends AppCompatActivity {
         }
         return result;
     }
+
+
 
 }
 

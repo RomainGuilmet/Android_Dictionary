@@ -371,7 +371,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             showFloatingMenu(view);
         }
         Intent importCSVintent = new Intent(this, CSVExportActivity.class);
-        importCSVintent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, selectedDictionary.getTitle());
+        importCSVintent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
 
         startActivity(importCSVintent);
     }
