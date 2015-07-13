@@ -89,5 +89,7 @@
     <string name="no_result">No result</string>
     <string name="clearHistory">Clear the history</string>
     <string name="historyCleared">The history has been cleared.</string>
+    <string name="loadingWords">Loading more words.</string>
+    <string name="loadingHistory">Loading more history.</string>
 
 </resources>

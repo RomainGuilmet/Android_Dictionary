@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -9,10 +8,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Head"
         android:id="@+id/textHeader"
-        android:textColor="@android:color/black"
+        android:text="Head"
+        android:textSize="@dimen/textSize"
+        android:textColor="@color/textColor"
         android:paddingRight="@dimen/edit_text_margin"
         android:paddingEnd="@dimen/edit_text_margin"
         android:singleLine="true"
@@ -23,10 +22,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Sub"
         android:id="@+id/textSub"
-        android:textColor="@android:color/darker_gray"
+        android:text="Sub"
+        android:textSize="@dimen/subTextSize"
+        android:textColor="@color/subTextColor"
+        android:layout_below="@+id/textHeader"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/edit_text_margin"
@@ -34,7 +34,6 @@
         android:paddingRight="@dimen/edit_text_margin"
         android:paddingEnd="@dimen/edit_text_margin"
         android:singleLine="true"
-        android:layout_below="@+id/textHeader"
         android:layout_toLeftOf="@+id/deleteWordBox"
         android:layout_toStartOf="@+id/deleteWordBox" />
 
@@ -42,11 +41,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/deleteWordBox"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignBottom="@+id/textSub"
-        android:layout_alignParentTop="true"
-        android:background="@color/white"
         android:layout_marginEnd="@dimen/edit_text_margin"
         android:layout_marginRight="@dimen/edit_text_margin"/>
 

@@ -3,22 +3,17 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
+import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.ViewPagerAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
-import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 
-import java.util.ArrayList;
-
 /**
- * TODO faire du tri dans les strings
+ * TODO fermer le clavier au clic ailleurs que dans un textField
  */
 public class MainActivity extends AppCompatActivity {
 

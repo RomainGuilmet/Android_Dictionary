@@ -1,4 +1,4 @@
-package com.antoine_charlotte_romain.dictionary.Controllers;
+package com.antoine_charlotte_romain.dictionary.Controllers.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

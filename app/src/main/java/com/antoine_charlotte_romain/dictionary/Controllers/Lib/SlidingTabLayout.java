@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.antoine_charlotte_romain.dictionary.Controllers.ViewPagerAdapter;
+import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.ViewPagerAdapter;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
