@@ -70,7 +70,7 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
             } else if (headWhole.equals(MainActivity.NOTES_ONLY)){
                 results = wdm.selectNote(begin, middle, end, id);
             } else if (headWhole.equals(MainActivity.WHOLE_WORD)){
-                //results = wdm.selectWholeWord(begin, middle, end, id);
+                results = wdm.select(begin+middle+end, id); // TODO does not works : "pla" returns "play" and it should not
             }
         }
 
