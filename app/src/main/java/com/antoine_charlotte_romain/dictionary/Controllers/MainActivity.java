@@ -31,11 +31,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_BEGIN_STRING = "begin";
     public static final String EXTRA_MIDDLE_STRING = "middle";
     public static final String EXTRA_END_STRING = "end";
-    public static final String EXTRA_HEAD_OR_WHOLE = "headOrWhole";
+    public static final String EXTRA_SEARCH_DATA = "searchOption";
+    public static final String EXTRA_PART_OR_WHOLE = "partOrWhole";
     public static final String EXTRA_NEW_DICO_NAME = "namedico";
     public static final String ALL_DICO = "All";
 
     public static final String WHOLE_WORD = "whole";
+    public static final String PART_WORD = "part";
     public static final String HEADWORD_ONLY = "headword";
     public static final String MEANING_ONLY = "meaning";
     public static final String NOTES_ONLY = "notes";

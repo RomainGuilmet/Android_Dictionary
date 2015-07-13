@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
@@ -37,7 +38,12 @@ public class SearchFragment extends Fragment {
     private EditText containsText;
     private EditText endText;
     private EditText targetDictionary;
+    private EditText searchIn;
+    private RadioButton partWord;
+    private RadioButton wholeWord;
     private MenuItem searchTabButton;
+
+    private String[] searchOptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +56,16 @@ public class SearchFragment extends Fragment {
         containsText = ((EditText) thisView.findViewById(R.id.middleString));
         endText = ((EditText) thisView.findViewById(R.id.endString));
         targetDictionary = ((EditText) thisView.findViewById(R.id.targetDico));
+        searchIn = ((EditText) thisView.findViewById(R.id.searchin));
+        partWord = ((RadioButton) thisView.findViewById(R.id.part));
+        wholeWord = ((RadioButton) thisView.findViewById(R.id.whole));
+
+        searchOptions = new String[4];
+        // Fill array with search options
+        searchOptions[0] = getString(R.string.headword_only);
+        searchOptions[1] = getString(R.string.translation_meaning_only);
+        searchOptions[2] = getString(R.string.notes_only);
+        searchOptions[3] = getString(R.string.all_data);
 
         setHasOptionsMenu(true);
 
@@ -67,9 +83,39 @@ public class SearchFragment extends Fragment {
             targetDictionary.setText(getString(R.string.target_dico)+ selectedDictionary.getTitle());
         }
 
+        searchIn.setText(getString(R.string.search_in) + " : " + searchOptions[0]);
         beginningText.setText("");
         containsText.setText("");
         endText.setText("");
+
+        searchIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displaySearchOptions(v);
+            }
+        });
+
+        partWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Set hint string of the beginning string EditText
+                beginningText.setHint(getString(R.string.begins_with));
+                // Show all EditText (if they were gone)
+                containsText.setVisibility(View.VISIBLE);
+                endText.setVisibility(View.VISIBLE);
+            }
+        });
+
+        wholeWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Set hint string of the beginning string EditText
+                beginningText.setHint(getString(R.string.Word));
+                // Hide contain and end EditText (if they were displayed)
+                containsText.setVisibility(View.GONE);
+                endText.setVisibility(View.GONE);
+            }
+        });
 
         targetDictionary.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,12 +160,10 @@ public class SearchFragment extends Fragment {
 
         endText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable arg0) {
@@ -162,6 +206,35 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    /**
+     * This function is called when the user click the search option text
+     * @param v
+     */
+    public void displaySearchOptions(View v){
+        final String[] display = searchOptions.clone();
+
+        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.search_in)
+                .setItems(display, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        searchIn.setText(getString(R.string.search_in) + " : " + searchOptions[which]);
+                    }
+                })
+                .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert);
+        AlertDialog alert = ad.create();
+        alert.show();
+    }
+
+    /**
+     * This function is called when the user click the dictionary text
+     * @param v
+     */
     public void displayDictionaries(View v){
         DictionaryDataModel ddm = new DictionaryDataModel(this.getActivity());
         ArrayList<Dictionary> dico = ddm.select();
@@ -190,6 +263,10 @@ public class SearchFragment extends Fragment {
         alert.show();
     }
 
+    /**
+     * This function is called when the user click the search button
+     * @param v
+     */
     public void advancedSearch(View v){
         Intent intent = new Intent(getActivity(), AdvancedSearchResultActivity.class);
 
@@ -197,30 +274,56 @@ public class SearchFragment extends Fragment {
         intent.putExtra(MainActivity.EXTRA_MIDDLE_STRING, containsText.getText().toString());
         intent.putExtra(MainActivity.EXTRA_END_STRING, endText.getText().toString());
 
-        // Let's see if the search has to be done on headword or whole word
+        // Let's see if the search has to be done on part or whole word
         switch (((RadioGroup)thisView.findViewById(R.id.boutonsradio)).getCheckedRadioButtonId()) {
-            case R.id.headword:
-                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.HEADWORD_ONLY);
+            case R.id.part:
+                intent.putExtra(MainActivity.EXTRA_PART_OR_WHOLE, MainActivity.PART_WORD);
                 break;
-            case R.id.alldata:
-                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.ALL_DATA);
+            case R.id.whole:
+                intent.putExtra(MainActivity.EXTRA_PART_OR_WHOLE, MainActivity.WHOLE_WORD);
                 break;
-            case R.id.translation:
-                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.MEANING_ONLY);
+        }
+
+        // Let's get the chosen search option
+        String tmp = searchIn.getText().toString();
+        String searchChoice = tmp.replace(getString(R.string.search_in) + " : ", "");
+
+        switch (getSearchChoiceRank(searchChoice)) {
+            case 0:
+                intent.putExtra(MainActivity.EXTRA_SEARCH_DATA, MainActivity.HEADWORD_ONLY);
                 break;
-            case R.id.notes://TODO implement use
-                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.NOTES_ONLY);
+            case 1:
+                intent.putExtra(MainActivity.EXTRA_SEARCH_DATA, MainActivity.MEANING_ONLY);
                 break;
-            case R.id.whole://TODO implement use
-                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.WHOLE_WORD);
+            case 2:
+                intent.putExtra(MainActivity.EXTRA_SEARCH_DATA, MainActivity.NOTES_ONLY);
+                break;
+            case 3:
+                intent.putExtra(MainActivity.EXTRA_SEARCH_DATA, MainActivity.ALL_DATA);
                 break;
         }
 
         // Let's get the targeted dictionary
-        String temp = targetDictionary.getText().toString();
-        String dico = temp.replace(getString(R.string.target_dico), "");
+        tmp = targetDictionary.getText().toString();
+        String dico = tmp.replace(getString(R.string.target_dico), "");
         intent.putExtra(MainActivity.EXTRA_DICTIONARY, dico);
 
         startActivity(intent);
+    }
+
+    /**
+     * This function finds which search option has been chosen
+     * @param searchChoice
+     *          The string representing the search choice of the user
+     * @return
+     *          The index number of the search choice in the searchChoice array
+     */
+    private int getSearchChoiceRank(String searchChoice){
+        for (int i=0; i<searchOptions.length; i++){
+            if (searchChoice.equals(searchOptions[i])){
+                return i;
+            }
+        }
+        return -1;
     }
 }

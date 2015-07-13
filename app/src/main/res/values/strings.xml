@@ -5,8 +5,10 @@
     <string name="begins_with">Begin with</string>
     <string name="contains">Contains</string>
     <string name="ends_with">End with</string>
+    <string name="Word">Word</string>
     <string name="headword_only">Headword only</string>
     <string name="whole_word">Whole word</string>
+    <string name="part_word">Part word</string>
     <string name="choose">Choose</string>
     <string name="allDico">All</string>
     <string name="choose_dictionary">Choose a dictionary</string>
@@ -51,6 +53,7 @@
     <string name="dictionary_not_renamed">Can\'t rename this dictionary. Name already taken.</string>
     <string name="open">Open</string>
     <string name="search">Search</string>
+    <string name="search_in">Search in</string>
     <string name="advanced_search">Advanced Search</string>
     <string name="list_words_activity">List</string>
     <string name="details">Details :</string>
