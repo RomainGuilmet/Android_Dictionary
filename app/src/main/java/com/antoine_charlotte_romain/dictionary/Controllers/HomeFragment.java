@@ -9,7 +9,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -35,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
+import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.DictionaryAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.HeaderGridView;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;

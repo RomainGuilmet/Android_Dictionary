@@ -16,7 +16,7 @@
         android:paddingLeft="14dp"
         android:textColor="@color/textColor"
         android:singleLine="true"
-        android:textSize="16sp"
+        android:textSize="@dimen/textSize"
         android:background="@color/white"
         android:layout_toLeftOf="@+id/delete_box"
         android:layout_alignParentLeft="true"

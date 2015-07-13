@@ -5,8 +5,10 @@
     <string name="begins_with">Begin with</string>
     <string name="contains">Contains</string>
     <string name="ends_with">End with</string>
+    <string name="Word">Word</string>
     <string name="headword_only">Headword only</string>
     <string name="whole_word">Whole word</string>
+    <string name="part_word">Part word</string>
     <string name="choose">Choose</string>
     <string name="allDico">All</string>
     <string name="choose_dictionary">Choose a dictionary</string>
@@ -15,7 +17,7 @@
 
     <string name="title_activity_csvimport">Import a CSV</string>
 
-    <string name="csvexport_insertCSVname">File name :</string>
+    <string name="csvexport_insertCSVname">Name of the CSV file :</string>
     <string name="csvexport_CSVname">CSV name</string>
     <string name="csvexport_export">Export</string>
     <string name="title_activity_csvexport">CSVExportActivity</string>
@@ -27,7 +29,7 @@
     <string name="available_csv_files">Available CSV files</string>
     <string name="dictionary_exported">Dictionary exported</string>
     <string name="success">Success</string>
-    <string name="return_to_dictionaries">Return</string>
+    <string name="return_to_dictionaries">Return to dictionaries</string>
     <string name="name_already_exists">The specified name already exists</string>
     <string name="already_exists">already exists.</string>
     <string name="error">Error</string>
@@ -51,12 +53,16 @@
     <string name="dictionary_not_renamed">Can\'t rename this dictionary. Name already taken.</string>
     <string name="open">Open</string>
     <string name="search">Search</string>
+    <string name="search_in">Search in</string>
     <string name="advanced_search">Advanced Search</string>
     <string name="list_words_activity">List</string>
     <string name="details">Details :</string>
     <string name="headword">HeadWord :</string>
     <string name="translation">Translation :</string>
     <string name="note">Note :</string>
+    <string name="notes_only">Notes only</string>
+    <string name="translation_meaning_only">Translation/Meaning only</string>
+    <string name="all_data">All data</string>
     <string name="add">Add</string>
     <string name="save">Save</string>
     <string name="new_word">New word</string>
@@ -86,6 +92,8 @@
     <string name="no_result">No result</string>
     <string name="clearHistory">Clear the history</string>
     <string name="historyCleared">The history has been cleared.</string>
+    <string name="loadingWords">Loading more words.</string>
+    <string name="loadingHistory">Loading more history.</string>
     <string name="exporting">"Exporting "</string>
     <string name="file_already_exists">File already exists</string>
     <string name="overwrite">Overwrite</string>

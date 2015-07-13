@@ -1,4 +1,4 @@
-package com.antoine_charlotte_romain.dictionary.Controllers;
+package com.antoine_charlotte_romain.dictionary.Controllers.Adapter;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.R;
@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;

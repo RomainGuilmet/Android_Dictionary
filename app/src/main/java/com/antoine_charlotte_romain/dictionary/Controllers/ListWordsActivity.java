@@ -3,16 +3,9 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.PorterDuff;
-import android.graphics.Shader;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,29 +16,26 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
+import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.WordAdapter;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
@@ -54,7 +44,6 @@ import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 import java.util.ArrayList;
 
 /**
- * TODO gridView en paysage
  * TODO Garder l'état des activités au changement d'orientation
  * Created by summer1 on 24/06/2015.
  */
@@ -66,7 +55,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private final int DELETE_STATE = 1;
 
     private EditText filterWords;
-    private ListView listViewWords;
+    private GridView gridViewWords;
     private Toolbar toolbar;
     private FloatingActionButton menuButton;
     private FloatingActionButton addButton;
@@ -75,12 +64,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private TextView importText;
     private FloatingActionButton exportCsvButton;
     private TextView exportText;
-    private View loading;
     private EditText nameBox;
-    private View header;
     private Menu menu;
-    private Button headerButton;
     private View backgroundMenuView;
+    private ProgressDialog progressDialog;
 
     private WordDataModel wdm;
     private DictionaryDataModel ddm;
@@ -91,6 +78,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private boolean open;
     private boolean undo;
     private boolean loadingMore;
+    private boolean allLoaded;
     private boolean hidden;
     private int wordsLimit;
     private int wordsOffset;
@@ -111,7 +99,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         selectedDictionary = (Dictionary)intent.getSerializableExtra(MainActivity.EXTRA_DICTIONARY);
 
         filterWords = (EditText) findViewById(R.id.filterWords);
-        listViewWords = (ListView) findViewById(R.id.listViewWords);
+        gridViewWords = (GridView) findViewById(R.id.gridViewWords);
         menuButton = (FloatingActionButton) findViewById(R.id.floatingMenuButton);
         addButton = (FloatingActionButton) findViewById(R.id.addWordButton);
         addText = (TextView) findViewById(R.id.textAddAWord);
@@ -119,50 +107,20 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         importText = (TextView) findViewById(R.id.textImportACsv);
         exportCsvButton = (FloatingActionButton) findViewById(R.id.exportCsvButton);
         exportText = (TextView) findViewById(R.id.textExportACsv);
-        loading = getLayoutInflater().inflate(R.layout.loading, null);
         backgroundMenuView = findViewById(R.id.surfaceView);
 
-        listViewWords.setOnItemClickListener(this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.loadingWords));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        gridViewWords.setOnItemClickListener(this);
 
         setupUI(findViewById(R.id.list_words_layout));
 
-        registerForContextMenu(listViewWords);
-
-        listViewWords.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (!open) {
-                    final int currentFirstVisibleItem = listViewWords.getFirstVisiblePosition();
-                    if (scrollState == SCROLL_STATE_TOUCH_SCROLL || scrollState == SCROLL_STATE_FLING) {
-                        if (currentFirstVisibleItem > myLastFirstVisibleItem) {
-                            if (!hidden) {
-                                menuButton.animate().translationY(350);
-                                hidden = true;
-                            }
-                        } else if (currentFirstVisibleItem < myLastFirstVisibleItem) {
-                            if (hidden) {
-                                menuButton.animate().translationY(0);
-                                hidden = false;
-                            }
-                        }
-                    }
-                    myLastFirstVisibleItem = currentFirstVisibleItem;
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                int lastInScreen = firstVisibleItem + visibleItemCount;
-                if ((lastInScreen == totalItemCount) && !(loadingMore)) {
-                    if (hidden) {
-                        menuButton.animate().translationY(0);
-                        hidden = false;
-                    }
-                    Thread thread = new Thread(null, loadMoreListWords);
-                    thread.start();
-                }
-            }
-        });
+        registerForContextMenu(gridViewWords);
     }
 
     /**
@@ -176,13 +134,13 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
         open = false;
         loadingMore = false;
+        allLoaded = false;
         wordsLimit = 10;
         wordsOffset = 0;
         hidden = false;
         myLastFirstVisibleItem = 0;
         filterWords.setText("");
 
-        listViewWords.removeHeaderView(header);
         stateMode = NORMAL_STATE;
         backgroundMenuView.setVisibility(View.GONE);
         backgroundMenuView.setOnClickListener(new View.OnClickListener() {
@@ -191,12 +149,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                 showFloatingMenu(v);
             }
         });
-
-        if(listViewWords.getFooterViewsCount() == 0) {
-            listViewWords.addFooterView(loading);
-            loading.setPadding(0, 0, 0, 90);
-            listViewWords.setPadding(0, 0, 0, 0);
-        }
 
         initListView();
 
@@ -280,11 +232,48 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             select = true;
         }
 
-        myAdapter = new WordAdapter(getApplicationContext(), R.layout.row_word, myWordsList, select);
+        myAdapter = new WordAdapter(this, R.layout.row_word, myWordsList, select);
         myAdapter.setCallback(this);
 
-        listViewWords.setAdapter(myAdapter);
-        listViewWords.setTextFilterEnabled(true);
+        gridViewWords.setAdapter(myAdapter);
+        gridViewWords.setTextFilterEnabled(true);
+
+        gridViewWords.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (!open) {
+                    final int currentFirstVisibleItem = gridViewWords.getFirstVisiblePosition();
+                    if (scrollState == SCROLL_STATE_TOUCH_SCROLL || scrollState == SCROLL_STATE_FLING) {
+                        if (currentFirstVisibleItem > myLastFirstVisibleItem) {
+                            if (!hidden) {
+                                menuButton.animate().translationY(350);
+                                hidden = true;
+                            }
+                        } else if (currentFirstVisibleItem < myLastFirstVisibleItem) {
+                            if (hidden) {
+                                menuButton.animate().translationY(0);
+                                hidden = false;
+                            }
+                        }
+                    }
+                    myLastFirstVisibleItem = currentFirstVisibleItem;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                int lastInScreen = firstVisibleItem + visibleItemCount;
+                if ((lastInScreen == totalItemCount) && !(loadingMore) && !(allLoaded)) {
+                    if (hidden) {
+                        menuButton.animate().translationY(0);
+                        hidden = false;
+                    }
+                    progressDialog.show();
+                    Thread thread = new Thread(null, loadMoreListWords);
+                    thread.start();
+                }
+            }
+        });
 
         filterWords.addTextChangedListener(new TextWatcher() {
 
@@ -312,11 +301,6 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                     }
                     else {
                         wordsOffset = 0;
-                        if (listViewWords.getFooterViewsCount() == 0) {
-                            listViewWords.addFooterView(loading);
-                            loading.setPadding(0, 0, 0, 90);
-                            listViewWords.setPadding(0, 0, 0, 0);
-                        }
                         if (select) {
                             tempList = wdm.selectAll(selectedDictionary.getId(), wordsLimit, wordsOffset);
                         } else {
@@ -657,10 +641,9 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
      */
     private void normalMode(){
         stateMode = NORMAL_STATE;
-        myAdapter = new WordAdapter(getApplicationContext(), R.layout.row_word, myWordsList, true);
+        myAdapter = new WordAdapter(this, R.layout.row_word, myWordsList, true);
         myAdapter.setCallback(this);
-        listViewWords.setAdapter(myAdapter);
-        listViewWords.removeHeaderView(header);
+        gridViewWords.setAdapter(myAdapter);
         showToolbarMenu();
     }
 
@@ -670,20 +653,9 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private void multipleDeleteMode(){
         stateMode = DELETE_STATE;
 
-        header = this.getLayoutInflater().inflate(R.layout.grid_view_header, null);
-        listViewWords.addHeaderView(header);
-        headerButton = (Button) header.findViewById(R.id.button_all);
-        headerButton.setText(R.string.select_all);
-        headerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myAdapter.selectAll();
-            }
-        });
-
-        myAdapter = new WordAdapter(getApplicationContext(), R.layout.row_delete_word, myWordsList, true);
+        myAdapter = new WordAdapter(this, R.layout.row_delete_word, myWordsList, true);
         myAdapter.setCallback(this);
-        listViewWords.setAdapter(myAdapter);
+        gridViewWords.setAdapter(myAdapter);
 
         showToolbarMenu();
     }
@@ -754,12 +726,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     public void notifyDeleteListChanged()
     {
         int s = myAdapter.getDeleteList().size();
-        getSupportActionBar().setTitle(s + getString(R.string.item));
+        getSupportActionBar().setTitle(s + " " + getString(R.string.item));
         menu.findItem(R.id.action_delete_list).setVisible(s > 0);
-        if (myAdapter.isAllSelected())
-            headerButton.setText(R.string.deselect_all);
-        else
-            headerButton.setText(R.string.select_all);
     }
 
     /**
@@ -802,9 +770,9 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             myAdapter.notifyDataSetChanged();
             loadingMore = false;
             if(actualListSize == myWordsList.size()){
-                listViewWords.removeFooterView(loading);
-                listViewWords.setPadding(0,0,0,180);
+                allLoaded = true;
             }
+            progressDialog.dismiss();
         }
     };
 

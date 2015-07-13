@@ -46,23 +46,83 @@ public class WordDataModel extends DAOBase{
                     " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
                      " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
+    private static final String SQL_SELECT_WHOLE_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " = ?;";
+
+    private static final String SQL_SELECT_WHOLE_WORD_FROM_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " = ?" +
+            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
+
+    private static final String SQL_SELECT_WHOLE_WORD_FROM_TRANSLATION = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " = ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_WHOLE_WORD_FROM_TRANSLATION_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " = ?" +
+            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_WHOLE_WORD_FROM_NOTE = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " = ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_WHOLE_WORD_FROM_NOTE_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " = ?" +
+            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_WHOLE_WORD_FROM_ALL_DATA = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " = ?" +
+            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " = ?" +
+            " OR " + WordEntry.COLUMN_NAME_NOTE + " = ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_WHOLE_WORD_FROM_ALL_DATA_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE (" + WordEntry.COLUMN_NAME_HEADWORD + " = ?" +
+            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " = ?" +
+            " OR " + WordEntry.COLUMN_NAME_NOTE + " = ? )" +
+            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
+            " WHERE UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
             " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
-            " AND " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
+            " AND UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE UPPER(" + WordEntry.COLUMN_NAME_TRANSLATION + ") LIKE ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " AND UPPER(" + WordEntry.COLUMN_NAME_TRANSLATION + ") LIKE ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE UPPER(" + WordEntry.COLUMN_NAME_NOTE + ") LIKE ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
+
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " AND UPPER(" + WordEntry.COLUMN_NAME_NOTE + ") LIKE ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
             " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
             " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
-            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?;";
+            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
             " WHERE (" + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
             " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
             " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ? )" +
-            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
+            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_ALL_FROM_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME
             + " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ? "
@@ -171,6 +231,110 @@ public class WordDataModel extends DAOBase{
     }
 
     /**
+     * Find a word in a dictionary with exactly the specified headword
+     * @param headWord the headword of the word we want to find
+     * @param dictionaryID the ID of the dictionary in which we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
+     * @return A list of word which have exaclty this headword in the selected dictionary
+     */
+    public ArrayList<Word> selectWholeHeadword(String headWord, long dictionaryID){
+        SQLiteDatabase db = open();
+
+        Cursor c;
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_HEADWORD, new String[]{String.valueOf(headWord)});
+        }
+        else{
+            c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_HEADWORD_AND_DICTIONARY, new String[]{String.valueOf(headWord), String.valueOf(dictionaryID)});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        while (c.moveToNext()) {
+            Word w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
+    /**
+     * Find a word in a dictionary with exactly the specified translation
+     * @param translation the translation of the word we want to find
+     * @param dictionaryID the ID of the dictionary in which we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
+     * @return A list of word which have exaclty this translation in the selected dictionary
+     */
+    public ArrayList<Word> selectWholeTranslation(String translation, long dictionaryID){
+        SQLiteDatabase db = open();
+
+        Cursor c;
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_TRANSLATION, new String[]{String.valueOf(translation)});
+        }
+        else{
+            c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_TRANSLATION_AND_DICTIONARY, new String[]{String.valueOf(translation), String.valueOf(dictionaryID)});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        while (c.moveToNext()) {
+            Word w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
+    /**
+     * Find a word in a dictionary with exactly the specified note
+     * @param note the note of the word we want to find
+     * @param dictionaryID the ID of the dictionary in which we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
+     * @return A list of word which have exaclty this note in the selected dictionary
+     */
+    public ArrayList<Word> selectWholeNote(String note, long dictionaryID){
+        SQLiteDatabase db = open();
+
+        Cursor c;
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_NOTE, new String[]{String.valueOf(note)});
+        }
+        else{
+            c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_NOTE_AND_DICTIONARY, new String[]{String.valueOf(note), String.valueOf(dictionaryID)});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        while (c.moveToNext()) {
+            Word w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
+    /**
+     * Find a word in a dictionary with exactly the specified string in its data
+     * @param string the string belonging to the word we want to find
+     * @param dictionaryID the ID of the dictionary in which we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
+     * @return A list of word which have exactly this string in its data in the selected dictionary
+     */
+    public ArrayList<Word> selectWholeAllData(String string, long dictionaryID){
+        SQLiteDatabase db = open();
+
+        Cursor c;
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_ALL_DATA, new String[]{String.valueOf(string), String.valueOf(string), String.valueOf(string)});
+        }
+        else{
+            c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_ALL_DATA_AND_DICTIONARY, new String[]{String.valueOf(string), String.valueOf(string), String.valueOf(string), String.valueOf(dictionaryID)});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        while (c.moveToNext()) {
+            Word w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
+    /**
      * Find a word in a dictionary with the beginning, the middle and the end of its headword
      * @param begin the start of the headword
      * @param middle the middle of the headword
@@ -188,6 +352,66 @@ public class WordDataModel extends DAOBase{
         }
         else{
             c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY, new String[]{String.valueOf(dictionaryID), search});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        Word w;
+        while (c.moveToNext()) {
+            w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
+    /**
+     * Find a word in a dictionary with the beginning, the middle and the end of its translation/meaning
+     * @param begin the start of the translation/meaning
+     * @param middle the middle of the translation/meaning
+     * @param end the end of the translation/meaning
+     * @param dictionaryID the ID of the dictionary in we wish we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
+     * @return A list of word which have this begin, this middle and this end in the translation/meaning
+     */
+    public ArrayList<Word> selectTranslation(String begin, String middle, String end, long dictionaryID){
+        SQLiteDatabase db = open();
+
+        String search = begin+"%"+middle+"%"+end;
+        Cursor c;
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION, new String[]{search});
+        }
+        else{
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION_AND_DICTIONARY, new String[]{String.valueOf(dictionaryID), search});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        Word w;
+        while (c.moveToNext()) {
+            w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
+    /**
+     * Find a word in a dictionary with the beginning, the middle and the end of its note
+     * @param begin the start of the note
+     * @param middle the middle of the note
+     * @param end the end of the note
+     * @param dictionaryID the ID of the dictionary in we wish we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
+     * @return A list of word which have this begin, this middle and this end in the note
+     */
+    public ArrayList<Word> selectNote(String begin, String middle, String end, long dictionaryID){
+        SQLiteDatabase db = open();
+
+        String search = begin+"%"+middle+"%"+end;
+        Cursor c;
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES, new String[]{search});
+        }
+        else{
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES_AND_DICTIONARY, new String[]{String.valueOf(dictionaryID), search});
         }
 
         ArrayList<Word> listWord = new ArrayList<Word>();

@@ -1,6 +1,7 @@
-package com.antoine_charlotte_romain.dictionary.Controllers;
+package com.antoine_charlotte_romain.dictionary.Controllers.Adapter;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Word;
-import com.antoine_charlotte_romain.dictionary.Controllers.ListWordsActivity;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 
@@ -102,6 +102,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
 
         if(layoutResourceId == R.layout.row_word) {
             ImageButton menuButton = (ImageButton) convertView.findViewById(R.id.imageButtonWord);
+            menuButton.setColorFilter(R.color.textColor, PorterDuff.Mode.MULTIPLY);
             menuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -140,7 +141,8 @@ public class WordAdapter extends ArrayAdapter<Word> {
                 }
             });
         }
-        else {
+        else if(layoutResourceId == R.layout.row_delete_word)
+        {
             final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.deleteWordBox);
 
             checkBox.setChecked(deleteList.contains(word));
@@ -186,23 +188,6 @@ public class WordAdapter extends ArrayAdapter<Word> {
         deleteList.remove(w);
         allSelected = false;
         callback.notifyDeleteListChanged();
-    }
-
-    public void selectAll()
-    {
-        allSelected = !allSelected;
-        if(allSelected)
-        {
-            for (int i = 0; i < aw.size(); i++) {
-                addToDeleteList(aw.get(i));
-            }
-        }
-        else {
-            deleteList.clear();
-            callback.notifyDeleteListChanged();
-        }
-
-        notifyDataSetChanged();
     }
 
     public void setCallback(WordAdapterCallback callback){

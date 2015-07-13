@@ -2,13 +2,14 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,10 +19,11 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.SearchDate;
+import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.SearchDateAdapter;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.SearchDateDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
@@ -35,15 +37,16 @@ import java.util.ArrayList;
 public class HistoryFragment extends Fragment implements SearchDateAdapter.SearchDateAdapterCallback{
 
     private View thisView;
-    private View loading;
     private EditText historySearch;
-    private ListView listViewHistory;
+    private GridView gridViewHistory;
+    private ProgressDialog progressDialog;
 
     private SearchDateDataModel sddm;
     private ArrayList<SearchDate> mySearchDateList;
     private SearchDateAdapter myAdapter;
 
     private boolean loadingMore;
+    private boolean allLoaded;
     private int historyLimit;
     private int historyOffset;
     private int actualListSize;
@@ -53,8 +56,7 @@ public class HistoryFragment extends Fragment implements SearchDateAdapter.Searc
         thisView = inflater.inflate(R.layout.fragment_history,container,false);
 
         historySearch = (EditText) thisView.findViewById(R.id.historySearch);
-        listViewHistory = (ListView) thisView.findViewById(R.id.listViewHistory);
-        loading = getActivity().getLayoutInflater().inflate(R.layout.loading, null);
+        gridViewHistory = (GridView) thisView.findViewById(R.id.gridViewHistory);
 
         initListView();
 
@@ -86,31 +88,34 @@ public class HistoryFragment extends Fragment implements SearchDateAdapter.Searc
      * Function that load all the search history on the database and show it on the listView
      */
     private void initListView(){
-        sddm = new SearchDateDataModel(getActivity());
         historyLimit = 10;
         historyOffset = 0;
+        allLoaded = false;
 
-        if(listViewHistory.getFooterViewsCount() == 0) {
-            listViewHistory.addFooterView(loading);
-            loading.setPadding(0, 0, 0, 90);
-        }
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getString(R.string.loadingHistory));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setGravity(Gravity.BOTTOM);
 
+        sddm = new SearchDateDataModel(getActivity());
         mySearchDateList = sddm.selectAll(historyLimit, historyOffset);
 
         myAdapter = new SearchDateAdapter(getActivity(), R.layout.row_history, mySearchDateList);
         myAdapter.setCallback(this);
 
-        listViewHistory.setAdapter(myAdapter);
-        listViewHistory.setTextFilterEnabled(true);
+        gridViewHistory.setAdapter(myAdapter);
+        gridViewHistory.setTextFilterEnabled(true);
 
-        listViewHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridViewHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 seeWord(position);
             }
         });
 
-        listViewHistory.setOnScrollListener(new AbsListView.OnScrollListener() {
+        gridViewHistory.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -119,7 +124,8 @@ public class HistoryFragment extends Fragment implements SearchDateAdapter.Searc
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 int lastInScreen = firstVisibleItem + visibleItemCount;
-                if ((lastInScreen == totalItemCount) && !(loadingMore)) {
+                if ((lastInScreen == totalItemCount) && !(loadingMore) && !(allLoaded)) {
+                    progressDialog.show();
                     Thread thread = new Thread(null, loadMoreHistory);
                     thread.start();
                 }
@@ -231,8 +237,9 @@ public class HistoryFragment extends Fragment implements SearchDateAdapter.Searc
             myAdapter.notifyDataSetChanged();
             loadingMore = false;
             if(actualListSize == mySearchDateList.size()){
-                listViewHistory.removeFooterView(loading);
+                allLoaded = true;
             }
+            progressDialog.dismiss();
         }
     };
 

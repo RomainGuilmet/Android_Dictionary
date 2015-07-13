@@ -3,22 +3,17 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
+import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.ViewPagerAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
-import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 
-import java.util.ArrayList;
-
 /**
- * TODO faire du tri dans les strings
+ * TODO fermer le clavier au clic ailleurs que dans un textField
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -31,9 +26,17 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_BEGIN_STRING = "begin";
     public static final String EXTRA_MIDDLE_STRING = "middle";
     public static final String EXTRA_END_STRING = "end";
-    public static final String EXTRA_HEAD_OR_WHOLE = "headOrWhole";
+    public static final String EXTRA_SEARCH_DATA = "searchOption";
+    public static final String EXTRA_PART_OR_WHOLE = "partOrWhole";
     public static final String EXTRA_NEW_DICO_NAME = "namedico";
     public static final String ALL_DICO = "All";
+
+    public static final String WHOLE_WORD = "whole";
+    public static final String PART_WORD = "part";
+    public static final String HEADWORD_ONLY = "headword";
+    public static final String MEANING_ONLY = "meaning";
+    public static final String NOTES_ONLY = "notes";
+    public static final String ALL_DATA = "allData";
 
     private Toolbar toolbar;
     private ViewPager pager;

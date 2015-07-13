@@ -47,8 +47,9 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
             String begin = intent.getStringExtra(MainActivity.EXTRA_BEGIN_STRING);
             String middle = intent.getStringExtra(MainActivity.EXTRA_MIDDLE_STRING);
             String end = intent.getStringExtra(MainActivity.EXTRA_END_STRING);
-            String headWhole = intent.getStringExtra(MainActivity.EXTRA_HEAD_OR_WHOLE);
+            String searchOption = intent.getStringExtra(MainActivity.EXTRA_SEARCH_DATA);
             String dico = intent.getStringExtra(MainActivity.EXTRA_DICTIONARY);
+            String partWhole = intent.getStringExtra(MainActivity.EXTRA_PART_OR_WHOLE);
 
             // find id of the dictionary
             long id;
@@ -61,11 +62,28 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
 
             // search
             wdm = new WordDataModel(this);
-            if(headWhole.equals("head")){
-                results = wdm.selectHeadword(begin, middle, end, id);
+            if (partWhole.equals(MainActivity.PART_WORD)){
+                if(searchOption.equals(MainActivity.HEADWORD_ONLY)){
+                    results = wdm.selectHeadword(begin, middle, end, id);
+                } else if (searchOption.equals(MainActivity.ALL_DATA)){
+                    results = wdm.selectWholeWord(begin, middle, end, id);
+                } else if (searchOption.equals(MainActivity.MEANING_ONLY)){
+                    results = wdm.selectTranslation(begin, middle, end, id);
+                } else if (searchOption.equals(MainActivity.NOTES_ONLY)){
+                    results = wdm.selectNote(begin, middle, end, id);
+                }
             } else {
-                results = wdm.selectWholeWord(begin, middle, end, id);
+                if(searchOption.equals(MainActivity.HEADWORD_ONLY)){
+                    results = wdm.selectWholeHeadword(begin, id);
+                } else if (searchOption.equals(MainActivity.ALL_DATA)){
+                    results = wdm.selectWholeAllData(begin, id);
+                } else if (searchOption.equals(MainActivity.MEANING_ONLY)){
+                    results = wdm.selectWholeTranslation(begin, id);
+                } else if (searchOption.equals(MainActivity.NOTES_ONLY)){
+                    results = wdm.selectWholeNote(begin, id);
+                }
             }
+
         }
 
         // Display results

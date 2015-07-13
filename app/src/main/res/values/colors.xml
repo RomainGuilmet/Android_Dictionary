@@ -26,6 +26,7 @@
     <color name="tabsScrollColor">@color/lime_A100</color>
     <color name="colorAccent">@color/cyan_500</color>
     <color name="textColor">@color/grey_800</color>
+    <color name="subTextColor">@color/grey_500</color>
     <color name="colorTextFlatButton">@color/blue_600</color>
     <color name="buttonColor">@color/white</color>
 
