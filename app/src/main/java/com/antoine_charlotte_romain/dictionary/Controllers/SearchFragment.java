@@ -200,10 +200,19 @@ public class SearchFragment extends Fragment {
         // Let's see if the search has to be done on headword or whole word
         switch (((RadioGroup)thisView.findViewById(R.id.boutonsradio)).getCheckedRadioButtonId()) {
             case R.id.headword:
-                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, "head");
+                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.HEADWORD_ONLY);
                 break;
-            case R.id.whole:
-                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, "whole");
+            case R.id.alldata:
+                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.ALL_DATA);
+                break;
+            case R.id.translation:
+                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.MEANING_ONLY);
+                break;
+            case R.id.notes://TODO implement use
+                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.NOTES_ONLY);
+                break;
+            case R.id.whole://TODO implement use
+                intent.putExtra(MainActivity.EXTRA_HEAD_OR_WHOLE, MainActivity.WHOLE_WORD);
                 break;
         }
 

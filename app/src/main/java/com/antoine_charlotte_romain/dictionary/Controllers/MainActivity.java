@@ -35,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_NEW_DICO_NAME = "namedico";
     public static final String ALL_DICO = "All";
 
+    public static final String WHOLE_WORD = "whole";
+    public static final String HEADWORD_ONLY = "headword";
+    public static final String MEANING_ONLY = "meaning";
+    public static final String NOTES_ONLY = "notes";
+    public static final String ALL_DATA = "allData";
+
     private Toolbar toolbar;
     private ViewPager pager;
     private ViewPagerAdapter adapter;

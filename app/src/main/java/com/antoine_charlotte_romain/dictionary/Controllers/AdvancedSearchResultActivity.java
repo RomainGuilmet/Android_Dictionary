@@ -61,10 +61,16 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
 
             // search
             wdm = new WordDataModel(this);
-            if(headWhole.equals("head")){
+            if(headWhole.equals(MainActivity.HEADWORD_ONLY)){
                 results = wdm.selectHeadword(begin, middle, end, id);
-            } else {
+            } else if (headWhole.equals(MainActivity.ALL_DATA)){
                 results = wdm.selectWholeWord(begin, middle, end, id);
+            } else if (headWhole.equals(MainActivity.MEANING_ONLY)){
+                results = wdm.selectTranslation(begin, middle, end, id);
+            } else if (headWhole.equals(MainActivity.NOTES_ONLY)){
+                results = wdm.selectNote(begin, middle, end, id);
+            } else if (headWhole.equals(MainActivity.WHOLE_WORD)){
+                //results = wdm.selectWholeWord(begin, middle, end, id);
             }
         }
 

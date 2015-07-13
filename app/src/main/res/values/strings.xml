@@ -57,6 +57,9 @@
     <string name="headword">HeadWord :</string>
     <string name="translation">Translation :</string>
     <string name="note">Note :</string>
+    <string name="notes_only">Notes only</string>
+    <string name="translation_meaning_only">Translation/Meaning only</string>
+    <string name="all_data">All data</string>
     <string name="add">Add</string>
     <string name="save">Save</string>
     <string name="new_word">New word</string>

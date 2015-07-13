@@ -76,6 +76,24 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/translation_meaning_only"
+            android:id="@+id/translation" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notes_only"
+            android:id="@+id/notes" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_data"
+            android:id="@+id/alldata" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/whole_word"
             android:id="@+id/whole" />
 

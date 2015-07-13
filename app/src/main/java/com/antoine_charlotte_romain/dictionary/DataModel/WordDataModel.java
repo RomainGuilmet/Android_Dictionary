@@ -53,6 +53,20 @@ public class WordDataModel extends DAOBase{
             " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
             " AND " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
 
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?;";
+
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " AND " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?;";
+
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?;";
+
+    private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
+            " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " AND " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?;";
+
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
             " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
             " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
@@ -188,6 +202,66 @@ public class WordDataModel extends DAOBase{
         }
         else{
             c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY, new String[]{String.valueOf(dictionaryID), search});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        Word w;
+        while (c.moveToNext()) {
+            w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
+    /**
+     * Find a word in a dictionary with the beginning, the middle and the end of its translation/meaning
+     * @param begin the start of the translation/meaning
+     * @param middle the middle of the translation/meaning
+     * @param end the end of the translation/meaning
+     * @param dictionaryID the ID of the dictionary in we wish we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
+     * @return A list of word which have this begin, this middle and this end in the translation/meaning
+     */
+    public ArrayList<Word> selectTranslation(String begin, String middle, String end, long dictionaryID){
+        SQLiteDatabase db = open();
+
+        String search = begin+"%"+middle+"%"+end;
+        Cursor c;
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION, new String[]{search});
+        }
+        else{
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION_AND_DICTIONARY, new String[]{String.valueOf(dictionaryID), search});
+        }
+
+        ArrayList<Word> listWord = new ArrayList<Word>();
+        Word w;
+        while (c.moveToNext()) {
+            w = select(c.getLong(c.getColumnIndexOrThrow(WordEntry._ID)));
+            listWord.add(w);
+        }
+        c.close();
+        return listWord;
+    }
+
+    /**
+     * Find a word in a dictionary with the beginning, the middle and the end of its note
+     * @param begin the start of the note
+     * @param middle the middle of the note
+     * @param end the end of the note
+     * @param dictionaryID the ID of the dictionary in we wish we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
+     * @return A list of word which have this begin, this middle and this end in the note
+     */
+    public ArrayList<Word> selectNote(String begin, String middle, String end, long dictionaryID){
+        SQLiteDatabase db = open();
+
+        String search = begin+"%"+middle+"%"+end;
+        Cursor c;
+        if(dictionaryID == Word.ALL_DICTIONARIES) {
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES, new String[]{search});
+        }
+        else{
+            c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES_AND_DICTIONARY, new String[]{String.valueOf(dictionaryID), search});
         }
 
         ArrayList<Word> listWord = new ArrayList<Word>();
