@@ -34,7 +34,11 @@ public class SearchDateDataModel extends DAOBase{
 
     private static final String SQL_SELECT_SEARCH_DATE_FROM_ID = "SELECT * FROM " + SearchDateEntry.TABLE_NAME + " WHERE " + SearchDateEntry._ID + " = ?;";
 
-    private static final String SQL_SELECT_SEARCH_DATE_FROM_WORD_AND_DATE = "SELECT * FROM " + SearchDateEntry.TABLE_NAME +
+    private static final String SQL_WORD_ADDED_IN_THE_HOUR = "SELECT * FROM " + SearchDateEntry.TABLE_NAME +
+            " WHERE " + SearchDateEntry.COLUMN_NAME_WORD_ID + " = ?" +
+            " AND " + "(strftime('%s', CURRENT_TIMESTAMP) - strftime('%s', " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + "))<3600;";
+
+    private static final String SQL_SELECT_SEARCH_DATE_FROM_WORD_OR_DATE = "SELECT * FROM " + SearchDateEntry.TABLE_NAME +
             " sd INNER JOIN " + WordDataModel.WordEntry.TABLE_NAME + " w ON sd." + SearchDateEntry.COLUMN_NAME_WORD_ID + "=w." + WordDataModel.WordEntry._ID +
             " WHERE w." + WordDataModel.WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
             " OR sd." + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " LIKE ? ORDER BY " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " DESC;";
@@ -58,8 +62,7 @@ public class SearchDateDataModel extends DAOBase{
         WordDataModel wdm = new WordDataModel(context);
         Word w = wdm.select(sd.getWord().getId());
         if(w != null) {
-            ArrayList<SearchDate> asd = select(sd.getWord(), sd.getDate());
-            if (asd.size() == 0) {
+            if (!alreadyAdded(sd.getWord())) {
                 // Create a new map of values, where column names are the keys
                 ContentValues values = new ContentValues();
                 values.put(SearchDateEntry.COLUMN_NAME_WORD_ID, sd.getWord().getId());
@@ -112,7 +115,7 @@ public class SearchDateDataModel extends DAOBase{
     public ArrayList<SearchDate> select(String search){
         SQLiteDatabase db = open();
 
-        Cursor c = db.rawQuery(SQL_SELECT_SEARCH_DATE_FROM_WORD_AND_DATE, new String[]{String.valueOf(search)+"%", "%"+String.valueOf(search)+"%"});
+        Cursor c = db.rawQuery(SQL_SELECT_SEARCH_DATE_FROM_WORD_OR_DATE, new String[]{String.valueOf(search) + "%", "%" + String.valueOf(search)+"%"});
 
         ArrayList<SearchDate> listDate = new ArrayList<>();
         while (c.moveToNext()) {
@@ -125,14 +128,21 @@ public class SearchDateDataModel extends DAOBase{
     }
 
     /**
-     *
-     * @param w
-     * @param date
-     * @return
+     * This function is used to know if a word was already added in the history less than an hour ago
+     * @param w the word we are wanted to know if it was added recently
+     * @return true if the word was added recently, false if not
      */
-    public ArrayList<SearchDate> select(Word w, String date){
-        ArrayList<SearchDate> listDate = new ArrayList<>();
-        return listDate;
+    public boolean alreadyAdded(Word w){
+        SQLiteDatabase db = open();
+
+        Cursor c = db.rawQuery(SQL_WORD_ADDED_IN_THE_HOUR, new String[]{String.valueOf(w.getId())});
+
+        if(c.getCount() == 0){
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     /**
