@@ -33,7 +33,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HistoryFragment extends Fragment implements SearchDateAdapter.SearchDateAdapterCallback{
+public class HistoryFragment extends Fragment {
 
     private View thisView;
     private EditText historySearch;
@@ -102,7 +102,6 @@ public class HistoryFragment extends Fragment implements SearchDateAdapter.Searc
         mySearchDateList = sddm.selectAll(historyLimit, historyOffset);
 
         myAdapter = new SearchDateAdapter(getActivity(), R.layout.row_history, mySearchDateList);
-        myAdapter.setCallback(this);
 
         gridViewHistory.setAdapter(myAdapter);
         gridViewHistory.setTextFilterEnabled(true);
@@ -153,6 +152,7 @@ public class HistoryFragment extends Fragment implements SearchDateAdapter.Searc
                     } else {
                         historyOffset = 0;
                         tempList = sddm.selectAll(historyLimit, historyOffset);
+                        allLoaded = false;
                     }
 
                     for (int i = 0; i < tempList.size(); i++) {

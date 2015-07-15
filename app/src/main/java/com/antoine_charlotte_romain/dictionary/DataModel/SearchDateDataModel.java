@@ -38,7 +38,7 @@ public class SearchDateDataModel extends DAOBase{
             " WHERE " + SearchDateEntry.COLUMN_NAME_WORD_ID + " = ?" +
             " AND " + "(strftime('%s', CURRENT_TIMESTAMP) - strftime('%s', " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + "))<3600;";
 
-    private static final String SQL_SELECT_SEARCH_DATE_FROM_WORD_OR_DATE = "SELECT * FROM " + SearchDateEntry.TABLE_NAME +
+    private static final String SQL_SELECT_SEARCH_DATE_FROM_WORD_OR_DATE = "SELECT sd." + SearchDateEntry._ID + " FROM " + SearchDateEntry.TABLE_NAME +
             " sd INNER JOIN " + WordDataModel.WordEntry.TABLE_NAME + " w ON sd." + SearchDateEntry.COLUMN_NAME_WORD_ID + "=w." + WordDataModel.WordEntry._ID +
             " WHERE w." + WordDataModel.WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
             " OR sd." + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " LIKE ? ORDER BY " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " DESC;";
@@ -119,6 +119,7 @@ public class SearchDateDataModel extends DAOBase{
 
         ArrayList<SearchDate> listDate = new ArrayList<>();
         while (c.moveToNext()) {
+            System.out.println(c.getLong(c.getColumnIndexOrThrow(SearchDateEntry._ID)));
             SearchDate sd = select(c.getLong(c.getColumnIndexOrThrow(SearchDateEntry._ID)));
             listDate.add(sd);
         }
@@ -158,6 +159,8 @@ public class SearchDateDataModel extends DAOBase{
 
         ArrayList<SearchDate> listDate = new ArrayList<>();
         while(c.moveToNext()) {
+            System.out.println(c.getLong(c.getColumnIndexOrThrow(SearchDateEntry._ID)));
+
             SearchDate sd = select(c.getLong(c.getColumnIndexOrThrow(SearchDateEntry._ID)));
             listDate.add(sd);
         }

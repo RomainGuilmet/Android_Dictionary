@@ -23,7 +23,6 @@ public class SearchDateAdapter extends ArrayAdapter<SearchDate> {
     private Context context;
     private int layoutResourceId;
     private ArrayList<SearchDate> asd = null;
-    private SearchDateAdapterCallback callback;
 
     /**
      * This function creates a custom ArrayAdapter of words
@@ -87,13 +86,4 @@ public class SearchDateAdapter extends ArrayAdapter<SearchDate> {
         // Return the completed view to render on screen
         return convertView;
     }
-
-    public void setCallback(SearchDateAdapterCallback callback){
-        this.callback = callback;
-    }
-
-    public interface SearchDateAdapterCallback {
-
-    }
-
 }

@@ -313,6 +313,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                         } else {
                             tempList = wdm.selectAll(Word.ALL_DICTIONARIES, wordsLimit, wordsOffset);
                         }
+                        allLoaded = false;
                     }
 
                     for (int i = 0; i < tempList.size(); i++) {
