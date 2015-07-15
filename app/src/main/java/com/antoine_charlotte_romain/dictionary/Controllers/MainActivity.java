@@ -7,13 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.ViewPagerAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
 import com.antoine_charlotte_romain.dictionary.R;
+import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 
 /**
- * TODO fermer le clavier au clic ailleurs que dans un textField
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager pager;
     private ViewPagerAdapter adapter;
     private SlidingTabLayout tabs;
-    private int numbOfTabs =3;
+    private int numbOfTabs = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             pager.setCurrentItem(ADVANCED_SEARCH_FRAGMENT);
         }
 
+        setupUI(findViewById(R.id.main_layout));
     }
 
     @Override
@@ -113,5 +118,32 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setupUI(View view) {
+
+        //Set up touch listener for non-text box views to hide keyboard.
+        if(!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    KeyboardUtility.hideSoftKeyboard(MainActivity.this);
+                    return false;
+                }
+
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupUI(innerView);
+            }
+        }
     }
 }
