@@ -119,7 +119,6 @@ public class SearchDateDataModel extends DAOBase{
 
         ArrayList<SearchDate> listDate = new ArrayList<>();
         while (c.moveToNext()) {
-            System.out.println(c.getLong(c.getColumnIndexOrThrow(SearchDateEntry._ID)));
             SearchDate sd = select(c.getLong(c.getColumnIndexOrThrow(SearchDateEntry._ID)));
             listDate.add(sd);
         }
@@ -159,8 +158,6 @@ public class SearchDateDataModel extends DAOBase{
 
         ArrayList<SearchDate> listDate = new ArrayList<>();
         while(c.moveToNext()) {
-            System.out.println(c.getLong(c.getColumnIndexOrThrow(SearchDateEntry._ID)));
-
             SearchDate sd = select(c.getLong(c.getColumnIndexOrThrow(SearchDateEntry._ID)));
             listDate.add(sd);
         }
