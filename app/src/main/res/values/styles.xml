@@ -7,12 +7,12 @@
         <item name="alertDialogTheme">@style/alertDialogStyle</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="popupTheme">@style/popupMenuStyle</item>
-        <item name="borderlessButtonStyle">@color/colorTextFlatButton</item>
+        <item name="borderlessButtonStyle">@style/borderlessButtonStyle</item>
         <item name="actionMenuTextAppearance">@style/MenuTextStyle</item>
     </style>
 
     <style name="MenuTextStyle">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/textSize</item>
     </style>
 
     <style name="popupMenuStyle" parent="ThemeOverlay.AppCompat">
@@ -25,8 +25,14 @@
         <item name="android:textColor">@color/windowBackground</item>
     </style>
 
+    <style name="buttonStyle" parent="Theme.AppCompat">
+        <item name="android:textSize">@dimen/textSize</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:background">@color/buttonColor</item>
+    </style>
+
     <style name="borderlessButtonStyle" parent="ThemeOverlay.AppCompat">
         <item name="android:background">@color/windowBackground</item>
-        <item name="android:textColor">@color/colorTextFlatButton</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 </resources>

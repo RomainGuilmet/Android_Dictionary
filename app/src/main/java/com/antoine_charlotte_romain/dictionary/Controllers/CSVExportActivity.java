@@ -30,6 +30,8 @@ import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 
+import net.rdrei.android.dirchooser.DirectoryChooserActivity;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,13 +45,21 @@ import java.util.List;
 
 public class CSVExportActivity extends AppCompatActivity {
 
+
+    private final int REQUEST_DIRECTORY = 0;
+
+    private final String INITIAL_DIRECTORY = Environment.getExternalStorageDirectory().toString();
+
     private Toolbar toolbar;
 
-    private EditText fileName;
+    private EditText fileName, directory;
 
     private Dictionary dictionary;
 
     private ProgressDialog progress;
+
+    private String selectedDirectory;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +73,16 @@ public class CSVExportActivity extends AppCompatActivity {
 
 
         fileName = (EditText) findViewById(R.id.editTextFile);
+
+        selectedDirectory = INITIAL_DIRECTORY;
+        directory = (EditText) findViewById(R.id.editTextDirectory);
+        directory.setText(selectedDirectory);
+        directory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseDirectory();
+            }
+        });
 
         // Getting the dictionary to export
         Intent intent = getIntent();
@@ -80,13 +100,11 @@ public class CSVExportActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // TODO Auto-generated method stub
 
             }
 
@@ -106,13 +124,43 @@ public class CSVExportActivity extends AppCompatActivity {
     }
 
     /**
+     * Method called when the user click on the directory EditText
+     */
+    private void chooseDirectory()
+    {
+        final Intent chooserIntent = new Intent(this, DirectoryChooserActivity.class);
+
+        chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME,
+                "DirChooserSample");
+
+        chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY,
+                selectedDirectory);
+
+        startActivityForResult(chooserIntent, REQUEST_DIRECTORY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_DIRECTORY) {
+            if (resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED) {
+                selectedDirectory = data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR);
+                directory.setText(selectedDirectory);
+            } else {
+                // Nothing selected
+            }
+        }
+    }
+
+    /**
      * Method called when the user click on the export button
      * @param v
      */
     public void export(View v)
     {
         //Creating the file
-        final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + fileName.getText().toString());
+        final File file = new File(selectedDirectory + "/" + fileName.getText().toString());
 
         //If the file doesn't already exists it is exported
         if (!file.exists())
@@ -120,7 +168,7 @@ public class CSVExportActivity extends AppCompatActivity {
             exportCSV(file);
 
         }
-        //Else the user can overwrie the existing file
+        //Else the user can overwrite the existing file
         else
         {
             new AlertDialog.Builder(CSVExportActivity.this)
@@ -168,7 +216,7 @@ public class CSVExportActivity extends AppCompatActivity {
                 new AlertDialog.Builder(CSVExportActivity.this)
                         .setTitle(R.string.success)
                         .setMessage(R.string.dictionary_exported)
-                        .setNegativeButton(R.string.return_to_dictionaries, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(CSVExportActivity.this, MainActivity.class);
                                 startActivity(intent);

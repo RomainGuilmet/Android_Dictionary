@@ -60,6 +60,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.ListWordsActivity" />
         </activity>
+
+        <!-- external libraries -->
+        <activity android:name="net.rdrei.android.dirchooser.DirectoryChooserActivity" />
     </application>
+
 
 </manifest>

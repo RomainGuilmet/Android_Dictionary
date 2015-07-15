@@ -29,7 +29,6 @@
     <string name="available_csv_files">Available CSV files</string>
     <string name="dictionary_exported">Dictionary exported</string>
     <string name="success">Success</string>
-    <string name="return_to_dictionaries">Return to dictionaries</string>
     <string name="name_already_exists">The specified name already exists</string>
     <string name="already_exists">already exists.</string>
     <string name="error">Error</string>
@@ -100,5 +99,7 @@
     <string name="export_progress">Export in progress</string>
     <string name="open_it">Open the csv</string>
     <string name="no_apps">No supported apps installed</string>
+    <string name="change_directory">Change directory</string>
+    <string name="directory">Directory :</string>
 
 </resources>

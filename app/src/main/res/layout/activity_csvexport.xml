@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Controllers.WordActivity"
+    tools:context=".Controllers.CSVExportActivity"
     android:id="@+id/export_layout">
 
     <include android:id="@+id/tool_bar"
@@ -39,16 +39,38 @@
         android:layout_alignRight="@+id/textViewFile"
         android:layout_alignEnd="@+id/textViewFile" />
 
+    <TextView
+        android:paddingTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/directory"
+        android:id="@+id/textViewDirectory"
+        android:layout_below="@+id/editTextFile"
+        android:layout_alignLeft="@+id/editTextFile"
+        android:layout_alignStart="@+id/editTextFile" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextDirectory"
+        android:focusable="false"
+        android:layout_below="@+id/textViewDirectory"
+        android:layout_alignLeft="@+id/textViewDirectory"
+        android:layout_alignStart="@+id/textViewDirectory"
+        android:layout_alignRight="@+id/editTextFile"
+        android:layout_alignEnd="@+id/editTextFile" />
+
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/csvexport_export"
         android:id="@+id/action_export"
         android:onClick="export"
-        android:background="@color/white"
-        android:textColor="@color/colorPrimary"
-        android:layout_below="@+id/editTextFile"
+        style="@style/buttonStyle"
+        android:layout_below="@+id/editTextDirectory"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp" />
+        android:layout_marginTop="20dp" />
 
 </RelativeLayout>
