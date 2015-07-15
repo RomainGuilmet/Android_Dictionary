@@ -304,7 +304,7 @@ public class CSVImportActivity extends AppCompatActivity {
                     animation.setVisibility(View.GONE);
 
                     final String msg = getString(R.string.nb_added_words) + " : " + addedWords + "\n" +
-                            getString(R.string.nb_uptaded_words) + " : " + updatedWords.size();
+                            getString(R.string.updated_words) + " : " + updatedWords.size();
 
                     // Display a pop up window
                     new AlertDialog.Builder(CSVImportActivity.this)

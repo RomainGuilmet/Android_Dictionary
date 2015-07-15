@@ -32,7 +32,6 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * TODO réfléchir à limiter les inserts (un meme mot uniquement une fois par heure)
  */
 public class HistoryFragment extends Fragment implements SearchDateAdapter.SearchDateAdapterCallback{
 
