@@ -46,7 +46,7 @@
         </activity>
         <activity
             android:name=".Controllers.CSVImportActivity"
-            android:label="@string/title_activity_csvimport"
+            android:label="@string/import_csv"
             android:parentActivityName=".Controllers.ListWordsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
