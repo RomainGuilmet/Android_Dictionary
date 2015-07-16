@@ -114,18 +114,31 @@ public class HistoryFragment extends Fragment {
         });
 
         gridViewHistory.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-            }
+            int currentVisibleItemCount;
+            int currentFirstVisibleItem;
+            int currentScrollState;
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                int lastInScreen = firstVisibleItem + visibleItemCount;
-                if ((lastInScreen == totalItemCount) && !(loadingMore) && !(allLoaded)) {
-                    progressDialog.show();
-                    Thread thread = new Thread(null, loadMoreHistory);
-                    thread.start();
+                this.currentVisibleItemCount = visibleItemCount;
+                this.currentFirstVisibleItem = firstVisibleItem;
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                this.currentScrollState = scrollState;
+                this.isScrollCompleted();
+            }
+
+            private void isScrollCompleted() {
+                if (this.currentVisibleItemCount > 0 && this.currentScrollState == SCROLL_STATE_IDLE) {
+                    int lastInScreen = currentFirstVisibleItem + currentVisibleItemCount;
+                    if ((lastInScreen == mySearchDateList.size()) && !(loadingMore) && !(allLoaded)) {
+                        progressDialog.show();
+                        Thread thread = new Thread(null, loadMoreHistory);
+                        thread.start();
+                    }
                 }
             }
         });

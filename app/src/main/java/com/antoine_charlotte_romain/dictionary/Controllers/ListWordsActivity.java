@@ -246,6 +246,17 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         gridViewWords.setTextFilterEnabled(true);
 
         gridViewWords.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            int currentVisibleItemCount;
+            int currentFirstVisibleItem;
+            int currentScrollState;
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                this.currentVisibleItemCount = visibleItemCount;
+                this.currentFirstVisibleItem = firstVisibleItem;
+            }
+
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (!open) {
@@ -265,19 +276,18 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                     }
                     myLastFirstVisibleItem = currentFirstVisibleItem;
                 }
+                this.currentScrollState = scrollState;
+                this.isScrollCompleted();
             }
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                int lastInScreen = firstVisibleItem + visibleItemCount;
-                if ((lastInScreen == totalItemCount) && !(loadingMore) && !(allLoaded)) {
-                    if (hidden) {
-                        menuButton.animate().translationY(0);
-                        hidden = false;
+            private void isScrollCompleted() {
+                if (this.currentVisibleItemCount > 0 && this.currentScrollState == SCROLL_STATE_IDLE) {
+                    int lastInScreen = currentFirstVisibleItem + currentVisibleItemCount;
+                    if ((lastInScreen == myWordsList.size()) && !(loadingMore) && !(allLoaded)) {
+                        progressDialog.show();
+                        Thread thread = new Thread(null, loadMoreListWords);
+                        thread.start();
                     }
-                    progressDialog.show();
-                    Thread thread = new Thread(null, loadMoreListWords);
-                    thread.start();
                 }
             }
         });
