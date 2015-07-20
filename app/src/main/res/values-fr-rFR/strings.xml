@@ -91,7 +91,7 @@
     <string name="historyCleared">L\'historique a été effacé.</string>
     <string name="loadingWords">Chargement de plus de mots.</string>
     <string name="loadingHistory">Chargement de plus d\'historique.</string>
-    <string name="exporting">Exportation </string>
+    <string name="exporting">Export de</string>
     <string name="file_already_exists">Le fichier existe déjà</string>
     <string name="overwrite">Écraser</string>
     <string name="export_progress">Exportation en cours</string>

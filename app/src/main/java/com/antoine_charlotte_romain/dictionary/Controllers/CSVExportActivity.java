@@ -19,7 +19,9 @@ import android.text.Selection;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import com.antoine_charlotte_romain.dictionary.Business.Word;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
+import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 
 import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
@@ -48,16 +51,31 @@ public class CSVExportActivity extends AppCompatActivity {
 
     private final int REQUEST_DIRECTORY = 0;
 
-    private final String INITIAL_DIRECTORY = Environment.getExternalStorageDirectory().toString();
-
     private Toolbar toolbar;
 
-    private EditText fileName, directory;
+    /**
+     * Used to enter the name of the exported file
+     */
+    private EditText fileName;
 
+    /**
+     * Used to choose the directory on the device where the file will be exported
+     */
+    private EditText directory;
+
+    /**
+     * The dictionary which will be exported
+     */
     private Dictionary dictionary;
 
+    /**
+     * Used to show the advancement of the export
+     */
     private ProgressDialog progress;
 
+    /**
+     * The dictionary choosed by the user
+     */
     private String selectedDirectory;
 
 
@@ -73,8 +91,12 @@ public class CSVExportActivity extends AppCompatActivity {
 
 
         fileName = (EditText) findViewById(R.id.editTextFile);
+        selectedDirectory = Environment.getExternalStorageDirectory().toString() + "/" + getString(R.string.app_name);
 
-        selectedDirectory = INITIAL_DIRECTORY;
+        //Creating a new file named like the application if not exists
+        File initialDir = new File (selectedDirectory);
+        initialDir.mkdir();
+
         directory = (EditText) findViewById(R.id.editTextDirectory);
         directory.setText(selectedDirectory);
         directory.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +113,7 @@ public class CSVExportActivity extends AppCompatActivity {
 
             fileName.setText(dictionary.getTitle() + ".csv");
             fileName.setSelection(0,dictionary.getTitle().length());
-            getSupportActionBar().setTitle(getString(R.string.exporting) + dictionary.getTitle());
+            getSupportActionBar().setTitle(getString(R.string.exporting) + " " +  dictionary.getTitle());
         }
 
 
@@ -121,6 +143,7 @@ public class CSVExportActivity extends AppCompatActivity {
         //Displaying the keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
+        setupUI(findViewById(R.id.export_layout));
     }
 
     /**
@@ -302,6 +325,31 @@ public class CSVExportActivity extends AppCompatActivity {
     }
 
 
+    public void setupUI(View view) {
 
+        //Set up touch listener for non-text box views to hide keyboard.
+        if(!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    KeyboardUtility.hideSoftKeyboard(CSVExportActivity.this);
+                    return false;
+                }
+
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupUI(innerView);
+            }
+        }
+    }
 }
 

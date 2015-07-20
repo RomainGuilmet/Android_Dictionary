@@ -89,7 +89,7 @@
     <string name="historyCleared">The history has been cleared.</string>
     <string name="loadingWords">Loading more words.</string>
     <string name="loadingHistory">Loading more history.</string>
-    <string name="exporting">Exporting </string>
+    <string name="exporting">Exporting</string>
     <string name="file_already_exists">File already exists</string>
     <string name="overwrite">Overwrite</string>
     <string name="export_progress">Export in progress</string>
