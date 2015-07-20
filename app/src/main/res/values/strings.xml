@@ -100,5 +100,6 @@
     <string name="before">Before :</string>
     <string name="after">After :</string>
     <string name="reset">Reset the search</string>
+    <string name="language">Language</string>
 
 </resources>

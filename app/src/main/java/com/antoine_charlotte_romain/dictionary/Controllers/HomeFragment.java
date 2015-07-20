@@ -1,9 +1,12 @@
 package com.antoine_charlotte_romain.dictionary.Controllers;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +16,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -39,6 +43,7 @@ import com.antoine_charlotte_romain.dictionary.Controllers.Lib.HeaderGridView;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,6 +107,11 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      * Used to communicating with the database
      */
     private DictionaryDataModel ddm;
+
+    /**
+     * Used to change app language
+     */
+    private Locale myLocale;
 
     /**
      * Used to handle a undo action after deleting a dictionary
@@ -586,13 +596,10 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
             @Override
             public void onViewDetachedFromWindow(View v) {
                 //Once snackbar is closed, whatever the way : undo button clicked, change activity, an other snackbar, etc.
-                if (!undo)
-                {
+                if (!undo) {
                     dictionaries.remove(d);
                     ddm.delete(d.getId());
-                }
-                else
-                {
+                } else {
                     dictionariesDisplay.add(position, d);
                     adapter.notifyDataSetChanged();
                 }
@@ -611,6 +618,47 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         Intent importCSVintent = new Intent(getActivity(), CSVExportActivity.class);
         importCSVintent.putExtra(MainActivity.EXTRA_DICTIONARY, dictionariesDisplay.get(position));
         startActivity(importCSVintent);
+    }
+
+    private void chooseLanguage(){
+        ArrayList<String> l = new ArrayList<>();
+        l.add("English");
+        l.add("Français");
+
+        String[] languages = new String[l.size()];
+        for (int i=0; i<l.size(); i++){
+            languages[i] = l.get(i);
+        }
+        final String[] s = languages.clone();
+
+        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.choose_dictionary)
+                .setItems(s, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Change language
+                        String lang = "en";
+                        switch (which){
+                            case 0 :
+                                lang = "en";
+                                break;
+                            case 1 :
+                                lang = "fr";
+                                break;
+                        }
+
+                        // Update interface
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert);
+        AlertDialog alert = ad.create();
+        alert.show();
     }
 
     @Override
@@ -653,6 +701,10 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
         {
+            case R.id.action_choose_language:
+                chooseLanguage();
+                return true;
+
             case R.id.action_add_dictionary:
                 create();
                 return true;
