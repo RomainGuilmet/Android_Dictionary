@@ -32,13 +32,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/gridViewHistory"
-        android:layout_below="@+id/historySearch"
         android:paddingTop="5dp"
         android:clipToPadding="false"
         android:numColumns="@integer/nb_columns_dico_grid"
         android:verticalSpacing="@dimen/vertical_spacing"
         android:horizontalSpacing="@dimen/grid_space"
         android:paddingLeft="@dimen/grid_space"
-        android:paddingRight="@dimen/grid_space" />
+        android:paddingRight="@dimen/grid_space"
+        android:layout_below="@+id/buttonAdvancedSearch" />
+
+    <Button
+        style="@style/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/advanced_search"
+        android:id="@+id/buttonAdvancedSearch"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:layout_below="@+id/historySearch"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        style="@style/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset"
+        android:id="@+id/buttonReset"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:layout_below="@+id/historySearch"
+        android:layout_alignLeft="@+id/historySearch"
+        android:layout_alignStart="@+id/historySearch" />
 
 </RelativeLayout>

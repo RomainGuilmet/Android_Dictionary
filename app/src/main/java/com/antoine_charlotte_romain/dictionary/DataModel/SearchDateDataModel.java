@@ -43,6 +43,13 @@ public class SearchDateDataModel extends DAOBase{
             " WHERE w." + WordDataModel.WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
             " OR sd." + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " LIKE ? ORDER BY " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " DESC;";
 
+    private static final String SQL_SELECT_SEARCH_DATE_BEFORE = "SELECT * FROM " + SearchDateEntry.TABLE_NAME + " WHERE " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " < ?;";
+
+    private static final String SQL_SELECT_SEARCH_DATE_AFTER = "SELECT * FROM " + SearchDateEntry.TABLE_NAME + " WHERE " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " > ?;";
+
+    private static final String SQL_SELECT_SEARCH_DATE_BETWEEN = "SELECT * FROM " + SearchDateEntry.TABLE_NAME + " WHERE " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " < ?"
+            + " AND " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " > ?;";
+
     private static final String SQL_SELECT_ALL_SEARCH_DATE = "SELECT * FROM " + SearchDateEntry.TABLE_NAME + " ORDER BY " + SearchDateEntry.COLUMN_NAME_SEARCH_DATE + " DESC" +
            " LIMIT ? OFFSET ?;";
 
@@ -115,7 +122,46 @@ public class SearchDateDataModel extends DAOBase{
     public ArrayList<SearchDate> select(String search){
         SQLiteDatabase db = open();
 
-        Cursor c = db.rawQuery(SQL_SELECT_SEARCH_DATE_FROM_WORD_OR_DATE, new String[]{String.valueOf(search) + "%", "%" + String.valueOf(search)+"%"});
+        Cursor c = db.rawQuery(SQL_SELECT_SEARCH_DATE_FROM_WORD_OR_DATE, new String[]{String.valueOf(search) + "%", "%" + String.valueOf(search) + "%"});
+
+        ArrayList<SearchDate> listDate = new ArrayList<>();
+        while (c.moveToNext()) {
+            SearchDate sd = select(c.getLong(c.getColumnIndexOrThrow(SearchDateEntry._ID)));
+            listDate.add(sd);
+        }
+        c.close();
+
+        return listDate;
+    }
+
+    /**
+     * Select all the searchDate registered before the first date and after the second one
+     * @param before the date we are wanted to find the history before
+     * @param after the date we are wanted to find the history after
+     * @return all the searchDate before the first string, after the second string or (if none is null) between the 2 strings
+     */
+    public ArrayList<SearchDate> select(String before, String after){
+        SQLiteDatabase db = open();
+
+        Cursor c;
+        if(!before.isEmpty()) {
+            // Search between two dates
+            if(!after.isEmpty()) {
+                c  = db.rawQuery(SQL_SELECT_SEARCH_DATE_BETWEEN, new String[]{String.valueOf(before), String.valueOf(after)});
+            }
+            // Search before only
+            else {
+                c  = db.rawQuery(SQL_SELECT_SEARCH_DATE_BEFORE, new String[]{String.valueOf(before)});
+            }
+        }
+        // Search after only
+        else if(!after.isEmpty()) {
+            c  = db.rawQuery(SQL_SELECT_SEARCH_DATE_AFTER, new String[]{String.valueOf(after)});
+        }
+        // If the two strings are null we return null
+        else {
+            return null;
+        }
 
         ArrayList<SearchDate> listDate = new ArrayList<>();
         while (c.moveToNext()) {

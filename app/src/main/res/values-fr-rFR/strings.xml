@@ -97,5 +97,8 @@
     <string name="export_progress">Exportation en cours</string>
     <string name="open_it">Ouvrir le csv</string>
     <string name="no_apps">Aucune application lisant les csv n\'est installée.</string>
+    <string name="before">Avant :</string>
+    <string name="after">Après :</string>
+    <string name="reset">Effacer la recherche</string>
 
 </resources>

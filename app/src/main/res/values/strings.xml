@@ -97,5 +97,8 @@
     <string name="no_apps">No supported apps installed.</string>
     <string name="change_directory">Change directory</string>
     <string name="directory">Directory :</string>
+    <string name="before">Before :</string>
+    <string name="after">After :</string>
+    <string name="reset">Reset the search</string>
 
 </resources>
