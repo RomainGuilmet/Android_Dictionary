@@ -39,6 +39,7 @@ public class SearchFragment extends Fragment {
     private EditText endText;
     private EditText targetDictionary;
     private EditText searchIn;
+    private RadioGroup radioGroup;
     private RadioButton partWord;
     private RadioButton wholeWord;
     private MenuItem searchTabButton;
@@ -57,6 +58,7 @@ public class SearchFragment extends Fragment {
         endText = ((EditText) thisView.findViewById(R.id.endString));
         targetDictionary = ((EditText) thisView.findViewById(R.id.targetDico));
         searchIn = ((EditText) thisView.findViewById(R.id.searchin));
+        radioGroup =((RadioGroup) thisView.findViewById(R.id.boutonsradio));
         partWord = ((RadioButton) thisView.findViewById(R.id.part));
         wholeWord = ((RadioButton) thisView.findViewById(R.id.whole));
 
@@ -82,6 +84,8 @@ public class SearchFragment extends Fragment {
         else {
             targetDictionary.setText(getString(R.string.target_dico)+ selectedDictionary.getTitle());
         }
+
+        radioGroup.check(R.id.part);
 
         searchIn.setText(getString(R.string.search_in) + " : " + searchOptions[0]);
         beginningText.setText("");

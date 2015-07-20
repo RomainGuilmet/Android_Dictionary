@@ -2,12 +2,14 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -28,7 +32,10 @@ import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.SearchDateDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +46,8 @@ public class HistoryFragment extends Fragment {
     private EditText historySearch;
     private GridView gridViewHistory;
     private ProgressDialog progressDialog;
+    private Button advancedSearchButton;
+    private Button resetButton;
 
     private SearchDateDataModel sddm;
     private ArrayList<SearchDate> mySearchDateList;
@@ -56,6 +65,8 @@ public class HistoryFragment extends Fragment {
 
         historySearch = (EditText) thisView.findViewById(R.id.historySearch);
         gridViewHistory = (GridView) thisView.findViewById(R.id.gridViewHistory);
+        advancedSearchButton = (Button) thisView.findViewById(R.id.buttonAdvancedSearch);
+        resetButton = (Button) thisView.findViewById(R.id.buttonReset);
 
         initListView();
 
@@ -173,6 +184,111 @@ public class HistoryFragment extends Fragment {
                     }
                     myAdapter.notifyDataSetChanged();
                 }
+            }
+        });
+
+        advancedSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.history_advanced_search_dialog, null);
+                dialogBuilder.setView(dialogView);
+
+                final EditText dateBeforeEditText = (EditText) dialogView.findViewById(R.id.editTextBefore);
+                final EditText dateAfterEditText = (EditText) dialogView.findViewById(R.id.editTextAfter);
+                dateBeforeEditText.setInputType(InputType.TYPE_NULL);
+                dateAfterEditText.setInputType(InputType.TYPE_NULL);
+
+                final Calendar myCalendar = Calendar.getInstance();
+
+                final DatePickerDialog.OnDateSetListener dateBeforeCalendar = new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        String myFormat = "yyyy-MM-dd";
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                        dateBeforeEditText.setText(sdf.format(myCalendar.getTime()));
+                    }
+
+                };
+
+                dateBeforeEditText.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        new DatePickerDialog(getActivity(), dateBeforeCalendar, myCalendar
+                                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    }
+                });
+
+                final DatePickerDialog.OnDateSetListener dateAfterCalendar = new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        String myFormat = "yyyy-MM-dd";
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                        dateAfterEditText.setText(sdf.format(myCalendar.getTime()));
+                    }
+
+                };
+
+                dateAfterEditText.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        new DatePickerDialog(getActivity(), dateAfterCalendar, myCalendar
+                                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    }
+                });
+
+
+                dialogBuilder.setTitle(R.string.advanced_search);
+
+                dialogBuilder.setPositiveButton(R.string.search, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mySearchDateList.clear();
+                        ArrayList<SearchDate> tempList = sddm.select(dateBeforeEditText.getText().toString(), dateAfterEditText.getText().toString());
+                        if (tempList != null) {
+                            for (int i = 0; i < tempList.size(); i++) {
+                                mySearchDateList.add(tempList.get(i));
+                            }
+                        }
+                        myAdapter.notifyDataSetChanged();
+                        dialog.cancel();
+                    }
+                });
+
+                dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.show();
+            }
+        });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initListView();
             }
         });
     }
