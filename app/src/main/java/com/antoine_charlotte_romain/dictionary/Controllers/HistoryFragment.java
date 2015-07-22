@@ -270,6 +270,7 @@ public class HistoryFragment extends Fragment {
                             }
                         }
                         myAdapter.notifyDataSetChanged();
+                        allLoaded = true;
                         dialog.cancel();
                     }
                 });
