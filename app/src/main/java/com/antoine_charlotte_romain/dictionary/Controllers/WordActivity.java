@@ -148,7 +148,7 @@ public class WordActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                boolean isReady = headwordText.getText().toString().length() > 0;
+                boolean isReady = headwordText.getText().toString().trim().length() > 0;
                 saveButton.setVisible(isReady);
             }
 

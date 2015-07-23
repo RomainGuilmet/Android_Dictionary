@@ -100,5 +100,9 @@
     <string name="before">Avant :</string>
     <string name="after">Après :</string>
     <string name="reset">Effacer la recherche</string>
+    <string name="about">A propos</string>
+    <string name="language">Langue</string>
+    <string name="available_languages">Langues disponibles</string>
+    <string name="title_activity_language">Choix d\'une langue</string>
 
 </resources>

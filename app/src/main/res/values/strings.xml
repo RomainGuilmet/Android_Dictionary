@@ -100,4 +100,8 @@
     <string name="before">Before :</string>
     <string name="after">After :</string>
     <string name="reset">Reset the search</string>
+    <string name="about">About</string>
+    <string name="language">Language</string>
+    <string name="available_languages">Available languages</string>
+    <string name="title_activity_language">Language selection</string>
 </resources>
