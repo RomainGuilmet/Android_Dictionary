@@ -138,7 +138,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                boolean isReady = beginningText.getText().toString().length() > 0;
+                boolean isReady = beginningText.getText().toString().trim().length() > 0;
                 searchTabButton.setVisible(isReady);
             }
 
@@ -155,7 +155,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                boolean isReady = containsText.getText().toString().length() > 0;
+                boolean isReady = containsText.getText().toString().trim().length() > 0;
                 searchTabButton.setVisible(isReady);
             }
 
@@ -170,7 +170,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                boolean isReady = endText.getText().toString().length() > 0;
+                boolean isReady = endText.getText().toString().trim().length() > 0;
                 searchTabButton.setVisible(isReady);
             }
 
