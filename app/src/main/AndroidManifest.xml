@@ -13,17 +13,18 @@
         <activity
             android:name=".Controllers.MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Controllers.ListWordsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/list_words_activity"
             android:launchMode="singleTop"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".Controllers.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -64,7 +65,14 @@
 
         <!-- external libraries -->
         <activity android:name="net.rdrei.android.dirchooser.DirectoryChooserActivity" />
+        <activity
+            android:name=".Controllers.LanguageActivity"
+            android:label="@string/title_activity_language"
+            android:parentActivityName=".Controllers.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity" />
+        </activity>
     </application>
-
 
 </manifest>
