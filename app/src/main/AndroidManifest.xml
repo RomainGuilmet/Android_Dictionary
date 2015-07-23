@@ -73,6 +73,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.MainActivity" />
         </activity>
+
+        <activity
+            android:name=".Controllers.AboutActivity"
+            android:label="@string/about"
+            android:parentActivityName=".Controllers.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

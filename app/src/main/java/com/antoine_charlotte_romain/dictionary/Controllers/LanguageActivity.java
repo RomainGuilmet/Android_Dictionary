@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -39,27 +40,27 @@ public class LanguageActivity extends AppCompatActivity {
         // Display results
         languages = (ListView) findViewById(R.id.languagesList);
 
-        ArrayList<String> l = new ArrayList<>();
-        l.add("English");
-        l.add("Français");
+        ArrayList<String> al = new ArrayList<>();
+        al.add("English");
+        al.add("Français");
 
         ArrayList<String> correspondingCode = new ArrayList<>();
         correspondingCode.add("en");
         correspondingCode.add("fr");
 
-        List<HashMap<String, String>> liste = new ArrayList<>();
+        List<HashMap<String, String>> list = new ArrayList<>();
         HashMap<String, String> element;
 
-        for (int i = 0; i < l.size(); i++) {
+        for (int i = 0; i < al.size(); i++) {
             // we add each language of the previous list in this new list
             element = new HashMap<>();
-            element.put("language", l.get(i));
+            element.put("language", al.get(i));
             element.put("code", correspondingCode.get(i));
-            liste.add(element);
+            list.add(element);
         }
 
         ListAdapter adapter = new SimpleAdapter(this,
-                liste,
+                list,
                 android.R.layout.simple_list_item_1,
                 new String[]{"language"},
                 new int[]{android.R.id.text1});

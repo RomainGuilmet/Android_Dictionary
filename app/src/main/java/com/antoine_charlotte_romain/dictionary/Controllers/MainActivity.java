@@ -1,9 +1,14 @@
 package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.DrawerAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.ViewPagerAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
 import com.antoine_charlotte_romain.dictionary.R;
@@ -48,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private SlidingTabLayout tabs;
     private int numbOfTabs = 3;
 
+    private DrawerLayout myDrawerLayout;
+    private RecyclerView myDrawerList;
+    private ActionBarDrawerToggle myDrawerToggle;
+    private DrawerAdapter myAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,17 +68,66 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+        String[] myPlanetTitles = {getString(R.string.language), getString(R.string.about)};
+        int[] icons = {R.drawable.ic_language_white_24dp, R.drawable.ic_info_white_24dp};
+        myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        myDrawerList = (RecyclerView) findViewById(R.id.left_drawer);
+
+        // Set the adapter for the list view
+        myAdapter = new DrawerAdapter(myPlanetTitles, icons);
+        myDrawerList.setAdapter(myAdapter);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        myDrawerList.setLayoutManager(mLayoutManager);
+
+        myDrawerToggle = new ActionBarDrawerToggle(this, myDrawerLayout, toolbar, R.string.language, R.string.about) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        myDrawerLayout.setDrawerListener(myDrawerToggle);
+        myDrawerToggle.syncState();
+
+        myAdapter.SetOnItemClickListener(new DrawerAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View v , int position) {
+                // Languages position
+                if(position == 1){
+                    Intent languageIntent = new Intent(getApplicationContext(), LanguageActivity.class);
+                    startActivity(languageIntent);
+                }
+
+                // About position
+                else if(position == 2){
+                    Intent aboutIntent = new Intent(getApplicationContext(), AboutActivity.class);
+                    startActivity(aboutIntent);
+                }
+            }
+        });
+
+
+        // Retrieving the intent to know the fragment to show
         Intent intent = getIntent();
         String fragment = intent.getStringExtra("fragment");
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),numbOfTabs);
+        adapter =  new ViewPagerAdapter(getSupportFragmentManager(), numbOfTabs);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setOffscreenPageLimit(numbOfTabs);
         pager.setAdapter(adapter);
-
 
         // Assigning the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
@@ -92,10 +152,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        myDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        myDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -114,6 +186,10 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (myDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 

@@ -102,6 +102,8 @@
     <string name="reset">Reset the search</string>
     <string name="about">About</string>
     <string name="language">Language</string>
-    <string name="available_languages">Available languages</string>
     <string name="title_activity_language">Language selection</string>
+    <string name="version">Version 1.0</string>
+    <string name="about_message">App created by GUILMET Romain, JOERG Antoine and TOUCHARD Charlotte.</string>
+    <string name="all_rights_reserved">University of Limerick - All rights reserved.</string>
 </resources>
