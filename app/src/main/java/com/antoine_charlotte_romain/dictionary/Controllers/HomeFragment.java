@@ -620,47 +620,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         startActivity(importCSVintent);
     }
 
-    private void chooseLanguage(){
-        ArrayList<String> l = new ArrayList<>();
-        l.add("English");
-        l.add("Français");
-
-        String[] languages = new String[l.size()];
-        for (int i=0; i<l.size(); i++){
-            languages[i] = l.get(i);
-        }
-        final String[] s = languages.clone();
-
-        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.choose_dictionary)
-                .setItems(s, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Change language
-                        String lang = "en";
-                        switch (which){
-                            case 0 :
-                                lang = "en";
-                                break;
-                            case 1 :
-                                lang = "fr";
-                                break;
-                        }
-
-                        // Update interface
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
-                    }
-                })
-                .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert);
-        AlertDialog alert = ad.create();
-        alert.show();
-    }
-
     @Override
     public void notifyDeleteListChanged()
     {
@@ -701,10 +660,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
         {
-            case R.id.action_choose_language:
-                chooseLanguage();
-                return true;
-
             case R.id.action_add_dictionary:
                 create();
                 return true;

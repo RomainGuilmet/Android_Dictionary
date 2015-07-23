@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -229,8 +228,7 @@ public class SearchFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert);
+                });
         AlertDialog alert = ad.create();
         alert.show();
     }
@@ -261,8 +259,7 @@ public class SearchFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert);
+                });
         AlertDialog alert = ad.create();
         alert.show();
     }
