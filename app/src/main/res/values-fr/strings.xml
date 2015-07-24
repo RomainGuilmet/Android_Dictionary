@@ -38,6 +38,7 @@
     <string name="dictionary_name">Nom du dictionnaire</string>
     <string name="add_dictionary">Ajouter un dictionnaire</string>
     <string name="dictionary_not_added">Impossible d\'ajouter ce dictionnaire. Nom déjà pris.</string>
+    <string name="dictionary_not_added_empty_string">Impossible d\'ajouter ce dictionnaire. Entrez un nom.</string>
     <string name="dico_name_not_available">Impossible de créer ce dictionnaire. Nom déjà pris.</string>
     <string name="close_button">Fermer</string>
     <string name="delete">Supprimer</string>

@@ -406,14 +406,24 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         builder.setPositiveButton(R.string.add,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Dictionary d = new Dictionary(nameBox.getText().toString());
-                        if (ddm.insert(d) == 1) {
-                            dictionariesDisplay.add(d);
-                            dictionaries.add(d);
-                            searchBox.setText("");
-                            read(dictionariesDisplay.indexOf(d));
+                        System.out.println("xxx"+nameBox.getText().toString()+"xxx");
+                        if (!nameBox.getText().toString().equals("")) {
+                            Dictionary d = new Dictionary(nameBox.getText().toString());
+                            if (ddm.insert(d) == 1) {
+                                dictionariesDisplay.add(d);
+                                dictionaries.add(d);
+                                searchBox.setText("");
+                                read(dictionariesDisplay.indexOf(d));
+                            } else {
+                                Snackbar.make(rootLayout, R.string.dictionary_not_added, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                    }
+                                }).show();
+                            }
                         } else {
-                            Snackbar.make(rootLayout, R.string.dictionary_not_added, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                            Snackbar.make(rootLayout, R.string.dictionary_not_added_empty_string, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 

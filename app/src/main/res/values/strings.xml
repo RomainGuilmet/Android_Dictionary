@@ -36,6 +36,7 @@
     <string name="dictionary_name">Dictionary Name</string>
     <string name="add_dictionary">Add a dictionary</string>
     <string name="dictionary_not_added">Can\'t add this dictionary. Name already taken.</string>
+    <string name="dictionary_not_added_empty_string">Can\'t add this dictionary. Choose a name.</string>
     <string name="dico_name_not_available">Can\'t choose this dictionary name. Name already taken.</string>
     <string name="close_button">Close</string>
     <string name="delete">Delete</string>
