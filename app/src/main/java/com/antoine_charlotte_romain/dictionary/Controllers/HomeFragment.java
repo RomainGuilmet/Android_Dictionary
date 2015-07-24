@@ -109,11 +109,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private DictionaryDataModel ddm;
 
     /**
-     * Used to change app language
-     */
-    private Locale myLocale;
-
-    /**
      * Used to handle a undo action after deleting a dictionary
      */
     private boolean undo;
