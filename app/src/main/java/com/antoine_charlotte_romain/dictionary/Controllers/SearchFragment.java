@@ -79,10 +79,10 @@ public class SearchFragment extends Fragment {
 
         // set dictionary
         if(selectedDictionary == null) {
-            targetDictionary.setText(getString(R.string.target_dico) + MainActivity.ALL_DICO);
+            targetDictionary.setText(getString(R.string.target_dico) + " : " + MainActivity.ALL_DICO);
         }
         else {
-            targetDictionary.setText(getString(R.string.target_dico) + selectedDictionary.getTitle());
+            targetDictionary.setText(getString(R.string.target_dico) + " : " + selectedDictionary.getTitle());
         }
 
         // check part radio button
@@ -255,7 +255,7 @@ public class SearchFragment extends Fragment {
                 .setItems(names, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        targetDictionary.setText(getString(R.string.target_dico) + names[which]);
+                        targetDictionary.setText(getString(R.string.target_dico) + " : " + names[which]);
                     }
                 })
                 .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
@@ -290,7 +290,7 @@ public class SearchFragment extends Fragment {
 
         // Let's get the chosen search option
         String tmp = searchIn.getText().toString();
-        String searchChoice = tmp.replace(getString(R.string.search_in) + " : ", "");
+        String searchChoice = tmp.replace((getString(R.string.search_in) + " : "), "");
 
         switch (getSearchChoiceRank(searchChoice)) {
             case 0:
@@ -309,7 +309,7 @@ public class SearchFragment extends Fragment {
 
         // Let's get the targeted dictionary
         tmp = targetDictionary.getText().toString();
-        String dico = tmp.replace(getString(R.string.target_dico), "");
+        String dico = tmp.replace((getString(R.string.target_dico) + " : "), "");
         intent.putExtra(MainActivity.EXTRA_DICTIONARY, dico);
 
         startActivity(intent);
