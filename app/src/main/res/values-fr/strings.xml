@@ -86,7 +86,7 @@
     <string name="dictionaries">dictionnaires</string>
     <string name="word">mot</string>
     <string name="words">mots</string>
-    <string name="target_dico">Dictionnaire cible : </string>
+    <string name="target_dico">Dictionnaire cible</string>
     <string name="no_result">Pas de résultat</string>
     <string name="clearHistory">Nettoyer l\'historique</string>
     <string name="historyCleared">L\'historique a été effacé.</string>

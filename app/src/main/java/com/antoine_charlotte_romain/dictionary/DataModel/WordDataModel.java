@@ -345,6 +345,13 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectHeadword(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
+        // if there is no begin and/or end string, make sure that the middle string will
+        // be in the middle of the word, and not at the beginning or the end
+        if (begin.equals(""))
+            begin = "_";
+        if (end.equals(""))
+            end = "_";
+
         String search = begin+"%"+middle+"%"+end;
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
@@ -374,6 +381,13 @@ public class WordDataModel extends DAOBase{
      */
     public ArrayList<Word> selectTranslation(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
+
+        // if there is no begin and/or end string, make sure that the middle string will
+        // be in the middle of the word, and not at the beginning or the end
+        if (begin.equals(""))
+            begin = "_";
+        if (end.equals(""))
+            end = "_";
 
         String search = begin+"%"+middle+"%"+end;
         Cursor c;
@@ -405,6 +419,13 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectNote(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
+        // if there is no begin and/or end string, make sure that the middle string will
+        // be in the middle of the word, and not at the beginning or the end
+        if (begin.equals(""))
+            begin = "_";
+        if (end.equals(""))
+            end = "_";
+
         String search = begin+"%"+middle+"%"+end;
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
@@ -434,6 +455,13 @@ public class WordDataModel extends DAOBase{
      */
     public ArrayList<Word> selectWholeWord(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
+
+        // if there is no begin and/or end string, make sure that the middle string will
+        // be in the middle of the word, and not at the beginning or the end
+        if (begin.equals(""))
+            begin = "_";
+        if (end.equals(""))
+            end = "_";
 
         String search = begin+"%"+middle+"%"+end;
         Cursor c;

@@ -78,10 +78,10 @@ public class SearchFragment extends Fragment {
         super.onResume();
 
         if(selectedDictionary == null) {
-            targetDictionary.setText(getString(R.string.target_dico) + MainActivity.ALL_DICO);
+            targetDictionary.setText(getString(R.string.target_dico) + " : " + MainActivity.ALL_DICO);
         }
         else {
-            targetDictionary.setText(getString(R.string.target_dico)+ selectedDictionary.getTitle());
+            targetDictionary.setText(getString(R.string.target_dico) + " : " + selectedDictionary.getTitle());
         }
 
         radioGroup.check(R.id.part);

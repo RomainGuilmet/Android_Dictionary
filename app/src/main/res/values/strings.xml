@@ -84,7 +84,7 @@
     <string name="dictionaries">dictionaries</string>
     <string name="word">word</string>
     <string name="words">words</string>
-    <string name="target_dico">Target dictionary : </string>
+    <string name="target_dico">Target dictionary</string>
     <string name="no_result">No result</string>
     <string name="clearHistory">Clear the history</string>
     <string name="historyCleared">The history has been cleared.</string>
