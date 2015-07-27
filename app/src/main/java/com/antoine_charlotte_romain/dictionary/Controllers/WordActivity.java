@@ -116,7 +116,7 @@ public class WordActivity extends AppCompatActivity {
         translationText.setText(selectedWord.getTranslation());
         noteText.setText(selectedWord.getNote());
 
-        getSupportActionBar().setTitle(getString(R.string.details) + selectedWord.getHeadword());
+        getSupportActionBar().setTitle(getString(R.string.details) + " : " + selectedWord.getHeadword());
 
         SearchDateDataModel sddm = new SearchDateDataModel(getApplicationContext());
         SearchDate sd = new SearchDate(selectedWord);
