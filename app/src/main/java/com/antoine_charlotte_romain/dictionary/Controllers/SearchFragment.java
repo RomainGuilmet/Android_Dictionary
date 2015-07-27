@@ -77,6 +77,7 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        // set dictionary
         if(selectedDictionary == null) {
             targetDictionary.setText(getString(R.string.target_dico) + " : " + MainActivity.ALL_DICO);
         }
@@ -84,8 +85,10 @@ public class SearchFragment extends Fragment {
             targetDictionary.setText(getString(R.string.target_dico) + " : " + selectedDictionary.getTitle());
         }
 
+        // check part radio button
         radioGroup.check(R.id.part);
 
+        // set search option
         searchIn.setText(getString(R.string.search_in) + " : " + searchOptions[0]);
         beginningText.setText("");
         containsText.setText("");
