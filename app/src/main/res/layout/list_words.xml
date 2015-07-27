@@ -24,7 +24,8 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="@dimen/edit_text_margin"
         android:layout_marginEnd="@dimen/edit_text_margin"
-        android:onClick="advancedSearch" />
+        android:onClick="advancedSearch"
+        android:background="?android:attr/selectableItemBackground"/>
 
     <GridView
         android:layout_width="match_parent"

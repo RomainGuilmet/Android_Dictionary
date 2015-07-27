@@ -44,7 +44,7 @@
     <string name="deleted">" has been deleted."</string>
     <string name="created">" has been created."</string>
     <string name="updated">" has been updated."</string>
-    <string name="rename_dictionary">Rename a dictionary</string>
+    <string name="rename_dictionary">Rename this dictionary</string>
     <string name="dictionary_renamed">Dictionary renamed.</string>
     <string name="dictionary_not_renamed">Can\'t rename this dictionary. Name already taken.</string>
     <string name="open">Open</string>
@@ -84,7 +84,7 @@
     <string name="dictionaries">dictionaries</string>
     <string name="word">word</string>
     <string name="words">words</string>
-    <string name="target_dico">Target dictionary</string>
+    <string name="target_dico">Target dictionary : </string>
     <string name="no_result">No result</string>
     <string name="clearHistory">Clear the history</string>
     <string name="historyCleared">The history has been cleared.</string>
