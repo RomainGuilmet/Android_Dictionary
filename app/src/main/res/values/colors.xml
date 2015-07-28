@@ -20,15 +20,13 @@
     <!-- http://www.google.com/design/spec/style/color.html#color-color-palette -->
 
 
-    <color name="colorPrimary">@color/cyan_500</color>
+    <color name="colorPrimary">@color/blue_800</color>
     <color name="windowBackground">@color/grey_200</color>
-    <color name="colorPrimaryDark">@color/cyan_600</color>
-    <color name="tabsScrollColor">@color/lime_A100</color>
-    <color name="colorAccent">@color/cyan_500</color>
+    <color name="colorPrimaryDark">@color/blue_900</color>
+    <color name="tabsScrollColor">@color/yellow_500</color>
     <color name="textColor">@color/grey_800</color>
     <color name="subTextColor">@color/grey_500</color>
-    <color name="colorTextFlatButton">@color/blue_600</color>
-    <color name="buttonColor">@color/white</color>
+    <color name="rowBackground">@color/white</color>
 
     <!-- Red -->
     <color name="red_50">#FFEBEE</color>

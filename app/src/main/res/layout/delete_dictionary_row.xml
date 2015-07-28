@@ -17,7 +17,7 @@
         android:textColor="@color/textColor"
         android:singleLine="true"
         android:textSize="@dimen/textSize"
-        android:background="@color/white"
+        android:background="@color/rowBackground"
         android:layout_toLeftOf="@+id/delete_box"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/delete_box"
-        android:background="@color/white"
+        android:background="@color/rowBackground"
         android:paddingRight="@dimen/more_button_padding"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
