@@ -347,10 +347,12 @@ public class WordDataModel extends DAOBase{
 
         // if there is no begin and/or end string, make sure that the middle string will
         // be in the middle of the word, and not at the beginning or the end
-        if (begin.equals(""))
-            begin = "_";
-        if (end.equals(""))
-            end = "_";
+        if(!middle.equals("")) {
+            if (begin.equals(""))
+                begin = "_";
+            if (end.equals(""))
+                end = "_";
+        }
 
         String search = begin+"%"+middle+"%"+end;
         Cursor c;
@@ -384,10 +386,12 @@ public class WordDataModel extends DAOBase{
 
         // if there is no begin and/or end string, make sure that the middle string will
         // be in the middle of the word, and not at the beginning or the end
-        if (begin.equals(""))
-            begin = "_";
-        if (end.equals(""))
-            end = "_";
+        if(!middle.equals("")) {
+            if (begin.equals(""))
+                begin = "_";
+            if (end.equals(""))
+                end = "_";
+        }
 
         String search = begin+"%"+middle+"%"+end;
         Cursor c;
@@ -421,10 +425,12 @@ public class WordDataModel extends DAOBase{
 
         // if there is no begin and/or end string, make sure that the middle string will
         // be in the middle of the word, and not at the beginning or the end
-        if (begin.equals(""))
-            begin = "_";
-        if (end.equals(""))
-            end = "_";
+        if(!middle.equals("")) {
+            if (begin.equals(""))
+                begin = "_";
+            if (end.equals(""))
+                end = "_";
+        }
 
         String search = begin+"%"+middle+"%"+end;
         Cursor c;
@@ -458,10 +464,12 @@ public class WordDataModel extends DAOBase{
 
         // if there is no begin and/or end string, make sure that the middle string will
         // be in the middle of the word, and not at the beginning or the end
-        if (begin.equals(""))
-            begin = "_";
-        if (end.equals(""))
-            end = "_";
+        if(!middle.equals("")) {
+            if (begin.equals(""))
+                begin = "_";
+            if (end.equals(""))
+                end = "_";
+        }
 
         String search = begin+"%"+middle+"%"+end;
         Cursor c;
