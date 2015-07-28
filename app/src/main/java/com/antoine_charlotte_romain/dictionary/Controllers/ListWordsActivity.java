@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -806,7 +808,11 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
      * @param i an int to put a little delay between each animation
      */
     private void animationOpenMenu(View v, int i){
-        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -125*i);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -(size.y*10/100)*i);
         PropertyValuesHolder pvhsX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1);
         PropertyValuesHolder pvhsY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1);
 
