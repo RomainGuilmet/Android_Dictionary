@@ -94,16 +94,16 @@ public class WordDataModel extends DAOBase{
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_OR = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE (UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?" +
-            " OR UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?" +
-            " OR UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?)" +
+            " WHERE ( (UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ? )" +
+            " OR (UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ? )" +
+            " OR (UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ? ))" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY_OR = "SELECT * FROM " + WordEntry.TABLE_NAME +
             " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
-            " AND (UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?" +
-            " OR UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?" +
-            " OR UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?)" +
+            " AND ( (UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ? )" +
+            " OR (UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ? )" +
+            " OR (UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ? ))" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION = "SELECT * FROM " + WordEntry.TABLE_NAME +
@@ -448,9 +448,12 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectHeadwordOrOption(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
-        begin = begin + "%";
-        middle = "_%" + middle + "%";
-        end = "%" + end;
+        if (!begin.equals(""))
+            begin = begin + "%";
+        if (!middle.equals(""))
+            middle = "_%" + middle + "%";
+        if (!end.equals(""))
+            end = "%" + end;
 
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
@@ -521,9 +524,12 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectTranslationOrOption(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
-        begin = begin + "%";
-        middle = "_%" + middle + "%";
-        end = "%" + end;
+        if (!begin.equals(""))
+            begin = begin + "%";
+        if (!middle.equals(""))
+            middle = "_%" + middle + "%";
+        if (!end.equals(""))
+            end = "%" + end;
 
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
@@ -594,9 +600,12 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectNoteOrOption(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
-        begin = begin + "%";
-        middle = "_%" + middle + "%";
-        end = "%" + end;
+        if (!begin.equals(""))
+            begin = begin + "%";
+        if (!middle.equals(""))
+            middle = "_%" + middle + "%";
+        if (!end.equals(""))
+            end = "%" + end;
 
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
@@ -666,9 +675,12 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectWholeWordOrOption(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
-        begin = begin + "%";
-        middle = "_%" + middle + "%";
-        end = "%" + end;
+        if (!begin.equals(""))
+            begin = begin + "%";
+        if (!middle.equals(""))
+            middle = "_%" + middle + "%";
+        if (!end.equals(""))
+            end = "%" + end;
 
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
