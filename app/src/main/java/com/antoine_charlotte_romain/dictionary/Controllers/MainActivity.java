@@ -28,8 +28,8 @@ import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
  */
 public class MainActivity extends AppCompatActivity {
 
-    public final static int ADVANCED_HOME_FRAGMENT = 0;
-    public final static int ADVANCED_HISTORY_FRAGMENT = 1;
+    public final static int HOME_FRAGMENT = 0;
+    public final static int HISTORY_FRAGMENT = 1;
     public final static int ADVANCED_SEARCH_FRAGMENT = 2;
     public final static String EXTRA_DICTIONARY = "SelectedDictionary";
     public final static String EXTRA_FRAGMENT = "fragment";
@@ -151,6 +151,25 @@ public class MainActivity extends AppCompatActivity {
         if(fragment != null && fragment.equalsIgnoreCase("advancedSearch")){
             pager.setCurrentItem(ADVANCED_SEARCH_FRAGMENT);
         }
+
+        // Pager Listener
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            public void onPageSelected(int position) {
+                if(position == HOME_FRAGMENT){
+                    addButton.animate().translationY(0);
+                }
+                else {
+                    addButton.animate().translationY(350);
+                }
+            }
+        });
+
 
         setupUI(findViewById(R.id.main_layout));
 

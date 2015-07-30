@@ -22,11 +22,13 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -134,7 +136,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
 
     private int myLastFirstVisibleItem;
     private boolean hidden;
-    private boolean isCreatedFragment = false;
 
 
     /*---------------------------------------------------------
@@ -165,7 +166,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         initGridView();
         initEditText();
 
-        isCreatedFragment = true;
         return v;
     }
 
@@ -720,19 +720,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
 
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if(isCreatedFragment) {
-            if (isVisibleToUser) {
-                addButton.animate().translationY(0);
-            } else {
-                addButton.animate().translationY(350);
-            }
         }
     }
 }
