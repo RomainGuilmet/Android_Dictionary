@@ -50,6 +50,7 @@
     <string name="dictionary_renamed">Dictionnaire renommé.</string>
     <string name="dictionary_not_renamed">Impossible de renommer ce dictionnaire. Nom déjà pris.</string>
     <string name="open">Ouvrir</string>
+    <string name="close">Fermer</string>
     <string name="search">Rechercher</string>
     <string name="search_in">Rechercher dans</string>
     <string name="advanced_search">Recherche avancée</string>

@@ -12,6 +12,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -131,6 +134,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
 
     private int myLastFirstVisibleItem;
     private boolean hidden;
+    private boolean isCreatedFragment = false;
 
 
     /*---------------------------------------------------------
@@ -160,6 +164,8 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         initFloatingActionButton();
         initGridView();
         initEditText();
+
+        isCreatedFragment = true;
         return v;
     }
 
@@ -329,7 +335,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     private void initFloatingActionButton()
     {
-        addButton = (FloatingActionButton) v.findViewById(R.id.add_button);
+        addButton = ((MainActivity)(getActivity())).addButton;
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -717,4 +723,16 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         }
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(isCreatedFragment) {
+            if (isVisibleToUser) {
+                addButton.animate().translationY(0);
+            } else {
+                addButton.animate().translationY(350);
+            }
+        }
+    }
 }

@@ -47,40 +47,40 @@ public class WordDataModel extends DAOBase{
                      " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " = ?;";
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " = ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_TRANSLATION = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " = ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_TRANSLATION_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " = ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_NOTE = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " = ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_NOTE_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " = ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_ALL_DATA = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " = ?" +
-            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " = ?" +
-            " OR " + WordEntry.COLUMN_NAME_NOTE + " = ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_ALL_DATA_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE (" + WordEntry.COLUMN_NAME_HEADWORD + " = ?" +
-            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " = ?" +
-            " OR " + WordEntry.COLUMN_NAME_NOTE + " = ? )" +
+            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ? " +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
