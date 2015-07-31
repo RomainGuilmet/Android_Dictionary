@@ -20,10 +20,10 @@
     <!-- http://www.google.com/design/spec/style/color.html#color-color-palette -->
 
 
-    <color name="colorPrimary">@color/blue_800</color>
+    <color name="colorPrimary">@color/light_blue_700</color>
     <color name="windowBackground">@color/grey_200</color>
-    <color name="colorPrimaryDark">@color/blue_900</color>
-    <color name="tabsScrollColor">@color/yellow_500</color>
+    <color name="colorPrimaryDark">@color/light_blue_800</color>
+    <color name="tabsScrollColor">@color/lime_A100</color>
     <color name="textColor">@color/grey_800</color>
     <color name="subTextColor">@color/grey_500</color>
     <color name="rowBackground">@color/white</color>

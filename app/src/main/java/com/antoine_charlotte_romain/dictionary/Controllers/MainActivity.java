@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_SEARCH_DATA = "searchOption";
     public static final String EXTRA_PART_OR_WHOLE = "partOrWhole";
     public static final String EXTRA_NEW_DICO_NAME = "namedico";
+    public static final String EXTRA_RENAME = "rename";
     public static final String ALL_DICO = "All";
 
     public static final String WHOLE_WORD = "whole";

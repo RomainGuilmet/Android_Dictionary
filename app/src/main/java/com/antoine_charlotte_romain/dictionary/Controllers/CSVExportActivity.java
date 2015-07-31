@@ -228,6 +228,7 @@ public class CSVExportActivity extends AppCompatActivity {
         progress.setMessage(getString(R.string.export_progress));
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.setProgress(0);
+        progress.setCancelable(false);
         progress.show();
 
         //Handling the end of the export

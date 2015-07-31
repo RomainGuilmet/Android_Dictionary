@@ -3,11 +3,13 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,7 +18,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -36,14 +37,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.DictionaryAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.HeaderGridView;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
+import com.antoine_charlotte_romain.dictionary.Utilities.ImportUtility;
+
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +64,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private final int CONTEXT_MENU_EXPORT = 3;
     private final int NORMAL_STATE = 0;
     private final int DELETE_STATE = 1;
+    private final int SELECT_FILE = 0;
 
     /*---------------------------------------------------------
     *                     INSTANCE VARIABLES
@@ -130,7 +134,10 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private EditText searchBox, nameBox;
 
     private int myLastFirstVisibleItem;
+
     private boolean hidden;
+
+    private Uri csvUri;
 
 
     /*---------------------------------------------------------
@@ -155,7 +162,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         rootLayout = (CoordinatorLayout) v.findViewById(R.id.rootLayout);
         setHasOptionsMenu(true);
         state = NORMAL_STATE;
-
         initData();
         initFloatingActionButton();
         initGridView();
@@ -285,7 +291,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     /**
      * Initialising the search box to dynamically researching on the dictionary list
      */
-
     private void initEditText()
     {
         //Creating the EditText for searching inside the dictionaries list
@@ -368,6 +373,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 delete(info.position - 1);
                 return true;
             case CONTEXT_MENU_EXPORT:
+                export(info.position - 1);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -406,7 +412,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         builder.setPositiveButton(R.string.add,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        System.out.println("xxx"+nameBox.getText().toString()+"xxx");
                         if (!nameBox.getText().toString().equals("")) {
                             Dictionary d = new Dictionary(nameBox.getText().toString());
                             if (ddm.insert(d) == 1) {
@@ -442,22 +447,36 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                     }
                 });
 
-        builder.setNeutralButton(R.string.import_csv,
+        builder.setNeutralButton(R.string.from_csv,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        String nameDico = nameBox.getText().toString();
-                        if (ddm.select(nameDico) == null){
-                            Intent intent = new Intent(HomeFragment.this.getActivity(), CSVImportActivity.class);
-                            intent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, nameDico);
-                            startActivity(intent);
-                        } else {
+                        /*String nameDico = nameBox.getText().toString();
+                        if (ddm.select(nameDico) == null)
+                        {*/
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            intent.setType("text/comma-separated-values");
+
+                            // special intent for Samsung file manager
+                            Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+                            sIntent.putExtra("CONTENT_TYPE", "text/comma-separated-values");
+                            sIntent.addCategory(Intent.CATEGORY_DEFAULT);
+
+                            if (getActivity().getPackageManager().resolveActivity(sIntent, 0) != null){
+                                startActivityForResult(sIntent, SELECT_FILE);
+                            }
+                            else {
+                                startActivityForResult(intent, SELECT_FILE);
+                            }
+
+                        /*} else {
                             Snackbar.make(rootLayout, R.string.dico_name_not_available, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
                                 }
                             }).show();
-                        }
+                        }*/
                     }
                 });
 
@@ -620,10 +639,51 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     public void export(int position)
     {
-        Intent importCSVintent = new Intent(getActivity(), CSVExportActivity.class);
-        importCSVintent.putExtra(MainActivity.EXTRA_DICTIONARY, dictionariesDisplay.get(position));
-        startActivity(importCSVintent);
+        Intent exportCSVintent = new Intent(getActivity(), CSVExportActivity.class);
+        exportCSVintent.putExtra(MainActivity.EXTRA_DICTIONARY, dictionariesDisplay.get(position));
+        startActivity(exportCSVintent);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //If we are importing a file
+        if (requestCode == SELECT_FILE && resultCode == Activity.RESULT_OK )
+        {
+            //Creating the file
+            Uri fileUri = data.getData();
+            String fileName = fileUri.getLastPathSegment();
+
+            //Creating ta dictionary named like the file (without the extension)
+            final Dictionary d = new Dictionary(fileName.substring(0, fileName.indexOf(".")));
+
+            final Context c = getActivity();
+
+            //Handling the end of the export
+            final Handler handler = new Handler()
+            {
+                @Override
+                public void handleMessage(Message msg) {
+                    Intent intent = new Intent(c,ListWordsActivity.class);
+                    intent.putExtra(MainActivity.EXTRA_DICTIONARY, d);
+                    intent.putExtra(MainActivity.EXTRA_RENAME, true);
+                    c.startActivity(intent);
+                }
+            };
+
+            if (ddm.insert(d) == 1)
+            {
+                dictionariesDisplay.add(d);
+                dictionaries.add(d);
+                searchBox.setText("");
+
+                ImportUtility.importCSV(d,data.getData(),c, handler);
+            }
+            else
+                Toast.makeText(getActivity(), R.string.dictionary_not_added, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @Override
     public void notifyDeleteListChanged()
