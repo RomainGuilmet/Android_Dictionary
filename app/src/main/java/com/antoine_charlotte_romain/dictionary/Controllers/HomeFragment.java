@@ -3,11 +3,15 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,12 +40,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.DictionaryAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.HeaderGridView;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
+import com.antoine_charlotte_romain.dictionary.Utilities.ImportUtility;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -61,6 +68,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private final int CONTEXT_MENU_EXPORT = 3;
     private final int NORMAL_STATE = 0;
     private final int DELETE_STATE = 1;
+    private final int SELECT_FILE = 0;
 
     /*---------------------------------------------------------
     *                     INSTANCE VARIABLES
@@ -445,9 +453,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         builder.setNeutralButton(R.string.from_csv,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        /*String nameDico = nameBox.getText().toString();
-                        if (ddm.select(nameDico) == null)
-                        {*/
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.addCategory(Intent.CATEGORY_OPENABLE);
                             intent.setType("text/comma-separated-values");
@@ -463,15 +468,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                             else {
                                 startActivityForResult(intent, SELECT_FILE);
                             }
-
-                        /*} else {
-                            Snackbar.make(rootLayout, R.string.dico_name_not_available, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            }).show();
-                        }
                     }
                 });
 
@@ -672,7 +668,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 dictionaries.add(d);
                 searchBox.setText("");
 
-                ImportUtility.importCSV(d,data.getData(),c, handler);
+                ImportUtility.importCSV(d, data.getData(), c, handler);
             }
             else
                 Toast.makeText(getActivity(), R.string.dictionary_not_added, Toast.LENGTH_SHORT).show();
@@ -771,5 +767,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
 }
