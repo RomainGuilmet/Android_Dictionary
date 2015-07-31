@@ -34,7 +34,7 @@
         android:id="@+id/gridViewHistory"
         android:paddingTop="5dp"
         android:clipToPadding="false"
-        android:numColumns="@integer/nb_columns_dico_grid"
+        android:numColumns="@integer/nb_columns_grid"
         android:verticalSpacing="@dimen/vertical_spacing"
         android:horizontalSpacing="@dimen/grid_space"
         android:paddingLeft="@dimen/grid_space"

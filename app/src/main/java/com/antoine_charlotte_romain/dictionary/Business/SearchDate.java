@@ -9,10 +9,6 @@ public class SearchDate {
     private Word word;
     private String date;
 
-    public SearchDate(){
-
-    }
-
     public SearchDate(Word w) {
         this.word = w;
     }

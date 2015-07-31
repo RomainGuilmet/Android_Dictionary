@@ -14,21 +14,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.InputType;
-import android.text.Selection;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
-import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
@@ -42,7 +36,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 

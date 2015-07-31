@@ -27,12 +27,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editTextHeadword"
-        android:inputType="text"
+        android:inputType="textCapSentences|text"
         android:layout_below="@+id/textHeadword"
         android:layout_alignLeft="@+id/textHeadword"
         android:layout_alignStart="@+id/textHeadword"
         android:layout_alignRight="@+id/textHeadword"
-        android:layout_alignEnd="@+id/textHeadword" />
+        android:layout_alignEnd="@+id/textHeadword"
+        android:imeOptions="flagNoExtractUi"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,11 +52,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/editTextTranslation"
         android:layout_below="@+id/textViewTranslation"
-        android:inputType="text"
+        android:inputType="textCapSentences|text"
         android:layout_alignLeft="@+id/textViewTranslation"
         android:layout_alignStart="@+id/textViewTranslation"
         android:layout_alignRight="@+id/textViewTranslation"
-        android:layout_alignEnd="@+id/textViewTranslation" />
+        android:layout_alignEnd="@+id/textViewTranslation"
+        android:imeOptions="flagNoExtractUi"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -74,11 +76,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/editTextNote"
         android:layout_below="@+id/textViewNote"
-        android:inputType="textMultiLine"
+        android:inputType="textCapSentences|textMultiLine"
         android:layout_alignLeft="@+id/textViewNote"
         android:layout_alignStart="@+id/textViewNote"
         android:layout_alignRight="@+id/textViewNote"
-        android:layout_alignEnd="@+id/textViewNote" />
+        android:layout_alignEnd="@+id/textViewNote"
+        android:imeOptions="flagNoExtractUi"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -101,7 +104,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editTextDictionary"
         android:layout_below="@+id/textViewDictionary"
-        android:inputType="text"
+        android:inputType="textCapSentences|text"
         android:layout_alignLeft="@+id/textViewDictionary"
         android:layout_alignStart="@+id/textViewDictionary"
         android:layout_alignRight="@+id/textViewDictionary"

@@ -3,13 +3,11 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +16,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -37,16 +36,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.DictionaryAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.HeaderGridView;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
-import com.antoine_charlotte_romain.dictionary.Utilities.ImportUtility;
-
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +61,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private final int CONTEXT_MENU_EXPORT = 3;
     private final int NORMAL_STATE = 0;
     private final int DELETE_STATE = 1;
-    private final int SELECT_FILE = 0;
 
     /*---------------------------------------------------------
     *                     INSTANCE VARIABLES
@@ -134,10 +130,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     private EditText searchBox, nameBox;
 
     private int myLastFirstVisibleItem;
-
     private boolean hidden;
-
-    private Uri csvUri;
 
 
     /*---------------------------------------------------------
@@ -162,10 +155,12 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         rootLayout = (CoordinatorLayout) v.findViewById(R.id.rootLayout);
         setHasOptionsMenu(true);
         state = NORMAL_STATE;
+
         initData();
         initFloatingActionButton();
         initGridView();
         initEditText();
+
         return v;
     }
 
@@ -334,7 +329,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     private void initFloatingActionButton()
     {
-        addButton = (FloatingActionButton) v.findViewById(R.id.add_button);
+        addButton = ((MainActivity)(getActivity())).addButton;
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -476,7 +471,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
 
                                 }
                             }).show();
-                        }*/
+                        }
                     }
                 });
 

@@ -48,6 +48,7 @@
     <string name="dictionary_renamed">Dictionary renamed.</string>
     <string name="dictionary_not_renamed">Can\'t rename this dictionary. Name already taken.</string>
     <string name="open">Open</string>
+    <string name="close">Close</string>
     <string name="search">Search</string>
     <string name="search_in">Search in</string>
     <string name="advanced_search">Advanced Search</string>

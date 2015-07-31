@@ -11,10 +11,7 @@ public class Dictionary implements Serializable {
     private long id;
     private String title;
 
-    public Dictionary()
-    {
-
-    }
+    public Dictionary() {}
 
     public Dictionary (String title){
         this.title = title;

@@ -2,6 +2,7 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -27,8 +28,8 @@ import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
  */
 public class MainActivity extends AppCompatActivity {
 
-    public final static int ADVANCED_HOME_FRAGMENT = 0;
-    public final static int ADVANCED_HISTORY_FRAGMENT = 1;
+    public final static int HOME_FRAGMENT = 0;
+    public final static int HISTORY_FRAGMENT = 1;
     public final static int ADVANCED_SEARCH_FRAGMENT = 2;
     public final static String EXTRA_DICTIONARY = "SelectedDictionary";
     public final static String EXTRA_FRAGMENT = "fragment";
@@ -55,10 +56,13 @@ public class MainActivity extends AppCompatActivity {
     private SlidingTabLayout tabs;
     private int numbOfTabs = 3;
 
-    private DrawerLayout myDrawerLayout;
-    private RecyclerView myDrawerList;
-    private ActionBarDrawerToggle myDrawerToggle;
-    private DrawerAdapter myAdapter;
+    private RecyclerView myMenuDrawerList;
+    private DrawerLayout myMenuDrawerLayout;
+    private ActionBarDrawerToggle myMenuDrawerToggle;
+    private DrawerAdapter myMenuAdapter;
+
+    public FloatingActionButton addButton;
+    private int currentPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,22 +73,24 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+        // Creating the menu settings
         String[] myPlanetTitles = {getString(R.string.language), getString(R.string.about)};
         int[] icons = {R.drawable.ic_language_white_24dp, R.drawable.ic_info_white_24dp};
-        myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        myDrawerList = (RecyclerView) findViewById(R.id.left_drawer);
+        myMenuDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        myMenuDrawerList = (RecyclerView) findViewById(R.id.left_drawer);
 
-        // Set the adapter for the list view
-        myAdapter = new DrawerAdapter(myPlanetTitles, icons);
-        myDrawerList.setAdapter(myAdapter);
+        // Set the adapter for the recycler view of the menu settings
+        myMenuAdapter = new DrawerAdapter(myPlanetTitles, icons);
+        myMenuDrawerList.setAdapter(myMenuAdapter);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        myDrawerList.setLayoutManager(mLayoutManager);
+        myMenuDrawerList.setLayoutManager(mLayoutManager);
 
-        myDrawerToggle = new ActionBarDrawerToggle(this, myDrawerLayout, toolbar, R.string.language, R.string.about) {
+        // Set the listener of the menu settings drawer
+        myMenuDrawerToggle = new ActionBarDrawerToggle(this, myMenuDrawerLayout, toolbar, R.string.open, R.string.close) {
 
             /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
                 invalidateOptionsMenu();
             }
 
@@ -94,12 +100,11 @@ public class MainActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
             }
         };
+        myMenuDrawerLayout.setDrawerListener(myMenuDrawerToggle);
+        myMenuDrawerToggle.syncState();
 
-        // Set the drawer toggle as the DrawerListener
-        myDrawerLayout.setDrawerListener(myDrawerToggle);
-        myDrawerToggle.syncState();
-
-        myAdapter.SetOnItemClickListener(new DrawerAdapter.OnItemClickListener() {
+        // Set the onItemClickListener of the menu settings
+        myMenuAdapter.SetOnItemClickListener(new DrawerAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(View v , int position) {
@@ -147,27 +152,62 @@ public class MainActivity extends AppCompatActivity {
 
         if(fragment != null && fragment.equalsIgnoreCase("advancedSearch")){
             pager.setCurrentItem(ADVANCED_SEARCH_FRAGMENT);
+            currentPage = ADVANCED_SEARCH_FRAGMENT;
         }
 
+        // Pager Listener
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            public void onPageSelected(int position) {
+                if(position == HOME_FRAGMENT){
+                    addButton.animate().translationY(0);
+                    currentPage = HOME_FRAGMENT;
+                }
+                else {
+                    addButton.animate().translationY(350);
+                    if(position == HISTORY_FRAGMENT){
+                        currentPage = HISTORY_FRAGMENT;
+                    }
+                    else {
+                        currentPage = ADVANCED_SEARCH_FRAGMENT;
+                    }
+                }
+            }
+        });
+
+
         setupUI(findViewById(R.id.main_layout));
+
+        addButton = (FloatingActionButton) findViewById(R.id.add_button);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        myDrawerToggle.syncState();
+        myMenuDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        myDrawerToggle.onConfigurationChanged(newConfig);
+        myMenuDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if(currentPage == HOME_FRAGMENT){
+            addButton.animate().translationY(0);
+        }
+        else {
+            addButton.animate().translationY(350);
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -190,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        if (myDrawerToggle.onOptionsItemSelected(item)) {
+        if (myMenuDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 

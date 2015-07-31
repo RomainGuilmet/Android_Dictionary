@@ -7,13 +7,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Word;
+import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.AdvancedSearchResultsAdapter;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
@@ -26,10 +27,11 @@ import java.util.List;
 public class AdvancedSearchResultActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private ListView listResults;
+    private GridView listResults;
 
     private ArrayList<Word> results;
     private WordDataModel wdm;
+    private AdvancedSearchResultsAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,29 +89,12 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
         }
 
         // Display results
-        listResults = (ListView) findViewById(R.id.resultsList);
-        List<HashMap<String, String>> liste = new ArrayList<>();
-        HashMap<String, String> element;
-
+        listResults = (GridView) findViewById(R.id.resultsList);
         if(results.size()>0) {
-            for (int i = 0; i < results.size(); i++) {
-                // we add each word of the results list in this new list
-                element = new HashMap<>();
 
-                element.put("headword", results.get(i).getHeadword());
-                element.put("translation", results.get(i).getTranslation());
+            myAdapter = new AdvancedSearchResultsAdapter(this, R.layout.row_advanced_search_result, results);
 
-                liste.add(element);
-            }
-
-            ListAdapter adapter = new SimpleAdapter(this,
-                    liste,
-                    android.R.layout.simple_list_item_2,
-                    new String[]{"headword", "translation"},
-                    new int[]{android.R.id.text1, android.R.id.text2});
-
-            // Give ListView to the SimpleAdapter
-            listResults.setAdapter(adapter);
+            listResults.setAdapter(myAdapter);
 
             listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
