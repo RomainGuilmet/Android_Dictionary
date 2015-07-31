@@ -3,7 +3,6 @@ package com.antoine_charlotte_romain.dictionary.Controllers.Adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 
 import com.antoine_charlotte_romain.dictionary.Controllers.HistoryFragment;
 import com.antoine_charlotte_romain.dictionary.Controllers.HomeFragment;

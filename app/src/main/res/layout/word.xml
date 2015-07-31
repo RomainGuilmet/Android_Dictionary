@@ -32,7 +32,8 @@
         android:layout_alignLeft="@+id/textHeadword"
         android:layout_alignStart="@+id/textHeadword"
         android:layout_alignRight="@+id/textHeadword"
-        android:layout_alignEnd="@+id/textHeadword" />
+        android:layout_alignEnd="@+id/textHeadword"
+        android:imeOptions="flagNoExtractUi"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,7 +56,8 @@
         android:layout_alignLeft="@+id/textViewTranslation"
         android:layout_alignStart="@+id/textViewTranslation"
         android:layout_alignRight="@+id/textViewTranslation"
-        android:layout_alignEnd="@+id/textViewTranslation" />
+        android:layout_alignEnd="@+id/textViewTranslation"
+        android:imeOptions="flagNoExtractUi"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -78,7 +80,8 @@
         android:layout_alignLeft="@+id/textViewNote"
         android:layout_alignStart="@+id/textViewNote"
         android:layout_alignRight="@+id/textViewNote"
-        android:layout_alignEnd="@+id/textViewNote" />
+        android:layout_alignEnd="@+id/textViewNote"
+        android:imeOptions="flagNoExtractUi"/>
 
     <TextView
         android:layout_width="wrap_content"

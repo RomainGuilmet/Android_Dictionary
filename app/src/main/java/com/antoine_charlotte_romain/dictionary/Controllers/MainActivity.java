@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerAdapter myMenuAdapter;
 
     public FloatingActionButton addButton;
+    private int currentPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(fragment != null && fragment.equalsIgnoreCase("advancedSearch")){
             pager.setCurrentItem(ADVANCED_SEARCH_FRAGMENT);
+            currentPage = ADVANCED_SEARCH_FRAGMENT;
         }
 
         // Pager Listener
@@ -163,9 +165,16 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 if(position == HOME_FRAGMENT){
                     addButton.animate().translationY(0);
+                    currentPage = HOME_FRAGMENT;
                 }
                 else {
                     addButton.animate().translationY(350);
+                    if(position == HISTORY_FRAGMENT){
+                        currentPage = HISTORY_FRAGMENT;
+                    }
+                    else {
+                        currentPage = ADVANCED_SEARCH_FRAGMENT;
+                    }
                 }
             }
         });
@@ -192,6 +201,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(currentPage == HOME_FRAGMENT){
+            addButton.animate().translationY(0);
+        }
+        else {
+            addButton.animate().translationY(350);
+        }
         adapter.notifyDataSetChanged();
     }
 

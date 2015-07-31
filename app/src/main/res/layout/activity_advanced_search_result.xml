@@ -11,10 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
 
-    <ListView
+    <GridView
         android:id="@+id/resultsList"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-    </ListView>
+        android:layout_height="fill_parent"
+        android:paddingTop="5dp"
+        android:clipToPadding="false"
+        android:numColumns="@integer/nb_columns_grid"
+        android:verticalSpacing="@dimen/vertical_spacing"
+        android:horizontalSpacing="@dimen/grid_space"
+        android:paddingLeft="@dimen/grid_space"
+        android:paddingRight="@dimen/grid_space"/>
 
-</LinearLayout> 
+</LinearLayout>

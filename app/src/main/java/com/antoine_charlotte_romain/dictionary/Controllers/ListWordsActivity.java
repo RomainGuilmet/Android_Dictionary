@@ -812,7 +812,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         Point size = new Point();
         display.getSize(size);
 
-        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -(size.y*10/100)*i);
+        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -(size.y*(getApplicationContext().getResources().getInteger(R.integer.floating_menu_translation))/100)*i);
         PropertyValuesHolder pvhsX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1);
         PropertyValuesHolder pvhsY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1);
 

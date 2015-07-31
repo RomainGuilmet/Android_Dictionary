@@ -1,6 +1,5 @@
 package com.antoine_charlotte_romain.dictionary.Utilities;
 
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
 
