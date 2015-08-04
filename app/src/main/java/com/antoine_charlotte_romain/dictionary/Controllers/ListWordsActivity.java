@@ -124,6 +124,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         setupUI(findViewById(R.id.list_words_layout));
 
         registerForContextMenu(gridViewWords);
+
+        if(intent.getBooleanExtra(MainActivity.EXTRA_RENAME,false))
+            renameDictionary(findViewById(R.id.list_words_layout));
+
     }
 
     /**
@@ -385,6 +389,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
      * @param view
      */
     public void importCsv(View view){
+        //TODO : New version of the import !!!
         if(open){
             showFloatingMenu(view);
         }

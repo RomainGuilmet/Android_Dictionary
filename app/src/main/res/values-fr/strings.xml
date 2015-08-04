@@ -109,5 +109,7 @@
     <string name="all_rights_reserved">Gearoid O\'NEILL - Tous droits réservés.</string>
     <string name="change_directory">Changer de répertoire</string>
     <string name="directory">Répertoire :</string>
+    <string name="from_csv">A partir d\'un csv</string>
+    <string name="import_progress">Importation en cours</string>
 
 </resources>
