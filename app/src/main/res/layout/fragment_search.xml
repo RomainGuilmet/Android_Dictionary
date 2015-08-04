@@ -90,10 +90,10 @@
             android:hint="@string/ends_with"
             android:layout_below="@+id/middleString"
             android:inputType="textCapSentences|text"
-            android:layout_alignLeft="@+id/middleString"
-            android:layout_alignStart="@+id/middleString"
-            android:layout_alignRight="@+id/middleString"
-            android:layout_alignEnd="@+id/middleString"
+            android:layout_marginEnd="@dimen/edit_text_margin"
+            android:layout_marginRight="@dimen/edit_text_margin"
+            android:layout_marginLeft="@dimen/edit_text_margin"
+            android:layout_marginStart="@dimen/edit_text_margin"
             android:imeOptions="flagNoExtractUi"/>
 
         <EditText
@@ -107,8 +107,6 @@
             android:layout_alignEnd="@+id/boutonsradio"
             android:focusable="false"
             android:inputType="text" />
-
-
 
         <EditText
             android:layout_width="wrap_content"

@@ -317,9 +317,9 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                     if (s.length() > 0) {
                         String search = s.toString();
                         if (select) {
-                            tempList = wdm.select(search.toUpperCase(), selectedDictionary.getId());
+                            tempList = wdm.select(search, selectedDictionary.getId());
                         } else {
-                            tempList = wdm.select(search.toUpperCase(), Word.ALL_DICTIONARIES);
+                            tempList = wdm.select(search, Word.ALL_DICTIONARIES);
                         }
                     }
                     else {
