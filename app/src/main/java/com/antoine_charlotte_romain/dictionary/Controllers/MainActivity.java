@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_SEARCH_DATA = "searchOption";
     public static final String EXTRA_PART_OR_WHOLE = "partOrWhole";
     public static final String EXTRA_NEW_DICO_NAME = "namedico";
-    public static final String ALL_DICO = "All";
 
     public static final String WHOLE_WORD = "whole";
     public static final String PART_WORD = "part";
@@ -164,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onPageSelected(int position) {
                 if(position == HOME_FRAGMENT){
+                    addButton.setVisibility(View.VISIBLE);
                     addButton.animate().translationY(0);
                     currentPage = HOME_FRAGMENT;
                 }
@@ -202,10 +202,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(currentPage == HOME_FRAGMENT){
-            addButton.animate().translationY(0);
+            addButton.setVisibility(View.VISIBLE);
         }
         else {
-            addButton.animate().translationY(350);
+            addButton.setVisibility(View.GONE);
         }
         adapter.notifyDataSetChanged();
     }

@@ -338,7 +338,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     }
 
     /**
-     * This function is called when the user click on an item of the listView
+     * This function is called when the user click on an item of the gridView
      * @param parent
      * @param view
      * @param position

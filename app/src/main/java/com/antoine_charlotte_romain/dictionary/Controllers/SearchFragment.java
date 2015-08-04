@@ -79,7 +79,7 @@ public class SearchFragment extends Fragment {
 
         // set dictionary
         if(selectedDictionary == null) {
-            targetDictionary.setText(getString(R.string.target_dico) + " : " + MainActivity.ALL_DICO);
+            targetDictionary.setText(getString(R.string.target_dico) + " : " + getString(R.string.allDico));
         }
         else {
             targetDictionary.setText(getString(R.string.target_dico) + " : " + selectedDictionary.getTitle());
@@ -104,22 +104,22 @@ public class SearchFragment extends Fragment {
         partWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Set hint string of the beginning string EditText
-                beginningText.setHint(getString(R.string.begins_with));
+                // Set hint string of the end string EditText
+                endText.setHint(getString(R.string.ends_with));
                 // Show all EditText (if they were gone)
+                beginningText.setVisibility(View.VISIBLE);
                 containsText.setVisibility(View.VISIBLE);
-                endText.setVisibility(View.VISIBLE);
             }
         });
 
         wholeWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Set hint string of the beginning string EditText
-                beginningText.setHint(getString(R.string.Word));
+                // Set hint string of the end string EditText
+                endText.setHint(getString(R.string.Word));
                 // Hide contain and end EditText (if they were displayed)
+                beginningText.setVisibility(View.GONE);
                 containsText.setVisibility(View.GONE);
-                endText.setVisibility(View.GONE);
             }
         });
 
@@ -244,7 +244,7 @@ public class SearchFragment extends Fragment {
         DictionaryDataModel ddm = new DictionaryDataModel(this.getActivity());
         ArrayList<Dictionary> dico = ddm.select();
         String[] nameDico = new String[dico.size()+1];
-        nameDico[0] = MainActivity.ALL_DICO;
+        nameDico[0] = getString(R.string.allDico);
         for (int i=0; i<dico.size(); i++){
             nameDico[i+1] = dico.get(i).getTitle();
         }
