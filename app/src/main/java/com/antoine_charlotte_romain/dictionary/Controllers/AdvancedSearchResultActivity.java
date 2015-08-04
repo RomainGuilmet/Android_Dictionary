@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.antoine_charlotte_romain.dictionary.Business.Word;
@@ -20,9 +18,6 @@ import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 
 public class AdvancedSearchResultActivity extends AppCompatActivity {
 
@@ -56,7 +51,7 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
             // find id of the dictionary
             long id;
             DictionaryDataModel ddm = new DictionaryDataModel(this);
-            if(!dico.equals(MainActivity.ALL_DICO)) {
+            if(!dico.equals(getString(R.string.allDico))) {
                 id = ddm.select(dico).getId();
             } else {
                 id = Word.ALL_DICTIONARIES;
@@ -76,13 +71,13 @@ public class AdvancedSearchResultActivity extends AppCompatActivity {
                 }
             } else {
                 if(searchOption.equals(MainActivity.HEADWORD_ONLY)){
-                    results = wdm.selectWholeHeadword(begin, id);
+                    results = wdm.selectWholeHeadword(end, id);
                 } else if (searchOption.equals(MainActivity.ALL_DATA)){
-                    results = wdm.selectWholeAllData(begin, id);
+                    results = wdm.selectWholeAllData(end, id);
                 } else if (searchOption.equals(MainActivity.MEANING_ONLY)){
-                    results = wdm.selectWholeTranslation(begin, id);
+                    results = wdm.selectWholeTranslation(end, id);
                 } else if (searchOption.equals(MainActivity.NOTES_ONLY)){
-                    results = wdm.selectWholeNote(begin, id);
+                    results = wdm.selectWholeNote(end, id);
                 }
             }
 
