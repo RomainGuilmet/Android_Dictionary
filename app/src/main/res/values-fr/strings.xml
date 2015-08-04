@@ -112,5 +112,6 @@
     <string name="directory">Répertoire :</string>
     <string name="from_csv">A partir d\'un csv</string>
     <string name="import_progress">Importation en cours</string>
+    <string name="delete_progress">Suppression en cours</string>
 
 </resources>

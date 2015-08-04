@@ -3,6 +3,7 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,9 +45,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
+import com.antoine_charlotte_romain.dictionary.Business.Word;
 import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.DictionaryAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.HeaderGridView;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
+import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 import com.antoine_charlotte_romain.dictionary.Utilities.ImportUtility;
 
@@ -106,10 +110,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     private DictionaryAdapter adapter;
 
-    /**
-     * Used to display the snackBars
-     */
-    private CoordinatorLayout rootLayout;
 
     /**
      * Used to communicating with the database
@@ -160,7 +160,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                              Bundle savedInstanceState)
     {
         v = inflater.inflate(R.layout.fragment_home,container,false);
-        rootLayout = (CoordinatorLayout) v.findViewById(R.id.rootLayout);
         setHasOptionsMenu(true);
         state = NORMAL_STATE;
 
@@ -179,6 +178,17 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     {
         ddm = new DictionaryDataModel(getActivity());
         ddm.open();
+
+        /*
+        WordDataModel wdm = new WordDataModel(getActivity());
+        for (int i = 0; i < 10; i++) {
+            Dictionary d = new Dictionary("dico" + i);
+            ddm.insert(d);
+            for (int j = 0; j < 50 ; j++) {
+                wdm.insert(new Word(d.getId(), "mot" + j, "trans"));
+            }
+        }*/
+
         dictionaries = ddm.selectAll();
         dictionariesDisplay = new ArrayList<>(dictionaries);
     }
@@ -206,16 +216,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                     read(-1);
                 }
             });
-
-            //Configuring the ListView listener
-            gridView.setOnItemClickListener(
-                    new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            read(position - 1);
-                        }
-                    }
-            );
 
             //Populating the GridView
             adapter = new DictionaryAdapter(getActivity(), R.layout.dictionary_row, dictionariesDisplay);
@@ -337,7 +337,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
      */
     private void initFloatingActionButton()
     {
-        addButton = ((MainActivity)(getActivity())).addButton;
+        addButton = ((MainActivity)(getActivity())).getAddButton();
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -423,7 +423,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                                 searchBox.setText("");
                                 read(dictionariesDisplay.indexOf(d));
                             } else {
-                                Snackbar.make(rootLayout, R.string.dictionary_not_added, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                                Snackbar.make(((MainActivity)(getActivity())).getRootLayout(), R.string.dictionary_not_added, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
 
@@ -431,7 +431,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                                 }).show();
                             }
                         } else {
-                            Snackbar.make(rootLayout, R.string.dictionary_not_added_empty_string, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                            Snackbar.make(((MainActivity)(getActivity())).getRootLayout(), R.string.dictionary_not_added_empty_string, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
@@ -540,7 +540,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                             adapter.notifyDataSetChanged();
                             searchBox.setText("");
 
-                            Snackbar.make(rootLayout, R.string.dictionary_renamed, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                            Snackbar.make(((MainActivity)(getActivity())).getRootLayout(), R.string.dictionary_renamed, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
@@ -548,7 +548,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                             }).show();
                         } else {
                             d.setTitle(title);
-                            Snackbar.make(rootLayout, R.string.dictionary_not_renamed, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
+                            Snackbar.make(((MainActivity)(getActivity())).getRootLayout(), R.string.dictionary_not_renamed, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 
@@ -597,7 +597,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         dictionariesDisplay.remove(d);
         adapter.notifyDataSetChanged();
         undo = false;
-        Snackbar snack = Snackbar.make(rootLayout, d.getTitle() + getString(R.string.deleted), Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
+        Snackbar snack = Snackbar.make(((MainActivity)(getActivity())).getRootLayout(), d.getTitle() + getString(R.string.deleted), Snackbar.LENGTH_LONG).setAction(R.string.undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 undo = true;
@@ -613,7 +613,32 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 //Once snackbar is closed, whatever the way : undo button clicked, change activity, an other snackbar, etc.
                 if (!undo) {
                     dictionaries.remove(d);
-                    ddm.delete(d.getId());
+
+                    final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setMessage(getString(R.string.delete_progress));
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.setIndeterminate(true);
+                    progressDialog.setCancelable(false);
+                    progressDialog.getWindow().setGravity(Gravity.BOTTOM);
+                    progressDialog.show();
+                    final Handler handler = new Handler()
+                    {
+                        @Override
+                        public void handleMessage(Message msg) {
+                            progressDialog.dismiss();
+                        }
+                    };
+
+                    final Thread t = new Thread() {
+                        @Override
+                        public void run() {
+                            ddm.delete(d.getId());
+                            handler.sendEmptyMessage(0);
+                        }
+                    };
+                    t.start();
+
+
                 } else {
                     dictionariesDisplay.add(position, d);
                     adapter.notifyDataSetChanged();
@@ -736,17 +761,41 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 }
                 alert.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        for (int i = 0; i < s ; i++)
-                        {
-                            Dictionary d = adapter.getDeleteList().get(i);
-                            dictionaries.remove(d);
-                            dictionariesDisplay.remove(d);
-                            ddm.delete(d.getId());
-                        }
 
-                        state = NORMAL_STATE;
-                        initGridView();
-                        showMenu();
+                        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setMessage(getString(R.string.delete_progress));
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.setIndeterminate(true);
+                        progressDialog.setCancelable(false);
+                        progressDialog.getWindow().setGravity(Gravity.BOTTOM);
+                        progressDialog.show();
+
+                        final Handler handler = new Handler()
+                        {
+                            @Override
+                            public void handleMessage(Message msg) {
+                                progressDialog.dismiss();
+                                state = NORMAL_STATE;
+                                initGridView();
+                                showMenu();
+                            }
+                        };
+                        final Thread t = new Thread() {
+                            @Override
+                            public void run() {
+
+                                for (int i = 0; i < s ; i++)
+                                {
+                                    Dictionary d = adapter.getDeleteList().get(i);
+                                    dictionaries.remove(d);
+                                    dictionariesDisplay.remove(d);
+                                    ddm.delete(d.getId());
+                                }
+                                handler.sendEmptyMessage(0);
+                            }
+                        };
+                        t.start();
+
                     }
                 });
 

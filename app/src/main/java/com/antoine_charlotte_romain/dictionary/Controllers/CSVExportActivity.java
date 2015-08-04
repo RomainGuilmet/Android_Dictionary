@@ -235,8 +235,7 @@ public class CSVExportActivity extends AppCompatActivity {
                         .setMessage(R.string.dictionary_exported)
                         .setNegativeButton(R.string.returnString, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(CSVExportActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                finish();
                             }
                         })
                         .setPositiveButton(R.string.open_it, new DialogInterface.OnClickListener() {

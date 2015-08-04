@@ -2,6 +2,7 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -61,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle myMenuDrawerToggle;
     private DrawerAdapter myMenuAdapter;
 
-    public FloatingActionButton addButton;
+    private FloatingActionButton addButton;
+
+    private CoordinatorLayout rootLayout;
     private int currentPage;
 
     @Override
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         // Creating the menu settings
         String[] myPlanetTitles = {getString(R.string.language), getString(R.string.about)};
         int[] icons = {R.drawable.ic_language_white_24dp, R.drawable.ic_info_white_24dp};
-        myMenuDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        myMenuDrawerLayout = (DrawerLayout) findViewById(R.id.activity_main);
         myMenuDrawerList = (RecyclerView) findViewById(R.id.left_drawer);
 
         // Set the adapter for the recycler view of the menu settings
@@ -181,9 +184,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        setupUI(findViewById(R.id.main_layout));
+        setupUI(findViewById(R.id.activity_main));
 
         addButton = (FloatingActionButton) findViewById(R.id.add_button);
+        rootLayout = (CoordinatorLayout) findViewById(R.id.rootLayout);
     }
 
     @Override
@@ -235,6 +239,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public FloatingActionButton getAddButton()
+    {
+        return addButton;
+    }
+
+    public CoordinatorLayout getRootLayout()
+    {
+        return rootLayout;
     }
 
     public void setupUI(View view) {

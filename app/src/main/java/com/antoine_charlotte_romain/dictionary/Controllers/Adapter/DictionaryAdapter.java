@@ -61,6 +61,13 @@ public class DictionaryAdapter extends ArrayAdapter<Dictionary>{
         {
             ImageButton menuButton = (ImageButton) convertView.findViewById(R.id.dico_more_button);
             menuButton.setColorFilter(R.color.textColor, PorterDuff.Mode.MULTIPLY);
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    callback.read(position);
+                }
+            });
             menuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

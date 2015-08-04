@@ -111,4 +111,5 @@
     <string name="all_rights_reserved">Gearoid O\'NEILL - All rights reserved.</string>
     <string name="from_csv">From a csv</string>
     <string name="import_progress">Import in progress</string>
+    <string name="delete_progress">Delete in progress</string>
 </resources>
