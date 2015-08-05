@@ -19,9 +19,9 @@
     <string name="csvexport_CSVname">Nom du csv</string>
     <string name="csvexport_export">Exporter</string>
     <string name="title_activity_csvexport">CSVExportActivity</string>
-    <string name="nb_added_words">Mots ajoutés</string>
+    <string name="nb_added_words">mots ajoutés</string>
     <string name="csv_imported">CSV importé</string>
-    <string name="updated_words">Mots mis à jour</string>
+    <string name="updated_words">mots mis à jour</string>
     <string name="see_dico">Voir le dictionnaire</string>
     <string name="available_csv_files">Fichier csv disponible</string>
     <string name="dictionary_exported">Dictionnaire exporté</string>
@@ -112,5 +112,6 @@
     <string name="from_csv">A partir d\'un csv</string>
     <string name="import_progress">Importation en cours</string>
     <string name="delete_progress">Suppression en cours</string>
+    <string name="see_updated">Voir les mots mis à jour</string>
 
 </resources>

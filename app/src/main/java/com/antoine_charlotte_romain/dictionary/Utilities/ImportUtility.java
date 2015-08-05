@@ -29,8 +29,8 @@ import java.util.List;
 public class ImportUtility
 {
     private static WordDataModel wdm;
-    private static ArrayList<String> updatedWords;
-    private static int addedWords;
+    public static ArrayList<String> updatedWords;
+    public static int addedWords;
     private static Long dicoID;
     private static BufferedReader br;
     private static String line;
@@ -140,8 +140,6 @@ public class ImportUtility
                         }
                         progress.incrementProgressBy(1);
                     }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {

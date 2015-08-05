@@ -2,13 +2,17 @@ package com.antoine_charlotte_romain.dictionary.Controllers;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +46,7 @@ import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.WordAdapter;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
 import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
+import com.antoine_charlotte_romain.dictionary.Utilities.ImportUtility;
 import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
 
 import java.util.ArrayList;
@@ -56,6 +61,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private final int CONTEXT_MENU_DELETE = 1;
     private final int NORMAL_STATE = 0;
     private final int DELETE_STATE = 1;
+    private final int SELECT_FILE = 0;
 
     private EditText filterWords;
     private GridView gridViewWords;
@@ -125,8 +131,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
         registerForContextMenu(gridViewWords);
 
-        if(intent.getBooleanExtra(MainActivity.EXTRA_RENAME,false))
+        if(intent.getBooleanExtra(MainActivity.EXTRA_RENAME,false)) {
+            getIntent().removeExtra(MainActivity.EXTRA_RENAME);
             renameDictionary(findViewById(R.id.list_words_layout));
+        }
 
     }
 
@@ -378,10 +386,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         if(open){
             showFloatingMenu(view);
         }
-        Intent importCSVintent = new Intent(this, CSVExportActivity.class);
-        importCSVintent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
+        Intent exportCSVintent = new Intent(this, CSVExportActivity.class);
+        exportCSVintent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
 
-        startActivity(importCSVintent);
+        startActivity(exportCSVintent);
     }
 
     /**
@@ -393,10 +401,27 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         if(open){
             showFloatingMenu(view);
         }
-        Intent importCSVintent = new Intent(this, CSVImportActivity.class);
+
+        /*Intent importCSVintent = new Intent(this, CSVImportActivity.class);
         importCSVintent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, selectedDictionary.getTitle());
 
-        startActivity(importCSVintent);
+        startActivity(importCSVintent);*/
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/comma-separated-values");
+
+        // special intent for Samsung file manager
+        Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+        sIntent.putExtra("CONTENT_TYPE", "text/comma-separated-values");
+        sIntent.addCategory(Intent.CATEGORY_DEFAULT);
+
+        if (getPackageManager().resolveActivity(sIntent, 0) != null){
+            startActivityForResult(sIntent, SELECT_FILE);
+        }
+        else {
+            startActivityForResult(intent, SELECT_FILE);
+        }
     }
 
     /**
@@ -759,6 +784,41 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         int s = myAdapter.getDeleteList().size();
         getSupportActionBar().setTitle(s + " " + getString(R.string.item));
         menu.findItem(R.id.action_delete_list).setVisible(s > 0);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //If we are importing a file
+        if (requestCode == SELECT_FILE && resultCode == Activity.RESULT_OK )
+        {
+            final Context c = this;
+
+            //Handling the end of the import
+            final Handler handler = new Handler()
+            {
+                @Override
+                public void handleMessage(Message msg) {
+                    recreate();
+                    //Creating an AlertDialog to show the updated words
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ListWordsActivity.this);
+                    builder.setTitle(R.string.csv_imported);
+                    builder.setMessage(ImportUtility.addedWords + " " + getString(R.string.nb_added_words) +"\n"+ ImportUtility.updatedWords.size() + " " + getString(R.string.updated_words));
+                    builder.setNegativeButton(R.string.returnString,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+            };
+
+            ImportUtility.importCSV(selectedDictionary, data.getData(), c, handler);
+        }
     }
 
     /**
