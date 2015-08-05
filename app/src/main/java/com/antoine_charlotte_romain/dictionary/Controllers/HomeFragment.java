@@ -1,19 +1,15 @@
 package com.antoine_charlotte_romain.dictionary.Controllers;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -21,7 +17,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.Gravity;
@@ -45,16 +40,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
-import com.antoine_charlotte_romain.dictionary.Business.Word;
 import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.DictionaryAdapter;
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.HeaderGridView;
 import com.antoine_charlotte_romain.dictionary.DataModel.DictionaryDataModel;
-import com.antoine_charlotte_romain.dictionary.DataModel.WordDataModel;
 import com.antoine_charlotte_romain.dictionary.R;
 import com.antoine_charlotte_romain.dictionary.Utilities.ImportUtility;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -682,7 +674,7 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
 
             final Context c = getActivity();
 
-            //Handling the end of the export
+            //Handling the end of the import
             final Handler handler = new Handler()
             {
                 @Override
