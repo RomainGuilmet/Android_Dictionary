@@ -76,6 +76,11 @@ public class HistoryFragment extends Fragment {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu m, MenuInflater inflater)
     {
         inflater.inflate(R.menu.menu_history, m);
@@ -306,6 +311,10 @@ public class HistoryFragment extends Fragment {
         wordDetailIntent.putExtra(MainActivity.EXTRA_DICTIONARY, ddm.select(mySearchDateList.get(position).getWord().getDictionaryID()));
 
         startActivity(wordDetailIntent);
+
+        if(historySearch.getText().toString().trim().length() > 0) {
+            historySearch.setText("");
+        }
     }
 
     /**

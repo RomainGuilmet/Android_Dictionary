@@ -26,7 +26,7 @@
         android:layout_marginStart="@dimen/edit_text_margin"
         android:layout_marginRight="@dimen/edit_text_margin"
         android:layout_marginEnd="@dimen/edit_text_margin"
-        android:imeOptions="actionGo|flagNoExtractUi"/>
+        android:imeOptions="actionSearch|flagNoExtractUi"/>
 
     <GridView
         android:layout_width="match_parent"

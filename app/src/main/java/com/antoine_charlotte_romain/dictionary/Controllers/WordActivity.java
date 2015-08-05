@@ -63,7 +63,7 @@ public class WordActivity extends AppCompatActivity {
     }
 
     /**
-     * This function is called when a chil activity back to this view or finish
+     * This function is called when a child activity back to this view or finish
      */
     @Override
     public void onResume() {
@@ -111,10 +111,16 @@ public class WordActivity extends AppCompatActivity {
      * This function is called after the onCreate if a word was selected by the user.
      */
     private void showDetails(){
-        headwordText.setText(selectedWord.getHeadword());
+        if(!(headwordText.getText().toString().trim().length() > 0)){
+            headwordText.setText(selectedWord.getHeadword());
+        }
         headwordText.setEnabled(false);
-        translationText.setText(selectedWord.getTranslation());
-        noteText.setText(selectedWord.getNote());
+        if(!(translationText.getText().toString().trim().length() > 0)){
+            translationText.setText(selectedWord.getTranslation());
+        }
+        if(!(noteText.getText().toString().trim().length() > 0)){
+            noteText.setText(selectedWord.getNote());
+        }
 
         getSupportActionBar().setTitle(getString(R.string.details) + " : " + selectedWord.getHeadword());
 
@@ -128,14 +134,24 @@ public class WordActivity extends AppCompatActivity {
      *  This function is called after the onCreate if no word was selected by the user.
      */
     private void newWord(){
-        headwordText.setText("");
+        boolean isReady = false;
+        if(!(headwordText.getText().toString().trim().length() > 0)){
+            headwordText.setText("");
+        }
+        else {
+            isReady = true;
+        }
         headwordText.setFocusable(true);
-        translationText.setText("");
-        noteText.setText("");
+        if(!(translationText.getText().toString().trim().length() > 0)){
+            translationText.setText("");
+        }
+        if(!(noteText.getText().toString().trim().length() > 0)){
+            noteText.setText("");
+        }
 
         getSupportActionBar().setTitle(R.string.new_word);
 
-        saveButton.setVisible(false);
+        saveButton.setVisible(isReady);
 
         headwordText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -183,10 +199,12 @@ public class WordActivity extends AppCompatActivity {
         switch (i){
             case 0:
                 Toast.makeText(this, w.getHeadword() + getString(R.string.created), Toast.LENGTH_SHORT).show();
+                Intent resultIntent = new Intent();
+                setResult(RESULT_OK, resultIntent);
                 finish();
                 break;
             case 1:
-                Toast.makeText(this, getString(R.string.error) + " : " + w.getHeadword() + getString(R.string.already_exists), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.error) + " : " + w.getHeadword() + " " + getString(R.string.already_exists), Toast.LENGTH_SHORT).show();
                 break;
             case 2:
                 Toast.makeText(this, getString(R.string.error) + " " + getString(R.string.dico_not_exists), Toast.LENGTH_SHORT).show();
@@ -209,6 +227,8 @@ public class WordActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), selectedWord.getHeadword() + getString(R.string.deleted), Toast.LENGTH_SHORT).show();
                 wdm = new WordDataModel(getApplicationContext());
                 wdm.delete(selectedWord.getId());
+                Intent resultIntent = new Intent();
+                setResult(RESULT_OK, resultIntent);
                 finish();
             }
         });

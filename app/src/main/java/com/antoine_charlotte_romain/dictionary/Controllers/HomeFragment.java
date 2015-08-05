@@ -171,6 +171,11 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         return v;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
+
     /**
      * Initialising the data model and selecting all the dictionaries
      */
@@ -178,16 +183,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     {
         ddm = new DictionaryDataModel(getActivity());
         ddm.open();
-
-        /*
-        WordDataModel wdm = new WordDataModel(getActivity());
-        for (int i = 0; i < 10; i++) {
-            Dictionary d = new Dictionary("dico" + i);
-            ddm.insert(d);
-            for (int j = 0; j < 50 ; j++) {
-                wdm.insert(new Word(d.getId(), "mot" + j, "trans"));
-            }
-        }*/
 
         dictionaries = ddm.selectAll();
         dictionariesDisplay = new ArrayList<>(dictionaries);
@@ -298,8 +293,6 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
     {
         //Creating the EditText for searching inside the dictionaries list
         searchBox = (EditText) v.findViewById(R.id.search_field);
-        searchBox.setMovementMethod(new ScrollingMovementMethod());
-        searchBox.setText("");
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -420,7 +413,9 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                             if (ddm.insert(d) == 1) {
                                 dictionariesDisplay.add(d);
                                 dictionaries.add(d);
-                                searchBox.setText("");
+                                if(searchBox.getText().toString().trim().length() > 0) {
+                                    searchBox.setText("");
+                                }
                                 read(dictionariesDisplay.indexOf(d));
                             } else {
                                 Snackbar.make(((MainActivity)(getActivity())).getRootLayout(), R.string.dictionary_not_added, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
@@ -468,6 +463,9 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                             else {
                                 startActivityForResult(intent, SELECT_FILE);
                             }
+                        if(searchBox.getText().toString().trim().length() > 0) {
+                            searchBox.setText("");
+                        }
                     }
                 });
 
@@ -502,6 +500,10 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         if(position != -1)
             intent.putExtra(MainActivity.EXTRA_DICTIONARY, dictionariesDisplay.get(position));
         startActivity(intent);
+
+        if(searchBox.getText().toString().trim().length() > 0) {
+            searchBox.setText("");
+        }
     }
 
 
@@ -538,7 +540,9 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                         d.setTitle(nameBox.getText().toString());
                         if (ddm.update(d) == 1) {
                             adapter.notifyDataSetChanged();
-                            searchBox.setText("");
+                            if(searchBox.getText().toString().trim().length() > 0) {
+                                searchBox.setText("");
+                            }
 
                             Snackbar.make(((MainActivity)(getActivity())).getRootLayout(), R.string.dictionary_renamed, Snackbar.LENGTH_LONG).setAction(R.string.close_button, new View.OnClickListener() {
                                 @Override
@@ -658,6 +662,9 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
         Intent exportCSVintent = new Intent(getActivity(), CSVExportActivity.class);
         exportCSVintent.putExtra(MainActivity.EXTRA_DICTIONARY, dictionariesDisplay.get(position));
         startActivity(exportCSVintent);
+        if(searchBox.getText().toString().trim().length() > 0) {
+            searchBox.setText("");
+        }
     }
 
     @Override
@@ -687,11 +694,12 @@ public class HomeFragment extends Fragment implements DictionaryAdapter.Dictiona
                 }
             };
 
-            if (ddm.insert(d) == 1)
-            {
+            if (ddm.insert(d) == 1) {
                 dictionariesDisplay.add(d);
                 dictionaries.add(d);
-                searchBox.setText("");
+                if(searchBox.getText().toString().trim().length() > 0) {
+                    searchBox.setText("");
+                }
 
                 ImportUtility.importCSV(d, data.getData(), c, handler);
             }

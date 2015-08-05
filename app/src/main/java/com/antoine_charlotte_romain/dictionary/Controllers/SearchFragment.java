@@ -43,6 +43,8 @@ public class SearchFragment extends Fragment {
     private RadioButton wholeWord;
     private MenuItem searchTabButton;
 
+    private boolean isReady;
+
     private String[] searchOptions;
 
     @Override
@@ -70,6 +72,8 @@ public class SearchFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        initSearchView();
+
         return thisView;
     }
 
@@ -77,6 +81,63 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        isReady = false;
+        if(beginningText.getText().toString().trim().length() > 0 || containsText.getText().toString().trim().length() > 0 || endText.getText().toString().trim().length() > 0) {
+            isReady = true;
+        }
+
+        if(radioGroup.getCheckedRadioButtonId() == R.id.part){
+            // Set hint string of the end string EditText
+            endText.setHint(getString(R.string.ends_with));
+            // Show all EditText (if they were gone)
+            beginningText.setVisibility(View.VISIBLE);
+            containsText.setVisibility(View.VISIBLE);
+        }
+        else {
+            // Set hint string of the end string EditText
+            endText.setHint(getString(R.string.Word));
+            // Hide contain and end EditText (if they were displayed)
+            beginningText.setVisibility(View.GONE);
+            containsText.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * This function creates the buttons on the toolBar
+     * @param menu
+     * @return
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menu.clear();
+        menuInflater.inflate(R.menu.menu_search_fragment, menu);
+        searchTabButton = menu.findItem(R.id.action_search);
+
+        searchTabButton.setVisible(isReady);
+
+        initTextFields();
+    }
+
+    /**
+     * This function is called when the user click on a button of the toolBar
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.action_search:
+                advancedSearch(thisView);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void initSearchView(){
         // set dictionary
         if(selectedDictionary == null) {
             targetDictionary.setText(getString(R.string.target_dico) + " : " + getString(R.string.allDico));
@@ -85,14 +146,8 @@ public class SearchFragment extends Fragment {
             targetDictionary.setText(getString(R.string.target_dico) + " : " + selectedDictionary.getTitle());
         }
 
-        // check part radio button
-        radioGroup.check(R.id.part);
-
         // set search option
         searchIn.setText(getString(R.string.search_in) + " : " + searchOptions[0]);
-        beginningText.setText("");
-        containsText.setText("");
-        endText.setText("");
 
         searchIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +184,9 @@ public class SearchFragment extends Fragment {
                 displayDictionaries(v);
             }
         });
+    }
 
+    private void initTextFields(){
         beginningText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -178,38 +235,6 @@ public class SearchFragment extends Fragment {
             }
 
         });
-    }
-
-    /**
-     * This function creates the buttons on the toolBar
-     * @param menu
-     * @return
-     */
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menu.clear();
-        menuInflater.inflate(R.menu.menu_search_fragment, menu);
-        searchTabButton = menu.findItem(R.id.action_search);
-        searchTabButton.setVisible(false);
-    }
-
-    /**
-     * This function is called when the user click on a button of the toolBar
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
-            case R.id.action_search:
-                advancedSearch(thisView);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     /**
@@ -313,6 +338,10 @@ public class SearchFragment extends Fragment {
         intent.putExtra(MainActivity.EXTRA_DICTIONARY, dico);
 
         startActivity(intent);
+
+        beginningText.setText("");
+        containsText.setText("");
+        endText.setText("");
     }
 
     /**

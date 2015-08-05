@@ -56,6 +56,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
     private final int CONTEXT_MENU_DELETE = 1;
     private final int NORMAL_STATE = 0;
     private final int DELETE_STATE = 1;
+    private final int NEW_WORD = 1;
+    private final int DELETE_WORD = 2;
 
     private EditText filterWords;
     private GridView gridViewWords;
@@ -128,28 +130,14 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         if(intent.getBooleanExtra(MainActivity.EXTRA_RENAME,false))
             renameDictionary(findViewById(R.id.list_words_layout));
 
-    }
-
-    /**
-     * This function is called when a child activity back to this view or finish
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
 
         menuButton.bringToFront();
 
-        open = false;
-        loadingMore = false;
         allLoaded = false;
         wordsLimit = 10;
         wordsOffset = 0;
-        hidden = false;
         myLastFirstVisibleItem = 0;
-        filterWords.setText("");
 
-        stateMode = NORMAL_STATE;
-        backgroundMenuView.setVisibility(View.GONE);
         backgroundMenuView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,9 +150,33 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         showToolbarMenu();
     }
 
+    /**
+     * This function is called when a child activity back to this view or finish
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        loadingMore = false;
+        stateMode = NORMAL_STATE;
+        normalMode();
+
+        backgroundMenuView.setVisibility(View.GONE);
+        if(selectedDictionary != null){
+            open = false;
+            menuButton.animate().translationY(0);
+            hidden = false;
+            exportCsvButton.setVisibility(View.VISIBLE);
+            importCsvButton.setVisibility(View.VISIBLE);
+            addButton.setVisibility(View.VISIBLE);
+        }
+
+    }
+
     @Override
      public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
 
     }
 
@@ -272,11 +284,17 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                             if (!hidden) {
                                 menuButton.animate().translationY(350);
                                 hidden = true;
+                                exportCsvButton.setVisibility(View.GONE);
+                                importCsvButton.setVisibility(View.GONE);
+                                addButton.setVisibility(View.GONE);
                             }
                         } else if (currentFirstVisibleItem < myLastFirstVisibleItem) {
                             if (hidden) {
                                 menuButton.animate().translationY(0);
                                 hidden = false;
+                                exportCsvButton.setVisibility(View.VISIBLE);
+                                importCsvButton.setVisibility(View.VISIBLE);
+                                addButton.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -293,6 +311,13 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                         progressDialog.show();
                         Thread thread = new Thread(null, loadMoreListWords);
                         thread.start();
+                    }
+                    else if((lastInScreen == myWordsList.size()) && !(loadingMore) && (allLoaded)) {
+                        menuButton.animate().translationY(0);
+                        hidden = false;
+                        exportCsvButton.setVisibility(View.VISIBLE);
+                        importCsvButton.setVisibility(View.VISIBLE);
+                        addButton.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -321,8 +346,7 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
                         } else {
                             tempList = wdm.select(search, Word.ALL_DICTIONARIES);
                         }
-                    }
-                    else {
+                    } else {
                         wordsOffset = 0;
                         if (select) {
                             tempList = wdm.selectAll(selectedDictionary.getId(), wordsLimit, wordsOffset);
@@ -367,7 +391,11 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
 
         newWordIntent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
 
-        startActivity(newWordIntent);
+        startActivityForResult(newWordIntent, NEW_WORD);
+
+        if(filterWords.getText().toString().trim().length() > 0) {
+            filterWords.setText("");
+        }
     }
 
     /**
@@ -382,6 +410,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         importCSVintent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
 
         startActivity(importCSVintent);
+
+        if(filterWords.getText().toString().trim().length() > 0) {
+            filterWords.setText("");
+        }
     }
 
     /**
@@ -397,6 +429,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         importCSVintent.putExtra(MainActivity.EXTRA_NEW_DICO_NAME, selectedDictionary.getTitle());
 
         startActivity(importCSVintent);
+
+        if(filterWords.getText().toString().trim().length() > 0) {
+            filterWords.setText("");
+        }
     }
 
     /**
@@ -410,6 +446,10 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         advancedSearchIntent.putExtra(MainActivity.EXTRA_DICTIONARY, selectedDictionary);
 
         startActivity(advancedSearchIntent);
+
+        if(filterWords.getText().toString().trim().length() > 0) {
+            filterWords.setText("");
+        }
     }
 
     /**
@@ -543,7 +583,11 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
             wordDetailIntent.putExtra(MainActivity.EXTRA_DICTIONARY, ddm.select(myWordsList.get(position).getDictionaryID()));
         }
 
-        startActivity(wordDetailIntent);
+        startActivityForResult(wordDetailIntent, DELETE_WORD);
+
+        if(filterWords.getText().toString().trim().length() > 0) {
+            filterWords.setText("");
+        }
     }
 
     /**
@@ -728,7 +772,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
      * @param position the position of the item to delete in the list
      */
     @Override
-    public void deletePressed(int position){
+    public void deletePressed(int position)
+    {
         delete(position);
     }
 
@@ -851,6 +896,28 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         animation.start();
 
         v.setEnabled(false);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == NEW_WORD || requestCode == DELETE_WORD) && resultCode == RESULT_OK )
+        {
+            System.out.println("activitySucces");
+            myWordsList.clear();
+            ArrayList<Word> tempList;
+
+            wordsOffset = 0;
+            tempList = wdm.selectAll(selectedDictionary.getId(), wordsLimit, wordsOffset);
+
+            allLoaded = false;
+
+            for (int i = 0; i < tempList.size(); i++) {
+                myWordsList.add(tempList.get(i));
+            }
+            myAdapter.notifyDataSetChanged();
+        }
     }
 
     /**
