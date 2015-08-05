@@ -112,7 +112,6 @@
     <string name="from_csv">From a csv</string>
     <string name="import_progress">Import in progress</string>
     <string name="delete_progress">Delete in progress</string>
-    <string name="title_activity_display_updated_words">DisplayUpdatedWords</string>
 
     <string name="see_updated">See updated words</string>
 </resources>
