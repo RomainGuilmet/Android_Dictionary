@@ -113,5 +113,6 @@
     <string name="import_progress">Importation en cours</string>
     <string name="delete_progress">Suppression en cours</string>
     <string name="see_updated">Voir les mots mis à jour</string>
+    <string name="app_name">Dicosaure</string>
 
 </resources>
