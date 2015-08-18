@@ -719,8 +719,8 @@ public class ListWordsActivity extends AppCompatActivity implements AdapterView.
         if(menu != null) {
             menu.clear();
             if (stateMode == NORMAL_STATE) {
-                getMenuInflater().inflate(R.menu.menu_list_words, menu);
                 if(selectedDictionary != null) {
+                    getMenuInflater().inflate(R.menu.menu_list_words, menu);
                     getSupportActionBar().setTitle(selectedDictionary.getTitle());
                 }
                 else {

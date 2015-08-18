@@ -8,6 +8,7 @@ import android.provider.BaseColumns;
 
 import com.antoine_charlotte_romain.dictionary.Business.Dictionary;
 import com.antoine_charlotte_romain.dictionary.Business.Word;
+import com.antoine_charlotte_romain.dictionary.Utilities.StringsUtility;
 
 import java.util.ArrayList;
 
@@ -18,8 +19,11 @@ public class WordDataModel extends DAOBase{
                     WordEntry._ID + " INTEGER PRIMARY KEY, " +
                     WordEntry.COLUMN_NAME_DICTIONARY_ID + " INTEGER NOT NULL, " +
                     WordEntry.COLUMN_NAME_HEADWORD + " TEXT NOT NULL, " +
-                    WordEntry.COLUMN_NAME_TRANSLATION + " TEXT NOT NULL, " +
+                    WordEntry.COLUMN_NAME_TRANSLATION + " TEXT, " +
                     WordEntry.COLUMN_NAME_NOTE + " TEXT, " +
+                    WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD+ " TEXT NOT NULL, " +
+                    WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION + " TEXT, " +
+                    WordEntry.COLUMN_NAME_UNACCENTED_NOTE + " TEXT, " +
                     "FOREIGN KEY (" + WordEntry.COLUMN_NAME_DICTIONARY_ID + ") REFERENCES " + DictionaryDataModel.DictionaryEntry.TABLE_NAME + " (" + DictionaryDataModel.DictionaryEntry._ID + ")" +
                     ");";
 
@@ -31,93 +35,98 @@ public class WordDataModel extends DAOBase{
         public static final String COLUMN_NAME_HEADWORD = "headword";
         public static final String COLUMN_NAME_TRANSLATION = "translation";
         public static final String COLUMN_NAME_NOTE = "note";
+        public static final String COLUMN_NAME_UNACCENTED_HEADWORD = "unaccented_headword";
+        public static final String COLUMN_NAME_UNACCENTED_TRANSLATION = "unaccented_translation";
+        public static final String COLUMN_NAME_UNACCENTED_NOTE = "unaccented_note";
     }
 
     private static final String SQL_SELECT_WORD_FROM_ID = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE " + WordEntry._ID + " = ?;";
 
-    private static final String SQL_SELECT_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") LIKE ?"
+    private static final String SQL_SELECT_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME + " WHERE UPPER(" + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + ") LIKE ?"
             + " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_FROM_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-                    " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
+                    " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + " LIKE ?" +
                     " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
                      " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?;";
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + " LIKE ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
-            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?;";
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + " LIKE ?" +
+            " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
+            " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_TRANSLATION = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_TRANSLATION_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION + " LIKE ?" +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_NOTE = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_NOTE + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_NOTE_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_NOTE + " LIKE ?" +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_ALL_DATA = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
-            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
-            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_UNACCENTED_NOTE + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WHOLE_WORD_FROM_ALL_DATA_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE (" + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
-            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
-            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?) " +
+            " WHERE (" + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_UNACCENTED_NOTE + " LIKE ?) " +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
             " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
-            " AND " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
+            " AND " + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
             " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
-            " AND " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
+            " AND " + WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_NOTE + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
             " WHERE " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
-            " AND " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
+            " AND " + WordEntry.COLUMN_NAME_UNACCENTED_NOTE + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE " + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
-            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
-            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?" +
+            " WHERE " + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_UNACCENTED_NOTE + " LIKE ?" +
             " ORDER BY UPPER(" + WordEntry.COLUMN_NAME_HEADWORD + ") ASC;";
 
     private static final String SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD_AND_DICTIONARY = "SELECT * FROM " + WordEntry.TABLE_NAME +
-            " WHERE (" + WordEntry.COLUMN_NAME_HEADWORD + " LIKE ?" +
-            " OR " + WordEntry.COLUMN_NAME_TRANSLATION + " LIKE ?" +
-            " OR " + WordEntry.COLUMN_NAME_NOTE + " LIKE ?) " +
+            " WHERE (" + WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION + " LIKE ?" +
+            " OR " + WordEntry.COLUMN_NAME_UNACCENTED_NOTE + " LIKE ?) " +
             " AND " + WordEntry.COLUMN_NAME_DICTIONARY_ID + " = ?" +
             " ORDER BY " + WordEntry.COLUMN_NAME_HEADWORD + " ASC;";
 
@@ -159,6 +168,9 @@ public class WordDataModel extends DAOBase{
                     values.put(WordEntry.COLUMN_NAME_HEADWORD, w.getHeadword());
                     values.put(WordEntry.COLUMN_NAME_TRANSLATION, w.getTranslation());
                     values.put(WordEntry.COLUMN_NAME_NOTE, w.getNote());
+                    values.put(WordEntry.COLUMN_NAME_UNACCENTED_HEADWORD, StringsUtility.removeAccents(w.getHeadword()));
+                    values.put(WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION, StringsUtility.removeAccents(w.getTranslation()));
+                    values.put(WordEntry.COLUMN_NAME_UNACCENTED_NOTE, StringsUtility.removeAccents(w.getNote()));
 
                     // Insert the new row, returning the primary key value of the new row
                     long newWordID = db.insert(WordEntry.TABLE_NAME, WordEntry.COLUMN_NAME_NOTE, values);
@@ -210,6 +222,7 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> select(String headWord, long dictionaryID){
         SQLiteDatabase db = open();
 
+        headWord = StringsUtility.removeAccents(headWord);
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
             c = db.rawQuery(SQL_SELECT_WORD_FROM_HEADWORD, new String[]{String.valueOf(headWord)+"%"});
@@ -231,11 +244,12 @@ public class WordDataModel extends DAOBase{
      * Find a word in a dictionary with exactly the specified headword
      * @param headWord the headword of the word we want to find
      * @param dictionaryID the ID of the dictionary in which we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
-     * @return A list of word which have exaclty this headword in the selected dictionary
+     * @return A list of word which have exactly this headword in the selected dictionary
      */
     public ArrayList<Word> selectWholeHeadword(String headWord, long dictionaryID){
         SQLiteDatabase db = open();
 
+        headWord = StringsUtility.removeAccents(headWord);
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
             c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_HEADWORD, new String[]{String.valueOf(headWord)});
@@ -257,11 +271,12 @@ public class WordDataModel extends DAOBase{
      * Find a word in a dictionary with exactly the specified translation
      * @param translation the translation of the word we want to find
      * @param dictionaryID the ID of the dictionary in which we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
-     * @return A list of word which have exaclty this translation in the selected dictionary
+     * @return A list of word which have exactly this translation in the selected dictionary
      */
     public ArrayList<Word> selectWholeTranslation(String translation, long dictionaryID){
         SQLiteDatabase db = open();
 
+        translation = StringsUtility.removeAccents(translation);
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
             c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_TRANSLATION, new String[]{String.valueOf(translation)});
@@ -283,11 +298,12 @@ public class WordDataModel extends DAOBase{
      * Find a word in a dictionary with exactly the specified note
      * @param note the note of the word we want to find
      * @param dictionaryID the ID of the dictionary in which we are searching (set this param to Word.ALL_DICTIONARIES to look in all the dictionaries)
-     * @return A list of word which have exaclty this note in the selected dictionary
+     * @return A list of word which have exactly this note in the selected dictionary
      */
     public ArrayList<Word> selectWholeNote(String note, long dictionaryID){
         SQLiteDatabase db = open();
 
+        note = StringsUtility.removeAccents(note);
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
             c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_NOTE, new String[]{String.valueOf(note)});
@@ -314,6 +330,7 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectWholeAllData(String string, long dictionaryID){
         SQLiteDatabase db = open();
 
+        string = StringsUtility.removeAccents(string);
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
             c = db.rawQuery(SQL_SELECT_WHOLE_WORD_FROM_ALL_DATA, new String[]{String.valueOf(string), String.valueOf(string), String.valueOf(string)});
@@ -342,16 +359,7 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectHeadword(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
-        // if there is no begin and/or end string, make sure that the middle string will
-        // be in the middle of the word, and not at the beginning or the end
-        if(!middle.equals("")) {
-            if (begin.equals(""))
-                begin = "_";
-            if (end.equals(""))
-                end = "_";
-        }
-
-        String search = begin+"%"+middle+"%"+end;
+        String search = StringsUtility.removeAccents(begin+"%"+middle+"%"+end);
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
             c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_HEADWORD, new String[]{search});
@@ -381,16 +389,7 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectTranslation(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
-        // if there is no begin and/or end string, make sure that the middle string will
-        // be in the middle of the word, and not at the beginning or the end
-        if(!middle.equals("")) {
-            if (begin.equals(""))
-                begin = "_";
-            if (end.equals(""))
-                end = "_";
-        }
-
-        String search = begin+"%"+middle+"%"+end;
+        String search = StringsUtility.removeAccents(begin+"%"+middle+"%"+end);
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
             c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_TRANSLATION, new String[]{search});
@@ -420,16 +419,7 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectNote(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
-        // if there is no begin and/or end string, make sure that the middle string will
-        // be in the middle of the word, and not at the beginning or the end
-        if(!middle.equals("")) {
-            if (begin.equals(""))
-                begin = "_";
-            if (end.equals(""))
-                end = "_";
-        }
-
-        String search = begin+"%"+middle+"%"+end;
+        String search = StringsUtility.removeAccents(begin+"%"+middle+"%"+end);
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
             c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_NOTES, new String[]{search});
@@ -459,16 +449,7 @@ public class WordDataModel extends DAOBase{
     public ArrayList<Word> selectWholeWord(String begin, String middle, String end, long dictionaryID){
         SQLiteDatabase db = open();
 
-        // if there is no begin and/or end string, make sure that the middle string will
-        // be in the middle of the word, and not at the beginning or the end
-        if(!middle.equals("")) {
-            if (begin.equals(""))
-                begin = "_";
-            if (end.equals(""))
-                end = "_";
-        }
-
-        String search = begin+"%"+middle+"%"+end;
+        String search = StringsUtility.removeAccents(begin+"%"+middle+"%"+end);
         Cursor c;
         if(dictionaryID == Word.ALL_DICTIONARIES) {
             c = db.rawQuery(SQL_SELECT_WORD_WITH_BEGIN_MIDDLE_END_WHOLEWORD, new String[]{search, search, search});
@@ -551,6 +532,8 @@ public class WordDataModel extends DAOBase{
 
         values.put(WordEntry.COLUMN_NAME_TRANSLATION, w.getTranslation());
         values.put(WordEntry.COLUMN_NAME_NOTE, w.getNote());
+        values.put(WordEntry.COLUMN_NAME_UNACCENTED_TRANSLATION, StringsUtility.removeAccents(w.getTranslation()));
+        values.put(WordEntry.COLUMN_NAME_UNACCENTED_NOTE, StringsUtility.removeAccents(w.getNote()));
 
         db.update(WordEntry.TABLE_NAME, values, WordEntry._ID + " = ?", new String[]{String.valueOf(w.getId())});
     }

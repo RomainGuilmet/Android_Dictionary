@@ -24,6 +24,7 @@ import com.antoine_charlotte_romain.dictionary.Controllers.Adapter.ViewPagerAdap
 import com.antoine_charlotte_romain.dictionary.Controllers.Lib.SlidingTabLayout;
 import com.antoine_charlotte_romain.dictionary.R;
 import com.antoine_charlotte_romain.dictionary.Utilities.KeyboardUtility;
+import com.antoine_charlotte_romain.dictionary.Utilities.StringsUtility;
 
 /**
  */
@@ -166,17 +167,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public void onPageSelected(int position) {
-                if(position == HOME_FRAGMENT){
+                if (position == HOME_FRAGMENT) {
                     addButton.setVisibility(View.VISIBLE);
                     addButton.animate().translationY(0);
                     currentPage = HOME_FRAGMENT;
-                }
-                else {
+                } else {
                     addButton.animate().translationY(350);
-                    if(position == HISTORY_FRAGMENT){
+                    if (position == HISTORY_FRAGMENT) {
                         currentPage = HISTORY_FRAGMENT;
-                    }
-                    else {
+                    } else {
                         currentPage = ADVANCED_SEARCH_FRAGMENT;
                     }
                 }
